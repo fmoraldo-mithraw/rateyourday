@@ -1,4 +1,4 @@
-package com.example.mithraw.howwasyourday;
+package com.example.mithraw.howwasyourday.databases;
 
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;

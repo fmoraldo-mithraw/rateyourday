@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:showIn="@layout/app_bar_second"
-    tools:context=".RateADay">
+    tools:context=".Activities.RateADay">
 
     <EditText
         android:id="@+id/dateTextView"

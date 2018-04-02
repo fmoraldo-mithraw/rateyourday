@@ -1,4 +1,4 @@
-package com.example.mithraw.howwasyourday;
+package com.example.mithraw.howwasyourday.Activities;
 
 import android.annotation.SuppressLint;
 
@@ -29,6 +29,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RatingBar;
+
+import com.example.mithraw.howwasyourday.R;
+import com.example.mithraw.howwasyourday.databases.Day;
+import com.example.mithraw.howwasyourday.databases.DaysDatabase;
 
 import java.util.Calendar;
 import java.util.List;
