@@ -15,10 +15,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class RateADay extends AppCompatActivity {
-    private static final int MSG_RATING = 0;
-    private static final int MSG_TITLE = 1;
-    private static final int MSG_LOG = 2;
-    private static final int MSG_EMPTY = 3;
+    private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY}
     protected final java.util.Calendar m_calendar = java.util.Calendar.getInstance();
     protected DaysDatabase db;
     protected static Handler handler;
@@ -28,7 +25,8 @@ public class RateADay extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rate_aday);
-        //Add the back button on the activity
+
+        //Add the back button to the activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         db = DaysDatabase.getInstance(getApplicationContext());
 
@@ -39,20 +37,20 @@ public class RateADay extends AppCompatActivity {
                 EditText titleText = (EditText) findViewById(R.id.titleText);
                 EditText logText = (EditText) findViewById(R.id.logText);
 
-                if (msg.what == MSG_RATING) {
+                if (msg.what == MSG_ID.MSG_RATING.ordinal()) {
                     rab.setRating((Integer) (msg.obj));
                     titleText.setEnabled(true);
                     logText.setEnabled(true);
-                } else if (msg.what == MSG_LOG) {
+                } else if (msg.what == MSG_ID.MSG_LOG.ordinal()) {
                     logText.setText((String) (msg.obj));
                     titleText.setEnabled(true);
                     logText.setEnabled(true);
-                } else if (msg.what == MSG_TITLE) {
+                } else if (msg.what == MSG_ID.MSG_TITLE.ordinal()) {
                     titleText.setText((String) (msg.obj));
                     titleText.setEnabled(true);
                     logText.setEnabled(true);
                 }
-                if (msg.what == MSG_EMPTY) {
+                if (msg.what == MSG_ID.MSG_EMPTY.ordinal()) {
                     titleText.setText("");
                     logText.setText("");
                     rab.setRating(0);
@@ -86,6 +84,7 @@ public class RateADay extends AppCompatActivity {
         titleText.setEnabled(false);
         logText.setEnabled(false);
         dateText.setEnabled(false);
+
         //Fill the controls with the correct informations
         fillTheInformations();
         java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
@@ -103,21 +102,21 @@ public class RateADay extends AppCompatActivity {
                 EditText logText = (EditText) findViewById(R.id.logText);
                 List<Day> days = db.dayDao().loadAllByDate(m_calendar.get(java.util.Calendar.DAY_OF_MONTH), m_calendar.get(java.util.Calendar.MONTH), m_calendar.get(java.util.Calendar.YEAR));
                 if (days.isEmpty()) {
-                    handler.sendEmptyMessage(MSG_EMPTY);
+                    handler.sendEmptyMessage(MSG_ID.MSG_EMPTY.ordinal());
                 } else {
                     Message msg_rating = Message.obtain();
-                    msg_rating.what = MSG_RATING;
-                    msg_rating.obj = new Integer(days.get(0).getRating());
+                    msg_rating.what = MSG_ID.MSG_RATING.ordinal();
+                    msg_rating.obj = days.get(0).getRating();
                     handler.sendMessage(msg_rating);
 
                     Message msg_title = Message.obtain();
-                    msg_title.what = MSG_TITLE;
-                    msg_title.obj = new String(days.get(0).getTitleText());
+                    msg_title.what = MSG_ID.MSG_TITLE.ordinal();
+                    msg_title.obj = days.get(0).getTitleText();
                     handler.sendMessage(msg_title);
 
                     Message msg_log = Message.obtain();
-                    msg_log.what = MSG_LOG;
-                    msg_log.obj = new String(days.get(0).getLog());
+                    msg_log.what = MSG_ID.MSG_LOG.ordinal();
+                    msg_log.obj = days.get(0).getLog();
                     handler.sendMessage(msg_log);
                 }
             }

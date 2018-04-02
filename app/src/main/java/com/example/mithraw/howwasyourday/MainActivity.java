@@ -36,16 +36,11 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private static final int MSG_RATING = 0;
-    private static final int MSG_TITLE = 1;
-    private static final int MSG_LOG = 2;
-    private static final int MSG_EMPTY = 3;
-    private static final int ACTIVITY_RATE_A_DAY = 0;
-    private static final int ACTIVITY_SETTINGS = 1;
+    private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT}
+    private enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS}
     protected static final String EXTRA_DATE_DAY = "extra_date_day";
     protected static final String EXTRA_DATE_MONTH = "extra_date_month";
     protected static final String EXTRA_DATE_YEAR = "extra_date_year";
-    private static final int MSG_SENT = 4;
 
     private DatePickerDialog datePickerDialog = null;
     protected DaysDatabase db;
@@ -59,9 +54,14 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Setup the database
         db = DaysDatabase.getInstance(getApplicationContext());
+
+        //Setup the sharing intent
         shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
+
         //Setup the ActionBar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
 
-        //Setup the navigation view (whatever it is
+        //Setup the navigation view (whatever it is)
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -84,14 +84,14 @@ public class MainActivity extends AppCompatActivity
                 EditText titleText = (EditText) findViewById(R.id.titleText);
                 EditText logText = (EditText) findViewById(R.id.logText);
                 EditText edittext = (EditText) findViewById(R.id.dateTextView);
-                if (msg.what == MSG_RATING) {
+                if (msg.what == MSG_ID.MSG_RATING.ordinal()) {
                     rab.setRating((Integer) (msg.obj));
-                } else if (msg.what == MSG_LOG) {
+                } else if (msg.what == MSG_ID.MSG_LOG.ordinal()) {
                     logText.setText((String) (msg.obj));
-                } else if (msg.what == MSG_TITLE) {
+                } else if (msg.what == MSG_ID.MSG_TITLE.ordinal()) {
                     titleText.setText((String) (msg.obj));
                 }
-                if (msg.what == MSG_EMPTY) {
+                if (msg.what == MSG_ID.MSG_EMPTY.ordinal()) {
                     rab.setRating(0);
                     logText.setText("");
                     titleText.setText("");
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity
                         mShareActionProvider.setShareIntent(sharingIntent);
                     launchActivityRateADay();
                 }
-                if (msg.what == MSG_SENT) {
+                if (msg.what == MSG_ID.MSG_SENT.ordinal()) {
                     String title = edittext.getText().toString() + " - " + titleText.getText().toString();
                     String shareBody = title + "\n" + (int) (rab.getRating()) + "/5\n" + logText.getText().toString();
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -180,24 +180,22 @@ public class MainActivity extends AppCompatActivity
 
     private void launchActivityRateADay() {
         Intent rateADayIntent = new Intent(getApplicationContext(), RateADay.class);
-        int requestCode = ACTIVITY_RATE_A_DAY;
         // Send the date informations to the next activity
         rateADayIntent.putExtra(EXTRA_DATE_DAY, m_calendar.get(java.util.Calendar.DAY_OF_MONTH));
         rateADayIntent.putExtra(EXTRA_DATE_MONTH, m_calendar.get(java.util.Calendar.MONTH));
         rateADayIntent.putExtra(EXTRA_DATE_YEAR, m_calendar.get(java.util.Calendar.YEAR));
-        startActivityForResult(rateADayIntent, requestCode);
+        startActivityForResult(rateADayIntent, ACTIVITY_ID.ACTIVITY_RATE_A_DAY.ordinal());
     }
 
     private void launchActivitySettings() {
         Intent settingIntent = new Intent(getApplicationContext(), SettingsActivity.class);
-        int requestCode = ACTIVITY_SETTINGS;
-        startActivityForResult(settingIntent, requestCode);
+        startActivityForResult(settingIntent, ACTIVITY_ID.ACTIVITY_SETTINGS.ordinal());
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
-        if (requestCode == ACTIVITY_RATE_A_DAY) {
+        if (requestCode == ACTIVITY_ID.ACTIVITY_RATE_A_DAY.ordinal()) {
             // Make sure the request was successful
             if (resultCode != 0) {
                 Resources res = getResources();
@@ -206,6 +204,8 @@ public class MainActivity extends AppCompatActivity
                 else
                     Snackbar.make(getCurrentFocus(), res.getString(R.string.save_the_day_bad), 5000).show();
             }
+        } else if(requestCode == ACTIVITY_ID.ACTIVITY_SETTINGS.ordinal()) {
+            //TODO Make something
         }
     }
 
@@ -282,23 +282,23 @@ public class MainActivity extends AppCompatActivity
                 List<Day> days = db.dayDao().loadAllByDate(m_calendar.get(java.util.Calendar.DAY_OF_MONTH), m_calendar.get(java.util.Calendar.MONTH), m_calendar.get(java.util.Calendar.YEAR));
                 if (days.isEmpty()) {
                     if (isResume == false)
-                        handler.sendEmptyMessage(MSG_EMPTY);
+                        handler.sendEmptyMessage(MSG_ID.MSG_EMPTY.ordinal());
                 } else {
                     Message msg_rating = Message.obtain();
-                    msg_rating.what = MSG_RATING;
-                    msg_rating.obj = new Integer(days.get(0).getRating());
+                    msg_rating.what = MSG_ID.MSG_RATING.ordinal();
+                    msg_rating.obj = days.get(0).getRating();
                     handler.sendMessage(msg_rating);
 
                     Message msg_title = Message.obtain();
-                    msg_title.what = MSG_TITLE;
-                    msg_title.obj = new String(days.get(0).getTitleText());
+                    msg_title.what = MSG_ID.MSG_TITLE.ordinal();
+                    msg_title.obj = days.get(0).getTitleText();
                     handler.sendMessage(msg_title);
 
                     Message msg_log = Message.obtain();
-                    msg_log.what = MSG_LOG;
-                    msg_log.obj = new String(days.get(0).getLog());
+                    msg_log.what = MSG_ID.MSG_LOG.ordinal();
+                    msg_log.obj = days.get(0).getLog();
                     handler.sendMessage(msg_log);
-                    handler.sendEmptyMessage(MSG_SENT);
+                    handler.sendEmptyMessage(MSG_ID.MSG_SENT.ordinal());
                 }
             }
         }.start();
