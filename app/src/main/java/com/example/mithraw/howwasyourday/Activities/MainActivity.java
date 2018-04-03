@@ -168,10 +168,7 @@ public class MainActivity extends AppCompatActivity
         datePickerDialog = new DatePickerDialog(MainActivity.this, date, m_calendar
                 .get(java.util.Calendar.YEAR), m_calendar.get(java.util.Calendar.MONTH),
                 m_calendar.get(java.util.Calendar.DAY_OF_MONTH));
-        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-        alertDialog.setTitle("Alert");
-        alertDialog.setMessage(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("notify_time", "00:00"));
-        alertDialog.show();
+
     }
 
     private void updateLabel() {
