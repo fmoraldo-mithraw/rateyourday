@@ -7,7 +7,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
-@Database(entities = Day.class, version = 2)
+@Database(entities = Day.class, version = 2, exportSchema = false)
 public abstract class DaysDatabase extends RoomDatabase {
     public abstract DayDao dayDao();
     private static DaysDatabase ourInstance =  null;

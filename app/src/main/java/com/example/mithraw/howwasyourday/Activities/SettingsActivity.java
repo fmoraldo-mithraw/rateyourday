@@ -15,14 +15,12 @@ import android.preference.PreferenceActivity;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.example.mithraw.howwasyourday.Helpers.NotificationHelper;
 import com.example.mithraw.howwasyourday.R;
-import com.example.mithraw.howwasyourday.Tools.Tools;
+import com.example.mithraw.howwasyourday.Tools.Hour;
 
 import java.util.List;
 
@@ -185,6 +183,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_notification);
             setHasOptionsMenu(true);
+            findPreference("notify_time").setSummary(PreferenceManager.getDefaultSharedPreferences(findPreference("notify_time").getContext()).getString("notify_time", "21:00"));
             findPreference("use_notifications").setOnPreferenceChangeListener(
                     new Preference.OnPreferenceChangeListener() {
                         @Override
@@ -249,7 +248,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                             String stringValue = value.toString();
                             // Validation
                             if (preference.getKey().equals("notify_time")) {
-                                if (!Tools.isHour(stringValue)) {
+                                if (!Hour.isHour(stringValue)) {
                                     return false;
                                 }
                             }

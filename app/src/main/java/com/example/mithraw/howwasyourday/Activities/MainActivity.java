@@ -3,8 +3,7 @@ package com.example.mithraw.howwasyourday.Activities;
 import android.annotation.SuppressLint;
 
 
-import android.app.AlertDialog;
-import android.preference.PreferenceManager;
+
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.app.DatePickerDialog;
@@ -30,6 +29,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RatingBar;
 
+import com.example.mithraw.howwasyourday.Helpers.NotificationHelper;
 import com.example.mithraw.howwasyourday.R;
 import com.example.mithraw.howwasyourday.databases.Day;
 import com.example.mithraw.howwasyourday.databases.DaysDatabase;
@@ -42,10 +42,10 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT}
     private enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS}
-    protected static final String EXTRA_DATE_DAY = "extra_date_day";
-    protected static final String EXTRA_DATE_MONTH = "extra_date_month";
-    protected static final String EXTRA_DATE_YEAR = "extra_date_year";
-
+    public static final String EXTRA_DATE_DAY = "extra_date_day";
+    public static final String EXTRA_DATE_MONTH = "extra_date_month";
+    public static final String EXTRA_DATE_YEAR = "extra_date_year";
+    private static Context mContext;
     private DatePickerDialog datePickerDialog = null;
     protected DaysDatabase db;
     protected static Handler handler;
@@ -53,11 +53,19 @@ public class MainActivity extends AppCompatActivity
     private ShareActionProvider mShareActionProvider = null;
     private Intent shareIntent;
 
+    public static Context getContext(){
+        return mContext;
+    }
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mContext = this;
+
+        // Setup the notifications
+        NotificationHelper.buildChannel();
+        NotificationHelper.setupNotificationStatus();
 
         //Setup the database
         db = DaysDatabase.getInstance(getApplicationContext());

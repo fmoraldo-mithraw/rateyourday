@@ -94,4 +94,7 @@
     <string name="pref_title_autoshare_twitter">Auto-share to twitter</string>
     <string name="pref_title_autoshare_googleplus">Auto-share to Google+</string>
     <string name="pref_title_autoshare_activated">Activate auto-sharing</string>
+
+    <string name="channel_name">Rate your day</string>
+    <string name="channel_description">It\'s time to rate your day mate !</string>
 </resources>
