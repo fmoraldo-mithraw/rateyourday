@@ -97,4 +97,10 @@
 
     <string name="channel_name">Note ta journée !</string>
     <string name="channel_description">Il est l\'heure de noter sa journée !</string>
+    <string name="notification_default_star">Tu as noté ta journée ! Super !</string>
+    <string name="notification_one_star">Tu as noté ta journée une étoile ! Demain sera surement une meilleure journée !</string>
+    <string name="notification_two_star">Tu as noté ta journée deux étoile ! Demain sera surement une meilleure journée !</string>
+    <string name="notification_three_star">Tu as noté ta journée trois étoiles ! Super !</string>
+    <string name="notification_four_star">Tu as noté ta journée quatre étoiles ! Super !</string>
+    <string name="notification_five_star">Tu as noté ta journée cinq étoiles ! Super !</string>
 </resources>

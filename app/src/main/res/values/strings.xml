@@ -97,4 +97,11 @@
 
     <string name="channel_name">Rate your day</string>
     <string name="channel_description">It\'s time to rate your day mate !</string>
+    <string name="notification_default_star">You did rate your day ! Congrats !</string>
+    <string name="notification_one_star">You did rate your day 1 stars! I hope tomorrow will be better !</string>
+    <string name="notification_two_star">You did rate your day 2 stars! I hope tomorrow will be better !</string>
+    <string name="notification_three_star">You did rate your day 3 stars! Congrats !</string>
+    <string name="notification_four_star">You did rate your day 4 stars! Congrats !</string>
+    <string name="notification_five_star">You did rate your day 5 stars ! Congrats !</string>
+
 </resources>

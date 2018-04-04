@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -18,6 +19,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
+import com.example.mithraw.howwasyourday.App;
 import com.example.mithraw.howwasyourday.Helpers.NotificationHelper;
 import com.example.mithraw.howwasyourday.R;
 import com.example.mithraw.howwasyourday.Tools.Hour;
@@ -154,11 +156,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
             setHasOptionsMenu(true);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
         }
 
         @Override
@@ -176,6 +173,28 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * This fragment shows notification preferences only. It is used when the
      * activity is showing a two-pane settings UI.
      */
+    private static String getRingtoneSummary(String value){
+        String ret;
+        if (TextUtils.isEmpty(value)) {
+            Resources res = App.getApplication().getResources();
+            ret =  res.getString(R.string.pref_ringtone_silent);
+
+        } else {
+            Ringtone ringtone = RingtoneManager.getRingtone(
+                    App.getApplication().getApplicationContext(), Uri.parse(value));
+
+            if (ringtone == null) {
+                // Clear the summary if there was a lookup error.
+                ret = null;
+            } else {
+                // Set the summary to reflect the new ringtone display
+                // name.
+                String name = ringtone.getTitle(App.getApplication().getApplicationContext());
+                ret = name;
+            }
+        }
+        return ret;
+    }
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class NotificationPreferenceFragment extends PreferenceFragment {
         @Override
@@ -184,6 +203,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_notification);
             setHasOptionsMenu(true);
             findPreference("notify_time").setSummary(PreferenceManager.getDefaultSharedPreferences(findPreference("notify_time").getContext()).getString("notify_time", "21:00"));
+            findPreference("notifications_new_message_ringtone").setSummary(getRingtoneSummary(PreferenceManager.getDefaultSharedPreferences(findPreference("notifications_new_message_ringtone").getContext()).getString("notifications_new_message_ringtone", "None")));
             findPreference("use_notifications").setOnPreferenceChangeListener(
                     new Preference.OnPreferenceChangeListener() {
                         @Override
@@ -201,24 +221,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         @Override
                         public boolean onPreferenceChange(Preference preference, Object value) {
                             String stringValue = value.toString();
-                            if (TextUtils.isEmpty(stringValue)) {
-                                // Empty values correspond to 'silent' (no ringtone).
-                                preference.setSummary(R.string.pref_ringtone_silent);
-
-                            } else {
-                                Ringtone ringtone = RingtoneManager.getRingtone(
-                                        preference.getContext(), Uri.parse(stringValue));
-
-                                if (ringtone == null) {
-                                    // Clear the summary if there was a lookup error.
-                                    preference.setSummary(null);
-                                } else {
-                                    // Set the summary to reflect the new ringtone display
-                                    // name.
-                                    String name = ringtone.getTitle(preference.getContext());
-                                    preference.setSummary(name);
-                                }
-                            }
+                            preference.setSummary(getRingtoneSummary(stringValue));
                             NotificationHelper.updateNotificationStatus(
                                     PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getBoolean("use_notifications", true),
                                     PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString("notify_time", "21:00"),

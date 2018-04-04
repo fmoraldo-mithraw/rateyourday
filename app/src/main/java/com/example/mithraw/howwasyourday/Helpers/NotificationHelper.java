@@ -12,10 +12,12 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.widget.RemoteViews;
 
 import com.example.mithraw.howwasyourday.Activities.MainActivity;
 import com.example.mithraw.howwasyourday.Activities.RateADay;
 import com.example.mithraw.howwasyourday.App;
+import com.example.mithraw.howwasyourday.NotificationIntentService;
 import com.example.mithraw.howwasyourday.R;
 import com.example.mithraw.howwasyourday.Tools.Hour;
 import com.example.mithraw.howwasyourday.Tools.TimeAlarm;
@@ -33,6 +35,11 @@ public class NotificationHelper {
     private static String CHANNEL_ID = "rate_your_day_channel";
     private static AlarmManager alarmMgr;
     private static PendingIntent alarmIntent;
+    public static final String ONE_STAR = "1";
+    public static final String TWO_STAR = "2";
+    public static final String THREE_STAR = "3";
+    public static final String FOUR_STAR = "4";
+    public static final String FIVE_STAR = "5";
 
     public static void buildChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -53,7 +60,7 @@ public class NotificationHelper {
         updateNotificationStatus(
                 PreferenceManager.getDefaultSharedPreferences(App.getApplication().getApplicationContext()).getBoolean("use_notifications", true),
                 PreferenceManager.getDefaultSharedPreferences(App.getApplication().getApplicationContext()).getString("notify_time", "21:30"),
-                PreferenceManager.getDefaultSharedPreferences(App.getApplication().getApplicationContext()).getString("ringtone", "content://settings/system/notification_sound"),
+                PreferenceManager.getDefaultSharedPreferences(App.getApplication().getApplicationContext()).getString("notifications_new_message_ringtone", "content://settings/system/notification_sound"),
                 PreferenceManager.getDefaultSharedPreferences(App.getApplication().getApplicationContext()).getBoolean("notifications_new_message_vibrate", true)
         );
     }
@@ -65,13 +72,17 @@ public class NotificationHelper {
         Hour curHour = new Hour(time);
         calendar.set(Calendar.HOUR_OF_DAY, curHour.getIntHour());
         calendar.set(Calendar.MINUTE, curHour.getIntMinute());
+        //if the date is in the past, we add a day
+        if( calendar.getTimeInMillis() < System.currentTimeMillis())
+            calendar.setTimeInMillis(calendar.getTimeInMillis()+ 86400000);
+
         Intent intent = new Intent(App.getApplication().getApplicationContext(), TimeAlarm.class);
         intent.setAction("com.example.mithraw.howwasyourday.alarm");
         alarmMgr = (AlarmManager) App.getApplication().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         alarmIntent = PendingIntent.getBroadcast(App.getApplication().getApplicationContext(), 0, intent, 0);
         alarmMgr.cancel(alarmIntent);
         if(enable) {
-            alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, alarmIntent);
+            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, alarmIntent);
         }
     }
 
@@ -86,7 +97,29 @@ public class NotificationHelper {
                 // TODO remove the comments here
                 if (!days.isEmpty())
                     return;
-                Resources res = App.getApplication().getApplicationContext().getResources();
+
+                //Complex notifications
+                RemoteViews notificationLayout = new RemoteViews(App.getApplication().getPackageName(), R.layout.notification_custom);
+                RemoteViews notificationLayoutExpanded = new RemoteViews(App.getApplication().getPackageName(), R.layout.notification_custom_large);
+                Intent oneIntent = new Intent(App.getApplication().getApplicationContext(), NotificationIntentService.class);
+                oneIntent.setAction(ONE_STAR);
+                notificationLayoutExpanded.setOnClickPendingIntent(R.id.Button1, PendingIntent.getService(App.getApplication().getApplicationContext(), 0, oneIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+                Intent twoIntent = new Intent(App.getApplication().getApplicationContext(), NotificationIntentService.class);
+                twoIntent.setAction(TWO_STAR);
+                notificationLayoutExpanded.setOnClickPendingIntent(R.id.Button2, PendingIntent.getService(App.getApplication().getApplicationContext(), 0, twoIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+                Intent threeIntent = new Intent(App.getApplication().getApplicationContext(), NotificationIntentService.class);
+                threeIntent.setAction(THREE_STAR);
+                notificationLayoutExpanded.setOnClickPendingIntent(R.id.Button3, PendingIntent.getService(App.getApplication().getApplicationContext(), 0, threeIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+                Intent fourIntent = new Intent(App.getApplication().getApplicationContext(), NotificationIntentService.class);
+                fourIntent.setAction(FOUR_STAR);
+                notificationLayoutExpanded.setOnClickPendingIntent(R.id.Button4, PendingIntent.getService(App.getApplication().getApplicationContext(), 0, fourIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+                Intent fiveIntent = new Intent(App.getApplication().getApplicationContext(), NotificationIntentService.class);
+                fiveIntent.setAction(FIVE_STAR);
+                notificationLayoutExpanded.setOnClickPendingIntent(R.id.Button5, PendingIntent.getService(App.getApplication().getApplicationContext(), 0, fiveIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
                 Intent intent = new Intent(App.getApplication().getApplicationContext(), RateADay.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -94,12 +127,16 @@ public class NotificationHelper {
                 intent.putExtra(MainActivity.EXTRA_DATE_MONTH, calendar.get(java.util.Calendar.MONTH));
                 intent.putExtra(MainActivity.EXTRA_DATE_YEAR, calendar.get(java.util.Calendar.YEAR));
                 PendingIntent pendingIntent = PendingIntent.getActivity(App.getApplication().getApplicationContext(), 0, intent, 0);
+
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(App.getApplication().getApplicationContext(), CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_launcher_foreground)
-                        .setContentTitle(res.getString(R.string.channel_name))
-                        .setContentText(res.getString(R.string.channel_name))
+                        .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                         .setContentIntent(pendingIntent)
-                        .setSound(Uri.parse(PreferenceManager.getDefaultSharedPreferences(App.getApplication().getApplicationContext()).getString("ringtone", "content://settings/system/notification_sound")))
+                        .setAutoCancel(true)
+                        .setCustomContentView(notificationLayout)
+                        .setCustomBigContentView(notificationLayoutExpanded)
+                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                        .setSound(Uri.parse(PreferenceManager.getDefaultSharedPreferences(App.getApplication().getApplicationContext()).getString("notifications_new_message_ringtone", "content://settings/system/notification_sound")))
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                 if (PreferenceManager.getDefaultSharedPreferences(App.getApplication().getApplicationContext()).getBoolean("notifications_new_message_vibrate", true)) {
                     long[] pattern = new long []{500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500};
