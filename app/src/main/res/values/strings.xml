@@ -2,8 +2,8 @@
     <string name="app_name">How Was Your Day ?</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Menu</string>
-    <string name="nav_header_subtitle">Hey there !</string>
+    <string name="nav_header_title">Rate your day !</string>
+    <string name="nav_header_subtitle">Menu</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="day_title">A title</string>
@@ -103,5 +103,9 @@
     <string name="notification_three_star">You did rate your day 3 stars! Congrats !</string>
     <string name="notification_four_star">You did rate your day 4 stars! Congrats !</string>
     <string name="notification_five_star">You did rate your day 5 stars ! Congrats !</string>
+    <string name="action_entry_logs">Entry log</string>
+    <string name="action_stats_diagrams">Statistics / Diagrams</string>
+    <string name="action_donate">Donate to the author</string>
+    <string name="action_about_the_author">About the author</string>
 
 </resources>

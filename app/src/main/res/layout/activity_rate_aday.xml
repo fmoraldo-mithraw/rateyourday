@@ -43,7 +43,7 @@
         android:isIndicator="true"
         android:longClickable="false"
         android:numStars="5"
-        android:rating="5"
+        android:rating="0"
         android:stepSize="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

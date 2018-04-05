@@ -2,8 +2,8 @@
     <string name="app_name">Note ta journée !</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Menu</string>
-    <string name="nav_header_subtitle">Salut toi !</string>
+    <string name="nav_header_title">Note ta journée !</string>
+    <string name="nav_header_subtitle">Menu</string>
     <string name="nav_header_desc">Barre de navigation</string>
     <string name="action_settings">Configuration</string>
     <string name="day_title">Un titre</string>
@@ -103,4 +103,8 @@
     <string name="notification_three_star">Tu as noté ta journée trois étoiles ! Super !</string>
     <string name="notification_four_star">Tu as noté ta journée quatre étoiles ! Super !</string>
     <string name="notification_five_star">Tu as noté ta journée cinq étoiles ! Super !</string>
+    <string name="action_entry_logs">Journal des entrées</string>
+    <string name="action_stats_diagrams">Statistiques / Diagrammes</string>
+    <string name="action_donate">Faire un don a l\'auteur</string>
+    <string name="action_about_the_author">A propos de l\'auteur</string>
 </resources>
