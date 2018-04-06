@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mithraw.howwasyourday">
+    package="com.mithraw.howwasyourday"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name="com.mithraw.howwasyourday.App"
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <provider android:authorities="com.facebook.app.FacebookContentProvider163663807786742"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
         <activity
-            android:name="com.mithraw.howwasyourday.Activities.MainActivity"
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            tools:replace="android:theme"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".Activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -22,12 +34,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.mithraw.howwasyourday.Activities.RateADay" />
+        <activity android:name=".Activities.RateADay" />
         <activity
-            android:name="com.mithraw.howwasyourday.Activities.SettingsActivity"
+            android:name=".Activities.SettingsActivity"
             android:label="@string/title_activity_settings" />
 
-        <receiver android:name="com.mithraw.howwasyourday.Tools.TimeAlarm">
+        <receiver android:name=".Tools.TimeAlarm">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="com.mithraw.howwasyourday.alarm" />
@@ -35,10 +47,10 @@
         </receiver>
 
         <service
-            android:name="com.mithraw.howwasyourday.NotificationIntentService"
+            android:name=".NotificationIntentService"
             android:enabled="true" />
 
-        <activity android:name="com.mithraw.howwasyourday.Activities.DiagramActivity"></activity>
+        <activity android:name=".Activities.DiagramActivity"></activity>
     </application>
 
 </manifest>

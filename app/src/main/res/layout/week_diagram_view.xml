@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ProgressBar
+        android:id="@+id/vertical_progressbar_monday"
+        android:layout_width="40dip"
+        android:layout_height="100dip"
+        style="@style/Widget.ProgressBar.Vertical"
+        android:layout_marginLeft="10dp"
+        />
+
+    <ProgressBar
+        android:id="@+id/vertical_progressbar_tuesday"
+        style="@style/Widget.ProgressBar.Vertical"
+        android:layout_width="40dip"
+        android:layout_height="100dip"
+        android:layout_toLeftOf="@id/vertical_progressbar_monday"
+        android:layout_marginLeft="10dp"
+/>
+
+    <ProgressBar
+        android:id="@+id/vertical_progressbar_wednesday"
+        style="@style/Widget.ProgressBar.Vertical"
+        android:layout_width="40dip"
+        android:layout_height="100dip"
+        android:layout_toLeftOf="@id/vertical_progressbar_tuesday"
+        android:layout_marginLeft="10dp"
+ />
+
+    <ProgressBar
+        android:id="@+id/vertical_progressbar_thursday"
+        style="@style/Widget.ProgressBar.Vertical"
+        android:layout_width="40dip"
+        android:layout_height="100dip"
+        android:layout_toLeftOf="@id/vertical_progressbar_wednesday"
+        android:layout_marginLeft="10dp"
+ />
+
+    <ProgressBar
+        android:id="@+id/vertical_progressbar_friday"
+        style="@style/Widget.ProgressBar.Vertical"
+        android:layout_width="40dip"
+        android:layout_height="100dip"
+        android:layout_toLeftOf="@id/vertical_progressbar_friday"
+        android:layout_marginLeft="10dp"
+ />
+
+    <ProgressBar
+        android:id="@+id/vertical_progressbar_saturday"
+        style="@style/Widget.ProgressBar.Vertical"
+        android:layout_width="40dip"
+        android:layout_height="100dip"
+        android:layout_toLeftOf="@id/vertical_progressbar_thursday"
+        android:layout_marginLeft="10dp"
+/>
+
+    <ProgressBar
+        android:id="@+id/vertical_progressbar_sunday"
+        style="@style/Widget.ProgressBar.Vertical"
+        android:layout_width="40dip"
+        android:layout_height="100dip"
+        android:layout_toLeftOf="@id/vertical_progressbar_saturday"
+        android:layout_marginLeft="10dp"
+ />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Monday"
+        android:layout_above="@id/vertical_progressbar_monday"
+        />
+</RelativeLayout>

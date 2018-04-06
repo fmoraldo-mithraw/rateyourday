@@ -93,7 +93,6 @@ public class NotificationHelper {
                 Calendar calendar = Calendar.getInstance();
                 //if the day has already been filled with a rating we don't show the notification
                 List<Day> days = db.dayDao().loadAllByDate(calendar.get(java.util.Calendar.DAY_OF_MONTH), calendar.get(java.util.Calendar.MONTH), calendar.get(java.util.Calendar.YEAR));
-                // TODO remove the comments here
                 if (!days.isEmpty())
                     return;
 

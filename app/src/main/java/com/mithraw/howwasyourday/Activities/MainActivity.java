@@ -3,7 +3,13 @@ package com.mithraw.howwasyourday.Activities;
 import android.annotation.SuppressLint;
 
 
-
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.app.DatePickerDialog;
@@ -15,6 +21,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.ShareActionProviderCustom;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -29,6 +36,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RatingBar;
 
+import com.facebook.share.model.ShareContent;
+import com.facebook.share.model.ShareHashtag;
+import com.facebook.share.model.ShareMediaContent;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.widget.ShareDialog;
 import com.mithraw.howwasyourday.Helpers.NotificationHelper;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.databases.Day;
@@ -40,28 +52,86 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
     private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT}
+
     private enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS}
+
     public static final String EXTRA_DATE_DAY = "extra_date_day";
     public static final String EXTRA_DATE_MONTH = "extra_date_month";
     public static final String EXTRA_DATE_YEAR = "extra_date_year";
     private static Context mContext;
+    private static Activity mActivity;
     private DatePickerDialog datePickerDialog = null;
     protected DaysDatabase db;
     protected static Handler handler;
     protected final java.util.Calendar m_calendar = java.util.Calendar.getInstance();
-    private ShareActionProvider mShareActionProvider = null;
+    private ShareActionProviderCustom mShareActionProvider = null;
     private Intent shareIntent;
 
-    public static Context getContext(){
+    public static Context getContext() {
         return mContext;
     }
+
+    public static Activity getmActivity() {
+        return mActivity;
+    }
+
+    public static String getShareString() {
+        RatingBar rab = (RatingBar) MainActivity.getmActivity().findViewById(R.id.ratingBar);
+        EditText titleText = (EditText) MainActivity.getmActivity().findViewById(R.id.titleText);
+        EditText logText = (EditText) MainActivity.getmActivity().findViewById(R.id.logText);
+        EditText edittext = (EditText) MainActivity.getmActivity().findViewById(R.id.dateTextView);
+        String title = edittext.getText().toString() + " - " + titleText.getText().toString();
+        String shareBody = title + "\n" + (int) (rab.getRating()) + "/5\n" + logText.getText().toString();
+        return shareBody;
+    }
+    public static Bitmap getBitmapWithShareString() {
+        Resources res = MainActivity.getContext().getResources();
+        RatingBar rab = (RatingBar) MainActivity.getmActivity().findViewById(R.id.ratingBar);
+        EditText titleText = (EditText) MainActivity.getmActivity().findViewById(R.id.titleText);
+        EditText logText = (EditText) MainActivity.getmActivity().findViewById(R.id.logText);
+        EditText edittext = (EditText) MainActivity.getmActivity().findViewById(R.id.dateTextView);
+        String title = edittext.getText().toString() + " - " + titleText.getText().toString();
+        String shareBody = (int) (rab.getRating()) + "/5 " + logText.getText().toString();
+        if (140 < shareBody.length()) {
+            shareBody = shareBody.substring(0, 136) + "...";
+        }
+
+        Bitmap src = BitmapFactory.decodeResource(res, R.mipmap.ic_launcher);
+        int totalWidth = src.getWidth()+400;
+        Bitmap image = Bitmap.createBitmap(totalWidth, src.getHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas cs = new Canvas(image);
+        Paint tPaint = new Paint();
+        tPaint.setTextSize(20);
+        tPaint.setTypeface(Typeface.create("Arial",Typeface.NORMAL));
+        tPaint.setColor(Color.WHITE);
+        tPaint.setStyle(Paint.Style.FILL);
+        cs.drawBitmap(src, 0f, 0f, null);
+        float height = tPaint.measureText("yY");
+        float width = tPaint.measureText(title);
+        cs.drawText(title, src.getWidth(), height+15f, tPaint);
+        tPaint.setTextSize(17);
+        int iteratorHeight = 2;
+        int sizeLine = 47;
+        for(int i = 0; i<shareBody.length();i+=sizeLine) {
+            cs.drawText(shareBody.substring(i, (i+sizeLine> shareBody.length()?shareBody.length():i+sizeLine)), src.getWidth(), 10 + (height + 4f) * iteratorHeight, tPaint);
+            iteratorHeight++;
+        }
+
+
+        return image;
+    }
+
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivity = this;
         setContentView(R.layout.activity_main);
         mContext = this;
+
 
         // Setup the notifications
         NotificationHelper.buildChannel();
@@ -115,8 +185,7 @@ public class MainActivity extends AppCompatActivity
                     launchActivityRateADay();
                 }
                 if (msg.what == MSG_ID.MSG_SENT.ordinal()) {
-                    String title = edittext.getText().toString() + " - " + titleText.getText().toString();
-                    String shareBody = title + "\n" + (int) (rab.getRating()) + "/5\n" + logText.getText().toString();
+                    String shareBody = getShareString();
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
                     sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
@@ -147,7 +216,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
-                // TODO Auto-generated method stub
                 m_calendar.set(java.util.Calendar.YEAR, year);
                 m_calendar.set(java.util.Calendar.MONTH, monthOfYear);
                 m_calendar.set(java.util.Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -195,10 +263,12 @@ public class MainActivity extends AppCompatActivity
         rateADayIntent.putExtra(EXTRA_DATE_YEAR, m_calendar.get(java.util.Calendar.YEAR));
         startActivityForResult(rateADayIntent, ACTIVITY_ID.ACTIVITY_RATE_A_DAY.ordinal());
     }
+
     private void launchActivitySettings() {
         Intent settingIntent = new Intent(getApplicationContext(), SettingsActivity.class);
         startActivityForResult(settingIntent, ACTIVITY_ID.ACTIVITY_SETTINGS.ordinal());
     }
+
     private void launchActivityDiagrams() {
         Intent diagramIntent = new Intent(getApplicationContext(), DiagramActivity.class);
         startActivityForResult(diagramIntent, ACTIVITY_ID.ACTIVITY_DIAGRAMS.ordinal());
@@ -216,7 +286,7 @@ public class MainActivity extends AppCompatActivity
                 else
                     Snackbar.make(getCurrentFocus(), res.getString(R.string.save_the_day_bad), 5000).show();
             }
-        } else if(requestCode == ACTIVITY_ID.ACTIVITY_SETTINGS.ordinal()) {
+        } else if (requestCode == ACTIVITY_ID.ACTIVITY_SETTINGS.ordinal()) {
             //TODO Make something
         }
     }
@@ -237,7 +307,30 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main, menu);
         getMenuInflater().inflate(R.menu.share_button, menu);
         MenuItem item = menu.findItem(R.id.menu_item_share);
-        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        mShareActionProvider = (ShareActionProviderCustom) MenuItemCompat.getActionProvider(item);
+        mShareActionProvider.setOnShareTargetSelectedListener(
+                new ShareActionProviderCustom.OnShareTargetSelectedListener() {
+                    @Override
+                    public boolean onShareTargetSelected(ShareActionProviderCustom actionProvider, Intent intent) {
+                        final String appName = intent.getComponent().getPackageName();
+                        Resources res = getResources();
+                        if ("com.facebook.katana".equals(appName)) {
+                            SharePhoto photo = new SharePhoto.Builder().setBitmap(getBitmapWithShareString())
+                                    .setCaption(getShareString())
+                                    .build();
+                            ShareContent shareContent = new ShareMediaContent.Builder()
+                                    .addMedium(photo)
+                                    .setShareHashtag(new ShareHashtag.Builder()
+                                            .setHashtag(res.getString(R.string.hashtag))
+                                            .build())
+                                    .build();
+                            ShareDialog shareDialog = new ShareDialog(MainActivity.getmActivity());
+                            shareDialog.show(shareContent, ShareDialog.Mode.AUTOMATIC);
+                            return true;
+                        }
+                        return false;
+                    }
+                });
         //Initialize the labels
         updateLabel();
         return true;

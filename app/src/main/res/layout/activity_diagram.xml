@@ -4,12 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mithraw.howwasyourday.Activities.DiagramActivity">
-    <ProgressBar
-        android:id="@+id/vertical_progressbar"
-        android:layout_width="120dip"
-        android:layout_height="300dip"
-        style="@style/Widget.ProgressBar.Vertical"
-        />
+    tools:context=".Activities.DiagramActivity">
+
+    <include
+        android:id="@+id/current_year_week"
+        layout="@layout/week_diagram_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <include
+        android:id="@+id/all_time_week"
+        layout="@layout/week_diagram_view"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="53dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/current_year_week"
+        app:layout_constraintBottom_toTopOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

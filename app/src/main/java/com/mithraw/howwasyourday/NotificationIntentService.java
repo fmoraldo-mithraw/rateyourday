@@ -7,7 +7,6 @@ import android.content.res.Resources;
 import android.os.Looper;
 import android.widget.Toast;
 
-import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Helpers.NotificationHelper;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
