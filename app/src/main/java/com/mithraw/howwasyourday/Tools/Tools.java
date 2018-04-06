@@ -1,4 +1,4 @@
-package com.example.mithraw.howwasyourday.Tools;
+package com.mithraw.howwasyourday.Tools;
 
 public class Tools {
     public static boolean isNumber(String str) {

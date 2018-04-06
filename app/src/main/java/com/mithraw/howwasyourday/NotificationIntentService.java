@@ -1,4 +1,4 @@
-package com.example.mithraw.howwasyourday;
+package com.mithraw.howwasyourday;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Looper;
 import android.widget.Toast;
-import com.example.mithraw.howwasyourday.Helpers.NotificationHelper;
-import com.example.mithraw.howwasyourday.databases.Day;
-import com.example.mithraw.howwasyourday.databases.DaysDatabase;
+
+import com.mithraw.howwasyourday.R;
+import com.mithraw.howwasyourday.Helpers.NotificationHelper;
+import com.mithraw.howwasyourday.databases.Day;
+import com.mithraw.howwasyourday.databases.DaysDatabase;
 
 import java.util.Calendar;
 import java.util.logging.Level;

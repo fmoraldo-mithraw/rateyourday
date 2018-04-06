@@ -1,4 +1,4 @@
-package com.example.mithraw.howwasyourday.Helpers;
+package com.mithraw.howwasyourday.Helpers;
 
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
@@ -11,18 +11,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.widget.RemoteViews;
 
-import com.example.mithraw.howwasyourday.Activities.MainActivity;
-import com.example.mithraw.howwasyourday.Activities.RateADay;
-import com.example.mithraw.howwasyourday.App;
-import com.example.mithraw.howwasyourday.NotificationIntentService;
-import com.example.mithraw.howwasyourday.R;
-import com.example.mithraw.howwasyourday.Tools.Hour;
-import com.example.mithraw.howwasyourday.Tools.TimeAlarm;
-import com.example.mithraw.howwasyourday.databases.Day;
-import com.example.mithraw.howwasyourday.databases.DaysDatabase;
+import com.mithraw.howwasyourday.Activities.MainActivity;
+import com.mithraw.howwasyourday.Activities.RateADay;
+import com.mithraw.howwasyourday.App;
+import com.mithraw.howwasyourday.NotificationIntentService;
+import com.mithraw.howwasyourday.R;
+import com.mithraw.howwasyourday.Tools.Hour;
+import com.mithraw.howwasyourday.Tools.TimeAlarm;
+import com.mithraw.howwasyourday.databases.Day;
+import com.mithraw.howwasyourday.databases.DaysDatabase;
 
 import java.util.Calendar;
 import java.util.List;
@@ -77,7 +76,7 @@ public class NotificationHelper {
             calendar.setTimeInMillis(calendar.getTimeInMillis()+ 86400000);
 
         Intent intent = new Intent(App.getApplication().getApplicationContext(), TimeAlarm.class);
-        intent.setAction("com.example.mithraw.howwasyourday.alarm");
+        intent.setAction("com.mithraw.howwasyourday.alarm");
         alarmMgr = (AlarmManager) App.getApplication().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         alarmIntent = PendingIntent.getBroadcast(App.getApplication().getApplicationContext(), 0, intent, 0);
         alarmMgr.cancel(alarmIntent);

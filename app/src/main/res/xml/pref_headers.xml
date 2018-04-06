@@ -3,17 +3,17 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="com.example.mithraw.howwasyourday.Activities.SettingsActivity$GeneralPreferenceFragment"
+        android:fragment="com.mithraw.howwasyourday.Activities.SettingsActivity$GeneralPreferenceFragment"
         android:icon="@drawable/ic_menu_share"
         android:title="@string/pref_header_general" />
 
     <header
-        android:fragment="com.example.mithraw.howwasyourday.Activities.SettingsActivity$NotificationPreferenceFragment"
+        android:fragment="com.mithraw.howwasyourday.Activities.SettingsActivity$NotificationPreferenceFragment"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/pref_header_notifications" />
 
     <header
-        android:fragment="com.example.mithraw.howwasyourday.Activities.SettingsActivity$DataSyncPreferenceFragment"
+        android:fragment="com.mithraw.howwasyourday.Activities.SettingsActivity$DataSyncPreferenceFragment"
         android:icon="@drawable/ic_sync_black_24dp"
         android:title="@string/pref_header_data_sync" />
 

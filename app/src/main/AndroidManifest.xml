@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.mithraw.howwasyourday">
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <application android:name=".App"
+    package="com.mithraw.howwasyourday">
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:name="com.mithraw.howwasyourday.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -10,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activities.MainActivity"
+            android:name="com.mithraw.howwasyourday.Activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -19,18 +22,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.RateADay" />
+        <activity android:name="com.mithraw.howwasyourday.Activities.RateADay" />
         <activity
-            android:name=".Activities.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
-        <receiver android:name=".Tools.TimeAlarm" >
+            android:name="com.mithraw.howwasyourday.Activities.SettingsActivity"
+            android:label="@string/title_activity_settings" />
+
+        <receiver android:name="com.mithraw.howwasyourday.Tools.TimeAlarm">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
-                <action android:name="com.example.mithraw.howwasyourday.alarm"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="com.mithraw.howwasyourday.alarm" />
             </intent-filter>
         </receiver>
-        <service android:name=".NotificationIntentService" android:enabled="true"/>
 
+        <service
+            android:name="com.mithraw.howwasyourday.NotificationIntentService"
+            android:enabled="true" />
+
+        <activity android:name="com.mithraw.howwasyourday.Activities.DiagramActivity"></activity>
     </application>
 
 </manifest>

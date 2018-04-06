@@ -1,9 +1,8 @@
-package com.example.mithraw.howwasyourday.databases;
+package com.mithraw.howwasyourday.databases;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
 
 
 @Entity(primaryKeys = {"day_of_the_month", "month", "year"},

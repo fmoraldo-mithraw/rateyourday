@@ -1,4 +1,4 @@
-package com.example.mithraw.howwasyourday.Activities;
+package com.mithraw.howwasyourday.Activities;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -19,10 +19,10 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
-import com.example.mithraw.howwasyourday.App;
-import com.example.mithraw.howwasyourday.Helpers.NotificationHelper;
-import com.example.mithraw.howwasyourday.R;
-import com.example.mithraw.howwasyourday.Tools.Hour;
+import com.mithraw.howwasyourday.App;
+import com.mithraw.howwasyourday.Helpers.NotificationHelper;
+import com.mithraw.howwasyourday.R;
+import com.mithraw.howwasyourday.Tools.Hour;
 
 import java.util.List;
 

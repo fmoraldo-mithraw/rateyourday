@@ -1,4 +1,4 @@
-package com.example.mithraw.howwasyourday.Activities;
+package com.mithraw.howwasyourday.Activities;
 
 import android.annotation.SuppressLint;
 
@@ -29,10 +29,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RatingBar;
 
-import com.example.mithraw.howwasyourday.Helpers.NotificationHelper;
-import com.example.mithraw.howwasyourday.R;
-import com.example.mithraw.howwasyourday.databases.Day;
-import com.example.mithraw.howwasyourday.databases.DaysDatabase;
+import com.mithraw.howwasyourday.Helpers.NotificationHelper;
+import com.mithraw.howwasyourday.R;
+import com.mithraw.howwasyourday.databases.Day;
+import com.mithraw.howwasyourday.databases.DaysDatabase;
 
 import java.util.Calendar;
 import java.util.List;
@@ -41,7 +41,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT}
-    private enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS}
+    private enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS}
     public static final String EXTRA_DATE_DAY = "extra_date_day";
     public static final String EXTRA_DATE_MONTH = "extra_date_month";
     public static final String EXTRA_DATE_YEAR = "extra_date_year";
@@ -195,10 +195,13 @@ public class MainActivity extends AppCompatActivity
         rateADayIntent.putExtra(EXTRA_DATE_YEAR, m_calendar.get(java.util.Calendar.YEAR));
         startActivityForResult(rateADayIntent, ACTIVITY_ID.ACTIVITY_RATE_A_DAY.ordinal());
     }
-
     private void launchActivitySettings() {
         Intent settingIntent = new Intent(getApplicationContext(), SettingsActivity.class);
         startActivityForResult(settingIntent, ACTIVITY_ID.ACTIVITY_SETTINGS.ordinal());
+    }
+    private void launchActivityDiagrams() {
+        Intent diagramIntent = new Intent(getApplicationContext(), DiagramActivity.class);
+        startActivityForResult(diagramIntent, ACTIVITY_ID.ACTIVITY_DIAGRAMS.ordinal());
     }
 
     @Override
@@ -263,6 +266,9 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_manage) {
             launchActivitySettings();
+        }
+        if (id == R.id.nav_diagrams) {
+            launchActivityDiagrams();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

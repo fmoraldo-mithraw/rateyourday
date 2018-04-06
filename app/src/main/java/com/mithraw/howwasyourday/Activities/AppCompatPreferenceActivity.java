@@ -1,4 +1,4 @@
-package com.example.mithraw.howwasyourday.Activities;
+package com.mithraw.howwasyourday.Activities;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

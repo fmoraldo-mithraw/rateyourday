@@ -1,4 +1,4 @@
-package com.example.mithraw.howwasyourday.Tools;
+package com.mithraw.howwasyourday.Tools;
 
 public class Hour {
     private String hour;
