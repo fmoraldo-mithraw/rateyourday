@@ -1,10 +1,11 @@
-package com.mithraw.howwasyourday;
+package com.mithraw.howwasyourday.Helpers;
 
-import android.content.Context;
 import android.os.Build;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.mithraw.howwasyourday.R;
 
 public class WeekView {
     public enum DAYS{MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY,SUNDAY}

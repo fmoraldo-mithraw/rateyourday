@@ -29,6 +29,12 @@ public interface DayDao {
     @Query("SELECT AVG(rating) FROM day WHERE day_of_the_week IS :dayOfTheWeek")
     float getAverageRatingPerDayOfTheWeek(int dayOfTheWeek);
 
+    @Query("SELECT AVG(rating) FROM day WHERE month IS :month")
+    float getAverageRatingPerMonth(int month);
+
+    @Query("SELECT AVG(rating) FROM day WHERE month IS :month AND year IS :year")
+    float getAverageRatingPerMonthAndYear(int month, int year);
+
 
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)

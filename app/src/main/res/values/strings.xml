@@ -118,5 +118,20 @@
     <string name="sunday">sun</string>
     <string name="all_years_diagram_title">All years weeks</string>
     <string name="current_diagram_title">Current year weeks</string>
+    <string name="all_years_months_diagram_title">All years months</string>
+    <string name="current_months_diagram_title">Current year months</string>
+    <string name="january">J</string>
+    <string name="february">F</string>
+    <string name="march">M</string>
+    <string name="april">A</string>
+    <string name="may">M</string>
+    <string name="june">J</string>
+    <string name="july">J</string>
+    <string name="august">A</string>
+    <string name="september">S</string>
+    <string name="october">O</string>
+    <string name="november">N</string>
+    <string name="december">D</string>
+
 
 </resources>

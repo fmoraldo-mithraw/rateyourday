@@ -48,6 +48,7 @@ import com.mithraw.howwasyourday.databases.DaysDatabase;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity
@@ -140,7 +141,8 @@ public class MainActivity extends AppCompatActivity
 
         //Setup the database
         db = DaysDatabase.getInstance(getApplicationContext());
-
+        //TODO WARNING REMOVE THAT ON PRODUTION
+        //fillDbWithJunk();
         //Setup the sharing intent
         shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
@@ -246,6 +248,37 @@ public class MainActivity extends AppCompatActivity
                 .get(java.util.Calendar.YEAR), m_calendar.get(java.util.Calendar.MONTH),
                 m_calendar.get(java.util.Calendar.DAY_OF_MONTH));
 
+    }
+
+    private void fillDbWithJunk() {
+        new Thread() {
+            @Override
+            public void run() {
+                //Last year
+                Calendar c = Calendar.getInstance();
+                c.set(Calendar.DAY_OF_MONTH, 1);
+                c.set(Calendar.MONTH, 1);
+                c.set(Calendar.YEAR, m_calendar.get(java.util.Calendar.YEAR) - 1);
+                for (int i = 0; i < 365; i++) {
+                    c.set(Calendar.DAY_OF_YEAR, c.get(Calendar.DAY_OF_YEAR) + 1);
+                    Random r = new Random();
+                    int rate = r.nextInt(5 - 1) + 1;
+                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), rate, "", "");
+                    db.dayDao().insertDay(d);
+                }
+                //Current Year
+                c.set(Calendar.DAY_OF_MONTH, 1);
+                c.set(Calendar.MONTH, 1);
+                c.set(Calendar.YEAR, m_calendar.get(java.util.Calendar.YEAR));
+                for (int i = 0; i < 365 && (c.getTimeInMillis() < System.currentTimeMillis()); i++) {
+                    c.set(Calendar.DAY_OF_YEAR, c.get(Calendar.DAY_OF_YEAR) + 1);
+                    Random r = new Random();
+                    int rate = r.nextInt(5 - 1) + 1;
+                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), rate, "", "");
+                    db.dayDao().insertDay(d);
+                }
+            }
+        }.start();
     }
 
     private void updateLabel() {

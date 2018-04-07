@@ -47,7 +47,7 @@
         </receiver>
 
         <service
-            android:name=".NotificationIntentService"
+            android:name=".Services.NotificationIntentService"
             android:enabled="true" />
 
         <activity android:name=".Activities.DiagramActivity"></activity>

@@ -16,7 +16,7 @@ import android.widget.RemoteViews;
 import com.mithraw.howwasyourday.Activities.MainActivity;
 import com.mithraw.howwasyourday.Activities.RateADay;
 import com.mithraw.howwasyourday.App;
-import com.mithraw.howwasyourday.NotificationIntentService;
+import com.mithraw.howwasyourday.Services.NotificationIntentService;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Tools.Hour;
 import com.mithraw.howwasyourday.Tools.TimeAlarm;
