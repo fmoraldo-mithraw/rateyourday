@@ -108,4 +108,13 @@
     <string name="action_donate">Faire un don a l\'auteur</string>
     <string name="action_about_the_author">A propos de l\'auteur</string>
     <string name="hashtag">#NoteTaJournée</string>
+    <string name="monday">lun</string>
+    <string name="tuesday">mar</string>
+    <string name="wednesday">mer</string>
+    <string name="thursday">jeu</string>
+    <string name="friday">ven</string>
+    <string name="saturday">sam</string>
+    <string name="sunday">dim</string>
+    <string name="all_years_diagram_title">Semaines de toutes les années</string>
+    <string name="current_diagram_title">Semaines de l\'année en cours</string>
 </resources>

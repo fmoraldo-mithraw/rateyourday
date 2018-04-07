@@ -1,14 +1,19 @@
 package com.mithraw.howwasyourday.Activities;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import com.mithraw.howwasyourday.R;
+import com.mithraw.howwasyourday.WeekView;
+import com.mithraw.howwasyourday.databases.DaysDatabase;
+
+import java.util.Calendar;
 
 public class DiagramActivity extends AppCompatActivity {
 
@@ -30,51 +35,100 @@ public class DiagramActivity extends AppCompatActivity {
     }
 
     protected static Handler handler;
+    protected DaysDatabase db;
 
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diagram);
-        View view = findViewById(R.id.all_time_week);
-        ProgressBar pb1 = view.findViewById(R.id.vertical_progressbar_monday);
-        pb1.setProgress(50);
-        ProgressBar pb2 = view.findViewById(R.id.vertical_progressbar_tuesday);
-        pb2.setProgress(50);
-        ProgressBar pb3 = view.findViewById(R.id.vertical_progressbar_wednesday);
-        pb3.setProgress(50);
-        ProgressBar pb4 = view.findViewById(R.id.vertical_progressbar_thursday);
-        pb4.setProgress(50);
-        ProgressBar pb5 = view.findViewById(R.id.vertical_progressbar_friday);
-        pb5.setProgress(50);
-        ProgressBar pb6 = view.findViewById(R.id.vertical_progressbar_saturday);
-        pb6.setProgress(50);
-        ProgressBar pb7 = view.findViewById(R.id.vertical_progressbar_sunday);
-        pb7.setProgress(50);
-        View view2 = findViewById(R.id.current_year_week);
-        ProgressBar pb8 = view2.findViewById(R.id.vertical_progressbar_monday);
-        pb8.setProgress(75);
-        ProgressBar pb9 = view2.findViewById(R.id.vertical_progressbar_tuesday);
-        pb9.setProgress(75);
-        ProgressBar pb10 = view2.findViewById(R.id.vertical_progressbar_wednesday);
-        pb10.setProgress(75);
-        ProgressBar pb11 = view2.findViewById(R.id.vertical_progressbar_thursday);
-        pb11.setProgress(75);
-        ProgressBar pb12 = view2.findViewById(R.id.vertical_progressbar_friday);
-        pb12.setProgress(75);
-        ProgressBar pb13 = view2.findViewById(R.id.vertical_progressbar_saturday);
-        pb13.setProgress(75);
-        ProgressBar pb14 = view2.findViewById(R.id.vertical_progressbar_sunday);
-        pb14.setProgress(75);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        db = DaysDatabase.getInstance(getApplicationContext());
 
-        /*handler = new Handler() {
+
+        handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                ProgressBar progressBarMonday = (ProgressBar) findViewById(R.id.vertical_progressbar_monday);
+                WeekView viewCur = new WeekView((View) findViewById(R.id.current_year_week));
+                WeekView viewAll = new WeekView((View) findViewById(R.id.all_time_week));
                 if (msg.what == MSG_ID.MONDAY_CURRENT_YEAR.ordinal()) {
-                    progressBarMonday.setProgress((Integer) (msg.obj));
+                    viewCur.updateDay(WeekView.DAYS.MONDAY, (float) msg.obj);
+                } else if (msg.what == MSG_ID.TUESDAY_CURRENT_YEAR.ordinal()) {
+                    viewCur.updateDay(WeekView.DAYS.TUESDAY, (float) msg.obj);
+                } else if (msg.what == MSG_ID.WEDNESDAY_CURRENT_YEAR.ordinal()) {
+                    viewCur.updateDay(WeekView.DAYS.WEDNESDAY, (float) msg.obj);
+                } else if (msg.what == MSG_ID.THURSDAY_CURRENT_YEAR.ordinal()) {
+                    viewCur.updateDay(WeekView.DAYS.THURSDAY, (float) msg.obj);
+                } else if (msg.what == MSG_ID.FRIDAY_CURRENT_YEAR.ordinal()) {
+                    viewCur.updateDay(WeekView.DAYS.FRIDAY, (float) msg.obj);
+                } else if (msg.what == MSG_ID.SATURDAY_CURRENT_YEAR.ordinal()) {
+                    viewCur.updateDay(WeekView.DAYS.SATURDAY, (float) msg.obj);
+                } else if (msg.what == MSG_ID.SUNDAY_CURRENT_YEAR.ordinal()) {
+                    viewCur.updateDay(WeekView.DAYS.SUNDAY, (float) msg.obj);
+                } else if (msg.what == MSG_ID.MONDAY_ALL_YEARS.ordinal()) {
+                    viewAll.updateDay(WeekView.DAYS.MONDAY, (float) msg.obj);
+                } else if (msg.what == MSG_ID.TUESDAY_ALL_YEARS.ordinal()) {
+                    viewAll.updateDay(WeekView.DAYS.TUESDAY, (float) msg.obj);
+                } else if (msg.what == MSG_ID.WEDNESDAY_ALL_YEARS.ordinal()) {
+                    viewAll.updateDay(WeekView.DAYS.WEDNESDAY, (float) msg.obj);
+                } else if (msg.what == MSG_ID.THURSDAY_ALL_YEARS.ordinal()) {
+                    viewAll.updateDay(WeekView.DAYS.THURSDAY, (float) msg.obj);
+                } else if (msg.what == MSG_ID.FRIDAY_ALL_YEARS.ordinal()) {
+                    viewAll.updateDay(WeekView.DAYS.FRIDAY, (float) msg.obj);
+                } else if (msg.what == MSG_ID.SATURDAY_ALL_YEARS.ordinal()) {
+                    viewAll.updateDay(WeekView.DAYS.SATURDAY, (float) msg.obj);
+                } else if (msg.what == MSG_ID.SUNDAY_ALL_YEARS.ordinal()) {
+                    viewAll.updateDay(WeekView.DAYS.SUNDAY, (float) msg.obj);
                 }
             }
-        };*/
+        };
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Resources res = getResources();
+        WeekView viewCur = new WeekView((View) findViewById(R.id.current_year_week));
+        viewCur.setTitle(res.getString(R.string.current_diagram_title));
+
+        WeekView viewAll = new WeekView((View) findViewById(R.id.all_time_week));
+        viewAll.setTitle(res.getString(R.string.all_years_diagram_title));
+        new Thread() {
+            @Override
+            public void run() {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                for (int i = 0; i < 7; i++) {
+                    int curDay = Calendar.MONDAY + i;
+                    if (i == 6)
+                        curDay = Calendar.SUNDAY;
+                    float ret = db.dayDao().getAverageRatingPerDayOfTheWeekAndYear(curDay, calendar.get(java.util.Calendar.YEAR));
+                    Message msg_rating = Message.obtain();
+                    msg_rating.what = (MSG_ID.MONDAY_CURRENT_YEAR.ordinal() + i);
+                    msg_rating.obj = ret;
+                    handler.sendMessage(msg_rating);
+                }
+                for (int i = 0; i < 7; i++) {
+                    int curDay = Calendar.MONDAY + i;
+                    if (i == 6)
+                        curDay = Calendar.SUNDAY;
+                    float ret = db.dayDao().getAverageRatingPerDayOfTheWeek(curDay);
+                    Message msg_rating = Message.obtain();
+                    msg_rating.what = (MSG_ID.MONDAY_ALL_YEARS.ordinal() + i);
+                    msg_rating.obj = ret;
+                    handler.sendMessage(msg_rating);
+                }
+            }
+        }.start();
+    }
+    @Override
+    public void onBackPressed() {
+        finish();
+        return;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        return true;
     }
 }

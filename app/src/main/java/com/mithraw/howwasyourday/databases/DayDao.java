@@ -23,8 +23,13 @@ public interface DayDao {
     @Query("SELECT * FROM day WHERE day_of_the_week IS :dayOfTheWeek AND month IS :month AND year IS :year")
     List<Day> loadAllByDayOfTheWeekByMonth(int dayOfTheWeek, int month, int year);
 
-    @Query("SELECT * FROM day WHERE month IS :month AND year IS :year")
-    List<Day> loadAllByMonth(int month, int year);
+    @Query("SELECT AVG(rating) FROM day WHERE day_of_the_week IS :dayOfTheWeek AND year IS :year")
+    float getAverageRatingPerDayOfTheWeekAndYear(int dayOfTheWeek, int year);
+
+    @Query("SELECT AVG(rating) FROM day WHERE day_of_the_week IS :dayOfTheWeek")
+    float getAverageRatingPerDayOfTheWeek(int dayOfTheWeek);
+
+
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insertDay(Day... days);
