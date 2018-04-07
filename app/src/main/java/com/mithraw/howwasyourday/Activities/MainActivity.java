@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity
         String shareBody = title + "\n" + (int) (rab.getRating()) + "/5\n" + logText.getText().toString();
         return shareBody;
     }
+
     public static Bitmap getBitmapWithShareString() {
         Resources res = MainActivity.getContext().getResources();
         RatingBar rab = (RatingBar) MainActivity.getmActivity().findViewById(R.id.ratingBar);
@@ -99,24 +100,24 @@ public class MainActivity extends AppCompatActivity
         }
 
         Bitmap src = BitmapFactory.decodeResource(res, R.mipmap.ic_launcher);
-        int totalWidth = src.getWidth()+400;
+        int totalWidth = src.getWidth() + 400;
         Bitmap image = Bitmap.createBitmap(totalWidth, src.getHeight(), Bitmap.Config.ARGB_8888);
 
         Canvas cs = new Canvas(image);
         Paint tPaint = new Paint();
         tPaint.setTextSize(20);
-        tPaint.setTypeface(Typeface.create("Arial",Typeface.NORMAL));
+        tPaint.setTypeface(Typeface.create("Arial", Typeface.NORMAL));
         tPaint.setColor(Color.WHITE);
         tPaint.setStyle(Paint.Style.FILL);
         cs.drawBitmap(src, 0f, 0f, null);
         float height = tPaint.measureText("yY");
         float width = tPaint.measureText(title);
-        cs.drawText(title, src.getWidth(), height+15f, tPaint);
+        cs.drawText(title, src.getWidth(), height + 15f, tPaint);
         tPaint.setTextSize(17);
         int iteratorHeight = 2;
         int sizeLine = 47;
-        for(int i = 0; i<shareBody.length();i+=sizeLine) {
-            cs.drawText(shareBody.substring(i, (i+sizeLine> shareBody.length()?shareBody.length():i+sizeLine)), src.getWidth(), 10 + (height + 4f) * iteratorHeight, tPaint);
+        for (int i = 0; i < shareBody.length(); i += sizeLine) {
+            cs.drawText(shareBody.substring(i, (i + sizeLine > shareBody.length() ? shareBody.length() : i + sizeLine)), src.getWidth(), 10 + (height + 4f) * iteratorHeight, tPaint);
             iteratorHeight++;
         }
 
@@ -377,6 +378,10 @@ public class MainActivity extends AppCompatActivity
         titleText.setEnabled(false);
         EditText logText = (EditText) findViewById(R.id.logText);
         logText.setEnabled(false);
+        m_calendar.setTimeInMillis(System.currentTimeMillis());
+        datePickerDialog.updateDate(m_calendar.get(java.util.Calendar.YEAR),
+                m_calendar.get(java.util.Calendar.MONTH),
+                m_calendar.get(java.util.Calendar.DAY_OF_MONTH));
         fillTheInformations(true);
     }
 
