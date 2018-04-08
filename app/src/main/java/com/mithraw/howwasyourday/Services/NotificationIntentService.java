@@ -58,7 +58,7 @@ public class NotificationIntentService extends IntentService {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(App.getApplication().NOTIFICATION_SERVICE);
         mNotificationManager.cancel(0);
         Resources res = App.getApplication().getResources();
-        Logger.getLogger("NotificationIntentService").log(new LogRecord(Level.WARNING, "FMORALDO : NotificationIntentService triggered " + intent.getAction()));
+        Logger.getLogger("NotificationIntentService").log(new LogRecord(Level.INFO, "FMORALDO : NotificationIntentService triggered " + intent.getAction()));
         String toastString = res.getString(R.string.notification_default_star);
         int rate = 1;
         switch (intent.getAction()) {

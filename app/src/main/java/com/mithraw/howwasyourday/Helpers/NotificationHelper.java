@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v7.app.AppCompatDelegate;
 import android.widget.RemoteViews;
 
 import com.mithraw.howwasyourday.Activities.MainActivity;
@@ -65,15 +67,18 @@ public class NotificationHelper {
     }
 
     public static void updateNotificationStatus(boolean enable, String time, String ringtone, boolean vibration) {
-        Logger.getLogger("NotificationHelper").log(new LogRecord(Level.WARNING, "FMORALDO : Notification updated" + " " + enable + " " + time + " " + ringtone + " " + vibration));
+        Logger.getLogger("NotificationHelper").log(new LogRecord(Level.INFO, "FMORALDO : Notification updated" + " " + enable + " " + time + " " + ringtone + " " + vibration));
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         Hour curHour = new Hour(time);
         calendar.set(Calendar.HOUR_OF_DAY, curHour.getIntHour());
         calendar.set(Calendar.MINUTE, curHour.getIntMinute());
+        calendar.set(Calendar.SECOND, 0);
         //if the date is in the past, we add a day
-        if( calendar.getTimeInMillis() < System.currentTimeMillis())
-            calendar.setTimeInMillis(calendar.getTimeInMillis()+ 86400000);
+        if( calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            Logger.getLogger("NotificationIntentService").log(new LogRecord(Level.INFO, "FMORALDO : updateNotificationStatus : Time set in the past, we add a day"));
+            calendar.setTimeInMillis(calendar.getTimeInMillis() + 86400000);
+        }
 
         Intent intent = new Intent(App.getApplication().getApplicationContext(), TimeAlarm.class);
         intent.setAction("com.mithraw.howwasyourday.alarm");
@@ -85,7 +90,8 @@ public class NotificationHelper {
         }
     }
 
-    public static void triggerNotification() {
+    public static void triggerNotification(final Context context) {
+        final Context pContext = context;
         new Thread() {
             @Override
             public void run() {
@@ -93,8 +99,10 @@ public class NotificationHelper {
                 Calendar calendar = Calendar.getInstance();
                 //if the day has already been filled with a rating we don't show the notification
                 List<Day> days = db.dayDao().loadAllByDate(calendar.get(java.util.Calendar.DAY_OF_MONTH), calendar.get(java.util.Calendar.MONTH), calendar.get(java.util.Calendar.YEAR));
-                if (!days.isEmpty())
+                if (!days.isEmpty()) {
+                    Logger.getLogger("NotificationIntentService").log(new LogRecord(Level.INFO, "FMORALDO : triggerNotification : The day has already been rated, we skip the notification"));
                     return;
+                }
 
                 //Complex notifications
                 RemoteViews notificationLayout = new RemoteViews(App.getApplication().getPackageName(), R.layout.notification_custom);
@@ -119,6 +127,7 @@ public class NotificationHelper {
                 fiveIntent.setAction(FIVE_STAR);
                 notificationLayoutExpanded.setOnClickPendingIntent(R.id.Button5, PendingIntent.getService(App.getApplication().getApplicationContext(), 0, fiveIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
+
                 Intent intent = new Intent(App.getApplication().getApplicationContext(), RateADay.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra(MainActivity.EXTRA_DATE_DAY, calendar.get(java.util.Calendar.DAY_OF_MONTH));
@@ -127,7 +136,7 @@ public class NotificationHelper {
                 PendingIntent pendingIntent = PendingIntent.getActivity(App.getApplication().getApplicationContext(), 0, intent, 0);
 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(App.getApplication().getApplicationContext(), CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                        .setSmallIcon(R.drawable.ic_stars_24dp)
                         .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)
@@ -140,7 +149,7 @@ public class NotificationHelper {
                     long[] pattern = new long []{500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500};
                     mBuilder.setVibrate(pattern);
                 }
-                NotificationManager notificationManager = (NotificationManager) App.getApplication().getApplicationContext().getSystemService(App.getApplication().getApplicationContext().NOTIFICATION_SERVICE);
+                NotificationManager notificationManager = (NotificationManager) pContext.getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.notify(0, mBuilder.build());
             }
         }.start();

@@ -16,15 +16,15 @@ public class TimeAlarm extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent)
     {
         if(intent.getAction() != null) {
-            Logger.getLogger("TimeAlarm").log(new LogRecord(Level.WARNING,"FMORALDO : " + intent.getAction()));
+            Logger.getLogger("TimeAlarm").log(new LogRecord(Level.INFO,"FMORALDO : " + intent.getAction()));
             if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
                 NotificationHelper.setupNotificationStatus();
             } else if (intent.getAction().equals("com.mithraw.howwasyourday.alarm")) {
-                NotificationHelper.triggerNotification();
+                NotificationHelper.triggerNotification(context);
             }
 
         }else {
-            Logger.getLogger("TimeAlarm").log(new LogRecord(Level.WARNING, "FMORALDO : Intent with no action name "));
+            Logger.getLogger("TimeAlarm").log(new LogRecord(Level.INFO, "FMORALDO : Intent with no action name "));
         }
     }
 

@@ -4,12 +4,12 @@
 
     <header
         android:fragment="com.mithraw.howwasyourday.Activities.SettingsActivity$GeneralPreferenceFragment"
-        android:icon="@drawable/ic_menu_share"
+        android:icon="@drawable/ic_menu_share2"
         android:title="@string/pref_header_general" />
 
     <header
         android:fragment="com.mithraw.howwasyourday.Activities.SettingsActivity$NotificationPreferenceFragment"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@drawable/ic_notifications_black_default"
         android:title="@string/pref_header_notifications" />
 
     <header

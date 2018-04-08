@@ -39,7 +39,7 @@
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:cropToPadding="false"
-            android:drawableTop="@drawable/ic_star"
+            android:drawableTop="@drawable/ic_stars_24dp"
             android:enabled="true" />
         <Button
             android:id="@+id/Button2"
@@ -47,7 +47,7 @@
             android:layout_height="35dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:drawableTop="@drawable/ic_star"
+            android:drawableTop="@drawable/ic_stars_24dp"
             android:enabled="true"/>
         <Button
             android:id="@+id/Button3"
@@ -55,7 +55,7 @@
             android:layout_height="35dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:drawableTop="@drawable/ic_star"
+            android:drawableTop="@drawable/ic_stars_24dp"
             android:enabled="true"/>
         <Button
             android:id="@+id/Button4"
@@ -63,7 +63,7 @@
             android:layout_height="35dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:drawableTop="@drawable/ic_star"
+            android:drawableTop="@drawable/ic_stars_24dp"
             android:enabled="true"/>
         <Button
             android:id="@+id/Button5"
@@ -71,7 +71,7 @@
             android:layout_height="35dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:drawableTop="@drawable/ic_star"
+            android:drawableTop="@drawable/ic_stars_24dp"
             android:enabled="true"/>
     </LinearLayout>
 </RelativeLayout>
