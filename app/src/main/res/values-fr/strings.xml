@@ -131,4 +131,6 @@
     <string name="october">O</string>
     <string name="november">N</string>
     <string name="december">D</string>
+    <string name="edit_button_text" >EDITER</string>
+    <string name="remove_button_text" >SUPPRIMER</string>
 </resources>

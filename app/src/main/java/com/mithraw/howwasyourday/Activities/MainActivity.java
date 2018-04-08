@@ -56,11 +56,9 @@ public class MainActivity extends AppCompatActivity
 
     private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT}
 
-    private enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS}
+    private enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS, ACTIVITY_LOGS}
 
-    public static final String EXTRA_DATE_DAY = "extra_date_day";
-    public static final String EXTRA_DATE_MONTH = "extra_date_month";
-    public static final String EXTRA_DATE_YEAR = "extra_date_year";
+
     private static Context mContext;
     private static Activity mActivity;
     private DatePickerDialog datePickerDialog = null;
@@ -263,7 +261,7 @@ public class MainActivity extends AppCompatActivity
                     c.set(Calendar.DAY_OF_YEAR, c.get(Calendar.DAY_OF_YEAR) + 1);
                     Random r = new Random();
                     int rate = r.nextInt(5 - 1) + 1;
-                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), rate, "", "");
+                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), rate, "Balbalalala", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
                     db.dayDao().insertDay(d);
                 }
                 //Current Year
@@ -274,7 +272,7 @@ public class MainActivity extends AppCompatActivity
                     c.set(Calendar.DAY_OF_YEAR, c.get(Calendar.DAY_OF_YEAR) + 1);
                     Random r = new Random();
                     int rate = r.nextInt(5 - 1) + 1;
-                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), rate, "", "");
+                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), rate, "Balbalalala", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
                     db.dayDao().insertDay(d);
                 }
             }
@@ -292,9 +290,9 @@ public class MainActivity extends AppCompatActivity
     private void launchActivityRateADay() {
         Intent rateADayIntent = new Intent(getApplicationContext(), RateADay.class);
         // Send the date informations to the next activity
-        rateADayIntent.putExtra(EXTRA_DATE_DAY, m_calendar.get(java.util.Calendar.DAY_OF_MONTH));
-        rateADayIntent.putExtra(EXTRA_DATE_MONTH, m_calendar.get(java.util.Calendar.MONTH));
-        rateADayIntent.putExtra(EXTRA_DATE_YEAR, m_calendar.get(java.util.Calendar.YEAR));
+        rateADayIntent.putExtra(RateADay.EXTRA_DATE_DAY, m_calendar.get(java.util.Calendar.DAY_OF_MONTH));
+        rateADayIntent.putExtra(RateADay.EXTRA_DATE_MONTH, m_calendar.get(java.util.Calendar.MONTH));
+        rateADayIntent.putExtra(RateADay.EXTRA_DATE_YEAR, m_calendar.get(java.util.Calendar.YEAR));
         startActivityForResult(rateADayIntent, ACTIVITY_ID.ACTIVITY_RATE_A_DAY.ordinal());
     }
 
@@ -306,6 +304,11 @@ public class MainActivity extends AppCompatActivity
     private void launchActivityDiagrams() {
         Intent diagramIntent = new Intent(getApplicationContext(), DiagramActivity.class);
         startActivityForResult(diagramIntent, ACTIVITY_ID.ACTIVITY_DIAGRAMS.ordinal());
+    }
+
+    private void launchActivityLogs() {
+        Intent diagramIntent = new Intent(getApplicationContext(), LogsActivity.class);
+        startActivityForResult(diagramIntent, ACTIVITY_ID.ACTIVITY_LOGS.ordinal());
     }
 
     @Override
@@ -396,6 +399,9 @@ public class MainActivity extends AppCompatActivity
         }
         if (id == R.id.nav_diagrams) {
             launchActivityDiagrams();
+        }
+        if (id == R.id.nav_entry_logs) {
+            launchActivityLogs();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

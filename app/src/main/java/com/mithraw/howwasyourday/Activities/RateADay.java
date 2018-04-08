@@ -23,6 +23,9 @@ public class RateADay extends AppCompatActivity {
     protected final java.util.Calendar m_calendar = java.util.Calendar.getInstance();
     protected DaysDatabase db;
     protected static Handler handler;
+    public static final String EXTRA_DATE_DAY = "extra_date_day";
+    public static final String EXTRA_DATE_MONTH = "extra_date_month";
+    public static final String EXTRA_DATE_YEAR = "extra_date_year";
 
     @SuppressLint("HandlerLeak")
     @Override
@@ -32,6 +35,8 @@ public class RateADay extends AppCompatActivity {
 
         //Add the back button to the activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //Retreive the database
         db = DaysDatabase.getInstance(getApplicationContext());
 
         handler = new Handler() {
@@ -65,9 +70,9 @@ public class RateADay extends AppCompatActivity {
         };
         // Retreive the informations of the date from the main activity and fill the calendar with them
         Intent intent = getIntent();
-        m_calendar.set(java.util.Calendar.DAY_OF_MONTH, intent.getIntExtra(MainActivity.EXTRA_DATE_DAY, 0));
-        m_calendar.set(java.util.Calendar.MONTH, intent.getIntExtra(MainActivity.EXTRA_DATE_MONTH, 0));
-        m_calendar.set(java.util.Calendar.YEAR, intent.getIntExtra(MainActivity.EXTRA_DATE_YEAR, 0));
+        m_calendar.set(java.util.Calendar.DAY_OF_MONTH, intent.getIntExtra(EXTRA_DATE_DAY, 0));
+        m_calendar.set(java.util.Calendar.MONTH, intent.getIntExtra(EXTRA_DATE_MONTH, 0));
+        m_calendar.set(java.util.Calendar.YEAR, intent.getIntExtra(EXTRA_DATE_YEAR, 0));
 
         // Adjusting the controls of the page
         EditText titleText = (EditText) findViewById(R.id.titleText);

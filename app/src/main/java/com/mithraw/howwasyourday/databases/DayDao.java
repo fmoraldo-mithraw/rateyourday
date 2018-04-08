@@ -11,7 +11,7 @@ import java.util.List;
 
 @Dao
 public interface DayDao {
-    @Query("SELECT * FROM day")
+    @Query("SELECT * FROM day ORDER BY year DESC, month DESC, day_of_the_month DESC")
     List<Day> getAll();
 
     @Query("SELECT * FROM day WHERE day_of_the_month IS :dayOfTheMonth AND month IS :month AND year IS :year")

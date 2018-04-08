@@ -130,9 +130,9 @@ public class NotificationHelper {
 
                 Intent intent = new Intent(App.getApplication().getApplicationContext(), RateADay.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra(MainActivity.EXTRA_DATE_DAY, calendar.get(java.util.Calendar.DAY_OF_MONTH));
-                intent.putExtra(MainActivity.EXTRA_DATE_MONTH, calendar.get(java.util.Calendar.MONTH));
-                intent.putExtra(MainActivity.EXTRA_DATE_YEAR, calendar.get(java.util.Calendar.YEAR));
+                intent.putExtra(RateADay.EXTRA_DATE_DAY, calendar.get(java.util.Calendar.DAY_OF_MONTH));
+                intent.putExtra(RateADay.EXTRA_DATE_MONTH, calendar.get(java.util.Calendar.MONTH));
+                intent.putExtra(RateADay.EXTRA_DATE_YEAR, calendar.get(java.util.Calendar.YEAR));
                 PendingIntent pendingIntent = PendingIntent.getActivity(App.getApplication().getApplicationContext(), 0, intent, 0);
 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(App.getApplication().getApplicationContext(), CHANNEL_ID)
