@@ -41,8 +41,6 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
-
         public enum MSG_ID {REMOVE_LOG}
 
         TextView logCardDate;
@@ -57,6 +55,7 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
         int mPosition;
         LinearLayout btnLayout;
         boolean isExtented = false;
+        View logCardDividerText;
 
 
         public ViewHolder(View v, Activity parent) {
@@ -77,11 +76,16 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
             logCardTitle = (TextView) v.findViewById(R.id.log_card_title);
             logCardText = (TextView) v.findViewById(R.id.log_card_text);
             btnLayout = (LinearLayout) v.findViewById(R.id.button_layout);
+            logCardDividerText = (View) v.findViewById(R.id.log_card_divider_text);
 
             btnEdit = (Button) v.findViewById(R.id.log_card_button_edit);
             btnRemove = (Button) v.findViewById(R.id.log_card_button_remove);
             //TODO set onClick methods
 
+        }
+
+        public View getLogCardDividerText() {
+            return logCardDividerText;
         }
 
         public TextView getLogCardDate() {
@@ -204,8 +208,14 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
         java.util.Date d = new java.util.Date(cal.getTimeInMillis());
         viewHolder.getLogCardDate().setText(format.format(d));
         viewHolder.getLogCardRating().setRating(mDataSet.get(position).getRating());
+        String logText = mDataSet.get(position).getLog();
+        if ("".equals(logText)) {
+            viewHolder.getLogCardDividerText().setVisibility(View.GONE);
+            viewHolder.getLogCardText().setVisibility(View.GONE);
+        } else {
+            viewHolder.getLogCardText().setText(logText);
+        }
         viewHolder.getLogCardTitle().setText(mDataSet.get(position).getTitleText());
-        viewHolder.getLogCardText().setText(mDataSet.get(position).getLog());
         viewHolder.setBtnLayoutExtented(false);
         viewHolder.setDay(mDataSet.get(position));
         viewHolder.setPosition(position);
