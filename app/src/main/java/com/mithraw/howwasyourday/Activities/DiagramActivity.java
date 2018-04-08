@@ -80,7 +80,7 @@ public class DiagramActivity extends AppCompatActivity {
         viewYearCur.setTitle(res.getString(R.string.current_months_diagram_title));
 
         MonthView viewYearAll = new MonthView((View) findViewById(R.id.all_time_months));
-        viewYearCur.setTitle(res.getString(R.string.all_years_months_diagram_title));
+        viewYearAll.setTitle(res.getString(R.string.all_years_months_diagram_title));
 
         handler = new Handler() {
             @Override

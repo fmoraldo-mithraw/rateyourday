@@ -105,7 +105,8 @@
     <string name="notification_four_star">You did rate your day 4 stars! Congrats !</string>
     <string name="notification_five_star">You did rate your day 5 stars ! Congrats !</string>
     <string name="action_entry_logs">Entry log</string>
-    <string name="action_stats_diagrams">Statistics / Diagrams</string>
+    <string name="action_stats_diagrams">Diagrams</string>
+    <string name="action_funny_stats">Interesting datas</string>
     <string name="action_donate">Donate to the author</string>
     <string name="action_about_the_author">About the author</string>
     <string name="hashtag">#RateYourDay</string>
@@ -132,8 +133,22 @@
     <string name="october">O</string>
     <string name="november">N</string>
     <string name="december">D</string>
-    <string name="edit_button_text" >EDIT</string>
-    <string name="remove_button_text" >REMOVE</string>
+    <string name="edit_button_text">EDIT</string>
+    <string name="remove_button_text">REMOVE</string>
+    <string name="last_week_title">Last week</string>
+    <string name="favorite_day">Favorite day :</string>
+    <string name="worst_day">Worst day :</string>
+    <string name="last_month_title">Last month</string>
+    <string name="current_month_title">Current month</string>
+    <string name="favorite_month">Favorite month :</string>
+    <string name="current_year_title">Current year</string>
+    <string name="last_year_title">Last year</string>
+    <string name="worst_month">Worst month :</string>
+    <string name="all_time_tile">All time</string>
+    <string name="favorite_year">Favorite year :</string>
+    <string name="worst_year">Worst year :</string>
+    <string name="nothing_interesting">Sorry, but at the moment, i don\'t have any interesting datas to show you.\nKeep rating your days and i will soon have some to show you my friend !</string>
+    <string name="nothing_interesting_title">Nothing interesting</string>
 
 
 </resources>

@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity
 
     private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT}
 
-    private enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS, ACTIVITY_LOGS}
+    private enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS, ACTIVITY_LOGS, ACTIVITY_STATS}
 
 
     private static Context mContext;
@@ -310,6 +310,10 @@ public class MainActivity extends AppCompatActivity
         Intent diagramIntent = new Intent(getApplicationContext(), LogsActivity.class);
         startActivityForResult(diagramIntent, ACTIVITY_ID.ACTIVITY_LOGS.ordinal());
     }
+    private void  launchActivityFunnyStats() {
+        Intent statsIntent = new Intent(getApplicationContext(), FunnyStatsActivity.class);
+        startActivityForResult(statsIntent, ACTIVITY_ID.ACTIVITY_STATS.ordinal());
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -403,6 +407,10 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_entry_logs) {
             launchActivityLogs();
         }
+        if (id == R.id.nav_funny_stats) {
+            launchActivityFunnyStats();
+        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

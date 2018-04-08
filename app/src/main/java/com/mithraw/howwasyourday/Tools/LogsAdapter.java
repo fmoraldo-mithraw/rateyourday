@@ -214,6 +214,8 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
             viewHolder.getLogCardText().setVisibility(View.GONE);
         } else {
             viewHolder.getLogCardText().setText(logText);
+            viewHolder.getLogCardDividerText().setVisibility(View.VISIBLE);
+            viewHolder.getLogCardText().setVisibility(View.VISIBLE);
         }
         viewHolder.getLogCardTitle().setText(mDataSet.get(position).getTitleText());
         viewHolder.setBtnLayoutExtented(false);

@@ -104,7 +104,8 @@
     <string name="notification_four_star">Tu as noté ta journée quatre étoiles ! Super !</string>
     <string name="notification_five_star">Tu as noté ta journée cinq étoiles ! Super !</string>
     <string name="action_entry_logs">Journal des entrées</string>
-    <string name="action_stats_diagrams">Statistiques / Diagrammes</string>
+    <string name="action_stats_diagrams">Diagrammes</string>
+    <string name="action_funny_stats">Données intéressantes</string>
     <string name="action_donate">Faire un don a l\'auteur</string>
     <string name="action_about_the_author">A propos de l\'auteur</string>
     <string name="hashtag">#NoteTaJournée</string>
@@ -133,4 +134,18 @@
     <string name="december">D</string>
     <string name="edit_button_text" >EDITER</string>
     <string name="remove_button_text" >SUPPRIMER</string>
+    <string name="last_week_title">La semaine dernière</string>
+    <string name="favorite_day">Journée préférée :</string>
+    <string name="worst_day">Pire journée :</string>
+    <string name="last_month_title">Le mois dernier</string>
+    <string name="current_month_title">Ce mois-ci</string>
+    <string name="favorite_month">Mois préféré :</string>
+    <string name="current_year_title">Cette année</string>
+    <string name="last_year_title">L\'année dernière</string>
+    <string name="worst_month">Pire mois :</string>
+    <string name="all_time_tile">De tout temps</string>
+    <string name="favorite_year">Favorite year :</string>
+    <string name="worst_year">Worst year :</string>
+    <string name="nothing_interesting">Désolé, mais je n\'ai pour le moment pas assez de données pour trouver des statistiques intéressantes à te montrer.\nContinue de noter tes journées et j\'en aurai bientôt a te proposer mon ami !</string>
+    <string name="nothing_interesting_title">Rien d\'intéressant</string>
 </resources>

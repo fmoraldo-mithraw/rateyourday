@@ -36,16 +36,21 @@ public class LogsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log);
+        // Init inner variables
         mContext = this;
         mActivity = this;
+
         //Get the DB
         db = DaysDatabase.getInstance(getApplicationContext());
+
         //Add the back button to the actionbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //Init the recycler view
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         // TODO initialize my dataset
 
-        //Initialize the recyclerView things
+        //Initialize the recyclerView things (throught the handler)
         mRecyclerView.setHasFixedSize(true);
         handler = new Handler() {
             @Override
@@ -71,6 +76,7 @@ public class LogsActivity extends AppCompatActivity {
         new Thread() {
             @Override
             public void run() {
+                //Retreive all days and send them to the adapter throught messages
                 List<Day> days = db.dayDao().getAll();
                 Message msg_rating = Message.obtain();
                 msg_rating.what = MSG_ID.DAYS_RECEIVED.ordinal();

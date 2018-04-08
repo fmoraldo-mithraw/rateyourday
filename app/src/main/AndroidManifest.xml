@@ -57,7 +57,8 @@
             android:enabled="true" />
 
         <activity android:name=".Activities.DiagramActivity" />
-        <activity android:name=".Activities.LogsActivity"></activity>
+        <activity android:name=".Activities.LogsActivity" />
+        <activity android:name=".Activities.FunnyStatsActivity"></activity>
     </application>
 
 </manifest>

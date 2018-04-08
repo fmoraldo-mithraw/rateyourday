@@ -35,6 +35,23 @@ public interface DayDao {
     @Query("SELECT AVG(rating) FROM day WHERE month IS :month AND year IS :year")
     float getAverageRatingPerMonthAndYear(int month, int year);
 
+    @Query("SELECT AVG(rating) FROM day WHERE day_of_the_week IS :day_of_the_week AND month IS :month AND year IS :year")
+    float getAverageRatingPerDayOfTheWeekPerMonthAndYear(int day_of_the_week,int month, int year);
+
+    @Query("SELECT AVG(rating) FROM day WHERE day_of_the_week IS :dayOfTheWeek")
+    float getAverageRatingPerDayOfTheWeekAllTime(int dayOfTheWeek);
+
+    @Query("SELECT AVG(rating) FROM day WHERE month IS :month")
+    float getAverageRatingPerMonthAllTime(int month);
+
+    @Query("SELECT * FROM day GROUP BY year")
+    List<Day> getYearsRated();
+
+    @Query("SELECT AVG(rating) FROM day WHERE year IS :year")
+    float getAverageRatingPerYear(int year);
+
+
+
 
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
@@ -45,5 +62,7 @@ public interface DayDao {
 
     @Update
     void update(Day day);
+    @Query("SELECT * FROM day WHERE day_of_the_month IS :dayOfTheMonth AND month IS :month AND year IS :year LIMIT 1")
+    List<Day> getDay(int dayOfTheMonth, int month, int year);
 
 }
