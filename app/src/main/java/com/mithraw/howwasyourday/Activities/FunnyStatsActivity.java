@@ -1,14 +1,23 @@
 package com.mithraw.howwasyourday.Activities;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.mithraw.howwasyourday.App;
@@ -25,23 +34,224 @@ import com.mithraw.howwasyourday.databases.DaysDatabase;
 import java.util.Calendar;
 import java.util.List;
 
+
 public class FunnyStatsActivity extends AppCompatActivity {
     private DaysDatabase db;
-    protected Handler handler;
+    protected static Handler handler;
+    CardView lastCardviewRemoved = null;
+    String lastKeyRemoved = "";
+    private String[] listProperties = {"stats_show_nothing_interresting",
+            "stats_show_last_week",
+            "stats_show_current_month",
+            "stats_show_last_month",
+            "stats_show_current_year",
+            "stats_show_last_year",
+            "stats_show_all_time"
+    };
 
     private enum MSG_ID {LAST_WEEK, CURRENT_MONTH, LAST_MONTH, CURRENT_YEAR, LAST_YEAR, ALL_TIME}
+
 
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_funny_stats);
-
         //Get the DB
         db = DaysDatabase.getInstance(getApplicationContext());
 
         //Add the back button to the actionbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ImageButton btn = findViewById(R.id.nothing_interresting_button);
+        btn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Resources res = App.getApplication().getResources();
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                alertDialogBuilder.setMessage(R.string.stat_removed)
+                        .setTitle(R.string.stat_removed_title);
+                alertDialogBuilder.setPositiveButton(R.string.stat_removed_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        lastCardviewRemoved = findViewById(R.id.card_view_nothing_interesting);
+                        lastCardviewRemoved.setVisibility(View.GONE);
+                        lastKeyRemoved = "stats_show_nothing_interresting";
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putBoolean(lastKeyRemoved, false).apply();
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putInt(lastKeyRemoved + "_month", Calendar.getInstance().get(Calendar.MONTH)).apply();
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putInt(lastKeyRemoved + "_year", Calendar.getInstance().get(Calendar.YEAR)).apply();
+                    }
+                });
+                alertDialogBuilder.setNegativeButton(R.string.stat_removed_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+                AlertDialog dialog = alertDialogBuilder.create();
+                dialog.show();
+            }
+        });
+
+        btn = findViewById(R.id.last_week_button);
+        btn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Resources res = App.getApplication().getResources();
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                alertDialogBuilder.setMessage(R.string.stat_removed)
+                        .setTitle(R.string.stat_removed_title);
+                alertDialogBuilder.setPositiveButton(R.string.stat_removed_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        lastCardviewRemoved = findViewById(R.id.card_view_last_week);
+                        lastCardviewRemoved.setVisibility(View.GONE);
+                        lastKeyRemoved = "stats_show_last_week";
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putBoolean(lastKeyRemoved, false).apply();
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putInt(lastKeyRemoved + "_month", Calendar.getInstance().get(Calendar.MONTH)).apply();
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putInt(lastKeyRemoved + "_year", Calendar.getInstance().get(Calendar.YEAR)).apply();
+                    }
+                });
+                alertDialogBuilder.setNegativeButton(R.string.stat_removed_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+                AlertDialog dialog = alertDialogBuilder.create();
+                dialog.show();
+            }
+        });
+        btn = findViewById(R.id.current_month_button);
+        btn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Resources res = App.getApplication().getResources();
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                alertDialogBuilder.setMessage(R.string.stat_removed)
+                        .setTitle(R.string.stat_removed_title);
+                alertDialogBuilder.setPositiveButton(R.string.stat_removed_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        lastCardviewRemoved = findViewById(R.id.card_view_current_month);
+                        lastCardviewRemoved.setVisibility(View.GONE);
+                        lastKeyRemoved = "stats_show_current_month";
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putBoolean(lastKeyRemoved, false).apply();
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putInt(lastKeyRemoved + "_month", Calendar.getInstance().get(Calendar.MONTH)).apply();
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putInt(lastKeyRemoved + "_year", Calendar.getInstance().get(Calendar.YEAR)).apply();
+                    }
+                });
+                alertDialogBuilder.setNegativeButton(R.string.stat_removed_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+                AlertDialog dialog = alertDialogBuilder.create();
+                dialog.show();
+            }
+        });
+        btn = findViewById(R.id.last_month_button);
+        btn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Resources res = App.getApplication().getResources();
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                alertDialogBuilder.setMessage(R.string.stat_removed)
+                        .setTitle(R.string.stat_removed_title);
+                alertDialogBuilder.setPositiveButton(R.string.stat_removed_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        lastCardviewRemoved = findViewById(R.id.card_view_last_month);
+                        lastCardviewRemoved.setVisibility(View.GONE);
+                        lastKeyRemoved = "stats_show_last_month";
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putBoolean(lastKeyRemoved, false).apply();
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putInt(lastKeyRemoved + "_month", Calendar.getInstance().get(Calendar.MONTH)).apply();
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putInt(lastKeyRemoved + "_year", Calendar.getInstance().get(Calendar.YEAR)).apply();
+                    }
+                });
+                alertDialogBuilder.setNegativeButton(R.string.stat_removed_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+                AlertDialog dialog = alertDialogBuilder.create();
+                dialog.show();
+            }
+        });
+        btn = findViewById(R.id.current_year_button);
+        btn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Resources res = App.getApplication().getResources();
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                alertDialogBuilder.setMessage(R.string.stat_removed)
+                        .setTitle(R.string.stat_removed_title);
+                alertDialogBuilder.setPositiveButton(R.string.stat_removed_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        lastCardviewRemoved = findViewById(R.id.card_view_current_year);
+                        lastCardviewRemoved.setVisibility(View.GONE);
+                        lastKeyRemoved = "stats_show_current_year";
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putBoolean(lastKeyRemoved, false).apply();
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putInt(lastKeyRemoved + "_month", Calendar.getInstance().get(Calendar.MONTH)).apply();
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putInt(lastKeyRemoved + "_year", Calendar.getInstance().get(Calendar.YEAR)).apply();
+                    }
+                });
+                alertDialogBuilder.setNegativeButton(R.string.stat_removed_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+                AlertDialog dialog = alertDialogBuilder.create();
+                dialog.show();
+            }
+        });
+        btn = findViewById(R.id.last_year_button);
+        btn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Resources res = App.getApplication().getResources();
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                alertDialogBuilder.setMessage(R.string.stat_removed)
+                        .setTitle(R.string.stat_removed_title);
+                alertDialogBuilder.setPositiveButton(R.string.stat_removed_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        lastCardviewRemoved = findViewById(R.id.card_view_last_year);
+                        lastCardviewRemoved.setVisibility(View.GONE);
+                        lastKeyRemoved = "stats_show_last_year";
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putBoolean(lastKeyRemoved, false).apply();
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putInt(lastKeyRemoved + "_month", Calendar.getInstance().get(Calendar.MONTH)).apply();
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putInt(lastKeyRemoved + "_year", Calendar.getInstance().get(Calendar.YEAR)).apply();
+                    }
+                });
+                alertDialogBuilder.setNegativeButton(R.string.stat_removed_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+                AlertDialog dialog = alertDialogBuilder.create();
+                dialog.show();
+            }
+        });
+        btn = findViewById(R.id.all_time_button);
+        btn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Resources res = App.getApplication().getResources();
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                alertDialogBuilder.setMessage(R.string.stat_removed)
+                        .setTitle(R.string.stat_removed_title);
+                alertDialogBuilder.setPositiveButton(R.string.stat_removed_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        lastCardviewRemoved = findViewById(R.id.card_view_all_time);
+                        lastCardviewRemoved.setVisibility(View.GONE);
+                        lastKeyRemoved = "stats_show_all_time";
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putBoolean(lastKeyRemoved, false).apply();
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putInt(lastKeyRemoved + "_month", Calendar.getInstance().get(Calendar.MONTH)).apply();
+                        PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putInt(lastKeyRemoved + "_year", Calendar.getInstance().get(Calendar.YEAR)).apply();
+                    }
+                });
+                alertDialogBuilder.setNegativeButton(R.string.stat_removed_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+                AlertDialog dialog = alertDialogBuilder.create();
+                dialog.show();
+            }
+        });
 
         handler = new Handler() {
             @Override
@@ -161,15 +371,30 @@ public class FunnyStatsActivity extends AppCompatActivity {
                         worstYear.setText(YearHelper.getInstance().format(datas.getWorstYear(), 2));
                     }
                 }
-
             }
         };
+    }
+
+    private void CheckHidingStatuses() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        int curMonth = cal.get(Calendar.MONTH);
+        int curYear = cal.get(Calendar.YEAR);
+        for (String propertyKey : listProperties) {
+            boolean showCard = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean(propertyKey, true);
+            int showCardMonth = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getInt(propertyKey + "_month", 0);
+            int showCardYear = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getInt(propertyKey + "_year", 0);
+            if ((showCard == false) && (((curMonth > showCardMonth) && (curYear >= showCardYear)) || (curYear > showCardYear))) {
+                PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putBoolean(propertyKey, true).apply();
+            }
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         CardView cv = findViewById(R.id.card_view_nothing_interesting);
+        CheckHidingStatuses();
         boolean showCard = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("stats_show_nothing_interresting", true);
         if (showCard)
             cv.setVisibility(View.VISIBLE);
@@ -194,7 +419,7 @@ public class FunnyStatsActivity extends AppCompatActivity {
                 //Last week
                 int firstDayOfTheWeek = calendar.getFirstDayOfWeek();
                 int currentDayOfTheWeek = calendar.get(Calendar.DAY_OF_WEEK);
-                int stepToBeFirstDayOfTheWeek = MathTool.floorMod(currentDayOfTheWeek - firstDayOfTheWeek,7);
+                int stepToBeFirstDayOfTheWeek = MathTool.floorMod(currentDayOfTheWeek - firstDayOfTheWeek, 7);
                 StatisticsDatas favoriteStatDay = new StatisticsDatas();
                 StatisticsDatas worstStatDay = new StatisticsDatas();
                 Day favoriteDay = null;
@@ -204,8 +429,8 @@ public class FunnyStatsActivity extends AppCompatActivity {
                 //Get days of the last week
                 int dayCount = 0;
                 for (int i = 1; i < 8; i++) {
-                    int curId = MathTool.floorMod((firstDayOfTheWeek - i - 1),7)+1;
-                    calendar.add(Calendar.DAY_OF_MONTH, - 1);
+                    int curId = MathTool.floorMod((firstDayOfTheWeek - i - 1), 7) + 1;
+                    calendar.add(Calendar.DAY_OF_MONTH, -1);
                     List<Day> dList = db.dayDao().getDay(calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
                     if (dList.size() == 1) {
                         Day d = dList.get(0);
@@ -277,7 +502,7 @@ public class FunnyStatsActivity extends AppCompatActivity {
                 minRate = 5;
                 dayCount = 0;
                 calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.add(Calendar.MONTH,-1);
+                calendar.add(Calendar.MONTH, -1);
                 for (int i = 1; i < 8; i++) {
                     float rate = db.dayDao().getAverageRatingPerDayOfTheWeekPerMonthAndYear(i, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
                     if (rate >= 1) {
@@ -348,7 +573,7 @@ public class FunnyStatsActivity extends AppCompatActivity {
                     }
                 }
                 //If there is more than one day get the best and the worst
-                if ((dayCount > 1)&&(monthCount > 1)) {
+                if ((dayCount > 1) && (monthCount > 1)) {
                     //Set the object to send
                     Statistics stats = new Statistics();
                     stats.setFavoriteDay(favoriteStatDay);
@@ -376,7 +601,7 @@ public class FunnyStatsActivity extends AppCompatActivity {
                 minRate = 5;
                 calendar.setTimeInMillis(System.currentTimeMillis());
                 for (int i = 1; i < 8; i++) {
-                    float rate = db.dayDao().getAverageRatingPerDayOfTheWeekAndYear(i, calendar.get(Calendar.YEAR)-1);
+                    float rate = db.dayDao().getAverageRatingPerDayOfTheWeekAndYear(i, calendar.get(Calendar.YEAR) - 1);
                     if (rate >= 1) {
                         dayCount++;
                         if (rate > maxRate) {
@@ -390,7 +615,7 @@ public class FunnyStatsActivity extends AppCompatActivity {
                     }
                 }
                 for (int i = 0; i < 12; i++) {
-                    float rate = db.dayDao().getAverageRatingPerMonthAndYear(i, calendar.get(Calendar.YEAR)-1);
+                    float rate = db.dayDao().getAverageRatingPerMonthAndYear(i, calendar.get(Calendar.YEAR) - 1);
                     if (rate >= 1) {
                         monthCount++;
                         if (rate > maxRateMonth) {
@@ -404,7 +629,7 @@ public class FunnyStatsActivity extends AppCompatActivity {
                     }
                 }
                 //If there is more than one day get the best and the worst
-                if ((dayCount > 1)&&(monthCount > 1)) {
+                if ((dayCount > 1) && (monthCount > 1)) {
                     //Set the object to send
                     Statistics stats = new Statistics();
                     stats.setFavoriteDay(favoriteStatDay);
@@ -479,7 +704,7 @@ public class FunnyStatsActivity extends AppCompatActivity {
                     }
                 }
                 //If there is more than one day get the best and the worst
-                if ((dayCount > 1)&&(monthCount > 1)&&(yearCount > 1)) {
+                if ((dayCount > 1) && (monthCount > 1) && (yearCount > 1)) {
                     //Set the object to send
                     Statistics stats = new Statistics();
                     stats.setFavoriteDay(favoriteStatDay);
@@ -500,6 +725,7 @@ public class FunnyStatsActivity extends AppCompatActivity {
                 start();
 
     }
+
 
     public void onBackPressed() {
         finish();

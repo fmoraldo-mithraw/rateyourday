@@ -2,9 +2,12 @@ package com.mithraw.howwasyourday.Tools;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -133,17 +136,32 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
             btnRemove.setOnClickListener(new Button.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            DaysDatabase db = DaysDatabase.getInstance(App.getApplication().getApplicationContext());
-                            db.dayDao().delete(day);
-                            Message msg_rating = Message.obtain();
-                            msg_rating.what = MSG_ID.REMOVE_LOG.ordinal();
-                            msg_rating.obj = mPosition;
-                            handler.sendMessage(msg_rating);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                    alertDialogBuilder.setMessage(R.string.log_removed)
+                            .setTitle(R.string.log_removed_title);
+                    alertDialogBuilder.setPositiveButton(R.string.log_removed_ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            new Thread() {
+                                @Override
+                                public void run() {
+                                    DaysDatabase db = DaysDatabase.getInstance(App.getApplication().getApplicationContext());
+                                    db.dayDao().delete(day);
+                                    Message msg_rating = Message.obtain();
+                                    msg_rating.what = MSG_ID.REMOVE_LOG.ordinal();
+                                    msg_rating.obj = mPosition;
+                                    handler.sendMessage(msg_rating);
+                                }
+                            }.start();
                         }
-                    }.start();
+                    });
+                    alertDialogBuilder.setNegativeButton(R.string.log_removed_cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User cancelled the dialog
+                        }
+                    });
+                    AlertDialog dialog = alertDialogBuilder.create();
+                    dialog.show();
+
 
                 }
             });

@@ -144,11 +144,22 @@
     <string name="current_year_title">Current year</string>
     <string name="last_year_title">Last year</string>
     <string name="worst_month">Worst month :</string>
-    <string name="all_time_tile">All time</string>
+    <string name="all_time_title">All time</string>
     <string name="favorite_year">Favorite year :</string>
     <string name="worst_year">Worst year :</string>
     <string name="nothing_interesting">Sorry, but at the moment, i don\'t have any interesting datas to show you.\nKeep rating your days and i will soon have some to show you my friend !</string>
     <string name="nothing_interesting_title">Nothing interesting</string>
+    <string name="entry_removed">Entry removed.</string>
+    <string name="stat_removed">Panel will be hidden until next month.</string>
+    <string name="stat_removed_title">Panel removal</string>
+    <string name="stat_removed_cancel">Cancel</string>
+    <string name="stat_removed_ok">OK</string>
+    <string name="log_removed">This entry will be definitely removed, are you sure?</string>
+    <string name="log_removed_title">Entry removal</string>
+    <string name="log_removed_cancel">Cancel</string>
+    <string name="log_removed_ok">Yes, go ahead !</string>
+    <string name="undo">UNDO</string>
+
 
 
 </resources>

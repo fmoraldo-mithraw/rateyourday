@@ -2,16 +2,21 @@ package com.mithraw.howwasyourday.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Tools.LogsAdapter;
+import com.mithraw.howwasyourday.Tools.SwipeableRecyclerViewTouchListener;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
 
@@ -25,11 +30,28 @@ public class LogsActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private LogsAdapter mAdapter;
-    private Handler handler;
+    private static Handler handler;
     private Context mContext;
+    private Day mLastDayRemoved = null;
+    private int mLastPositionRemoved = 0;
     private AppCompatActivity mActivity;
-
+    protected List<Day> mDataset = null;
     protected DaysDatabase db;
+
+    public class UndoListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            mDataset.add(mLastPositionRemoved,mLastDayRemoved);
+            mAdapter.notifyDataSetChanged();
+            new Thread() {
+                @Override
+                public void run() {
+                    db.dayDao().insertDay(mLastDayRemoved);
+                }
+            }.start();
+        }
+    }
 
     @SuppressLint("HandlerLeak")
     @Override
@@ -40,6 +62,7 @@ public class LogsActivity extends AppCompatActivity {
         mContext = this;
         mActivity = this;
 
+
         //Get the DB
         db = DaysDatabase.getInstance(getApplicationContext());
 
@@ -48,7 +71,50 @@ public class LogsActivity extends AppCompatActivity {
 
         //Init the recycler view
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        // TODO initialize my dataset
+        SwipeableRecyclerViewTouchListener swipeTouchListener =
+                new SwipeableRecyclerViewTouchListener(mRecyclerView,
+                        new SwipeableRecyclerViewTouchListener.SwipeListener() {
+
+                            @Override
+                            public boolean canSwipeLeft(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public boolean canSwipeRight(int position) {
+                                return true;
+                            }
+
+                            private void removeItem(int[] reverseSortedPositions) {
+                                Resources res = App.getApplication().getResources();
+                                for (int position : reverseSortedPositions) {
+                                    mLastDayRemoved = mDataset.get(position);
+                                    mDataset.remove(position);
+                                    mAdapter.notifyItemRemoved(position);
+                                    mLastPositionRemoved = position;
+                                    new Thread() {
+                                        @Override
+                                        public void run() {
+                                            db.dayDao().delete(mLastDayRemoved);
+                                        }
+                                    }.start();
+                                }
+                                mAdapter.notifyDataSetChanged();
+                                Snackbar.make(getCurrentFocus(), res.getString(R.string.entry_removed), 10000).setAction(R.string.undo, new UndoListener()).show();
+                            }
+
+                            @Override
+                            public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                removeItem(reverseSortedPositions);
+                            }
+
+                            @Override
+                            public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                removeItem(reverseSortedPositions);
+                            }
+                        });
+
+        mRecyclerView.addOnItemTouchListener(swipeTouchListener);
 
         //Initialize the recyclerView things (throught the handler)
         mRecyclerView.setHasFixedSize(true);
@@ -56,13 +122,13 @@ public class LogsActivity extends AppCompatActivity {
             @Override
             public void handleMessage(Message msg) {
                 if (msg.what == MSG_ID.DAYS_RECEIVED.ordinal()) {
-                    List<Day> myDataset = (List<Day>) msg.obj;
+                    mDataset = (List<Day>) msg.obj;
                     // use a linear layout manager
                     mLayoutManager = new LinearLayoutManager(mContext);
                     mRecyclerView.setLayoutManager(mLayoutManager);
 
                     // specify an adapter (see also next example)
-                    mAdapter = new LogsAdapter(myDataset, mActivity);
+                    mAdapter = new LogsAdapter(mDataset, mActivity);
                     mRecyclerView.setAdapter(mAdapter);
                 }
             }

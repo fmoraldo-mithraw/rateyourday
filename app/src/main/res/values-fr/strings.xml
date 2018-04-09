@@ -143,9 +143,19 @@
     <string name="current_year_title">Cette année</string>
     <string name="last_year_title">L\'année dernière</string>
     <string name="worst_month">Pire mois :</string>
-    <string name="all_time_tile">De tout temps</string>
+    <string name="all_time_title">De tout temps</string>
     <string name="favorite_year">Favorite year :</string>
     <string name="worst_year">Worst year :</string>
     <string name="nothing_interesting">Désolé, mais je n\'ai pour le moment pas assez de données pour trouver des statistiques intéressantes à te montrer.\nContinue de noter tes journées et j\'en aurai bientôt a te proposer mon ami !</string>
     <string name="nothing_interesting_title">Rien d\'intéressant</string>
+    <string name="entry_removed">Entrée supprimée.</string>
+    <string name="stat_removed">Ce panneau va être caché, il ne reviendra que le mois prochain.</string>
+    <string name="stat_removed_title">Suppression de panneau</string>
+    <string name="stat_removed_cancel">Annuler</string>
+    <string name="stat_removed_ok">Ok</string>
+    <string name="log_removed">Cette entrée va être définitivement supprimée, êtes vous sûr ?</string>
+    <string name="log_removed_title">Suppression d\'entrée</string>
+    <string name="log_removed_cancel">Annuler</string>
+    <string name="log_removed_ok">Oui, vas-y !</string>
+    <string name="undo">ANNULER</string>
 </resources>
