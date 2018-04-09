@@ -17,6 +17,7 @@ import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.view.MenuItem;
 
 import com.mithraw.howwasyourday.App;
@@ -24,6 +25,8 @@ import com.mithraw.howwasyourday.Helpers.NotificationHelper;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Tools.Hour;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -195,6 +198,20 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
         return ret;
     }
+    private static String formatLocaleTime(String stringValue){
+        //Format the date depending on the time type (24h/am/pm)
+        String summaryStringValue = stringValue;
+        if(!DateFormat.is24HourFormat(App.getContext())){
+            Hour hour = new Hour(stringValue);
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY,hour.getIntHour());
+            cal.set(Calendar.MINUTE,hour.getIntMinute());
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aaa");
+            summaryStringValue = simpleDateFormat.format(new java.util.Date(cal.getTimeInMillis()));
+        }
+        return summaryStringValue;
+    }
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class NotificationPreferenceFragment extends PreferenceFragment {
         @Override
@@ -202,7 +219,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_notification);
             setHasOptionsMenu(true);
-            findPreference("notify_time").setSummary(PreferenceManager.getDefaultSharedPreferences(findPreference("notify_time").getContext()).getString("notify_time", "21:00"));
+            findPreference("notify_time").setSummary(formatLocaleTime(PreferenceManager.getDefaultSharedPreferences(findPreference("notify_time").getContext()).getString("notify_time", "21:00")));
             findPreference("notifications_new_message_ringtone").setSummary(getRingtoneSummary(PreferenceManager.getDefaultSharedPreferences(findPreference("notifications_new_message_ringtone").getContext()).getString("notifications_new_message_ringtone", "None")));
             findPreference("use_notifications").setOnPreferenceChangeListener(
                     new Preference.OnPreferenceChangeListener() {
@@ -255,7 +272,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                     return false;
                                 }
                             }
-                            preference.setSummary(stringValue);
+                            //Format the date depending on the time type (24h/am/pm)
+                            String summaryStringValue = formatLocaleTime(stringValue);
+
+
+                            preference.setSummary(summaryStringValue);
                             NotificationHelper.updateNotificationStatus(
                                     PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getBoolean("use_notifications", true),
                                     stringValue,
