@@ -28,6 +28,9 @@ import com.mithraw.howwasyourday.Tools.Hour;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -176,11 +179,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * This fragment shows notification preferences only. It is used when the
      * activity is showing a two-pane settings UI.
      */
-    private static String getRingtoneSummary(String value){
+    private static String getRingtoneSummary(String value) {
         String ret;
         if (TextUtils.isEmpty(value)) {
             Resources res = App.getApplication().getResources();
-            ret =  res.getString(R.string.pref_ringtone_silent);
+            ret = res.getString(R.string.pref_ringtone_silent);
 
         } else {
             Ringtone ringtone = RingtoneManager.getRingtone(
@@ -198,20 +201,22 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
         return ret;
     }
-    private static String formatLocaleTime(String stringValue){
+
+    private static String formatLocaleTime(String stringValue) {
         //Format the date depending on the time type (24h/am/pm)
         String summaryStringValue = stringValue;
-        if(!DateFormat.is24HourFormat(App.getContext())){
+        if (!DateFormat.is24HourFormat(App.getContext())) {
             Hour hour = new Hour(stringValue);
             Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY,hour.getIntHour());
-            cal.set(Calendar.MINUTE,hour.getIntMinute());
+            cal.set(Calendar.HOUR_OF_DAY, hour.getIntHour());
+            cal.set(Calendar.MINUTE, hour.getIntMinute());
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aaa");
             summaryStringValue = simpleDateFormat.format(new java.util.Date(cal.getTimeInMillis()));
         }
         return summaryStringValue;
     }
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class NotificationPreferenceFragment extends PreferenceFragment {
         @Override
@@ -328,14 +333,22 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
     }
-    @Override
-    public void onBackPressed() {
-        finish();
-        return;
-    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        finish();
+        Logger.getLogger("SettingsActivity").log(new LogRecord(Level.INFO, "FMORALDO : SettingsActivity.onOptionsItemSelected"));
+        goBack();
+        super.onOptionsItemSelected(item);
         return true;
+    }
+
+    private void goBack() {
+        int count = mFragmentCount;
+        Logger.getLogger("SettingsActivity").log(new LogRecord(Level.INFO, "FMORALDO : number of fragments :" + count));
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1)
+            count = 0;
+        if (count == 0) {
+            finish();
+        }
     }
 }

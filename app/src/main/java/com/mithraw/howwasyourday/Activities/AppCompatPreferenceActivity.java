@@ -1,5 +1,6 @@
 package com.mithraw.howwasyourday.Activities;
 
+import android.app.Fragment;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -9,9 +10,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 /**
  * A {@link android.preference.PreferenceActivity} which implements and proxies the necessary calls
  * to be used with AppCompat.
@@ -19,6 +24,15 @@ import android.view.ViewGroup;
 public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
 
     private AppCompatDelegate mDelegate;
+    protected int mFragmentCount = 0;
+    protected Fragment mCurrentFragment;
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+        mCurrentFragment = fragment;
+        mFragmentCount++;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,5 +119,18 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
             mDelegate = AppCompatDelegate.create(this, null);
         }
         return mDelegate;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Logger.getLogger("SettingsActivity").log(new LogRecord(Level.INFO, "FMORALDO : AppCompat.onOptionsItemSelected"));
+        goBack();
+        super.onOptionsItemSelected(item);
+        return true;
+    }
+
+    private void goBack() {
+        if (mFragmentCount > 0)
+            mFragmentCount--;
     }
 }
