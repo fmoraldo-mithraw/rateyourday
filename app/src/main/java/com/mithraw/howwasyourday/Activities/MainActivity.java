@@ -47,6 +47,7 @@ import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -54,7 +55,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT}
+    private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_EMPTY_TO_FILL, MSG_SENT}
 
     private enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS, ACTIVITY_LOGS, ACTIVITY_STATS}
 
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity
     protected final java.util.Calendar m_calendar = java.util.Calendar.getInstance();
     private ShareActionProviderCustom mShareActionProvider = null;
     private Intent shareIntent;
+    private boolean dateChangedByUser = false;
 
     public static Context getContext() {
         return mContext;
@@ -166,7 +168,7 @@ public class MainActivity extends AppCompatActivity
                 RatingBar rab = (RatingBar) findViewById(R.id.ratingBar);
                 EditText titleText = (EditText) findViewById(R.id.titleText);
                 EditText logText = (EditText) findViewById(R.id.logText);
-                EditText edittext = (EditText) findViewById(R.id.dateTextView);
+
                 if (msg.what == MSG_ID.MSG_RATING.ordinal()) {
                     rab.setRating((Integer) (msg.obj));
                 } else if (msg.what == MSG_ID.MSG_LOG.ordinal()) {
@@ -175,6 +177,11 @@ public class MainActivity extends AppCompatActivity
                     titleText.setText((String) (msg.obj));
                 }
                 if (msg.what == MSG_ID.MSG_EMPTY.ordinal()) {
+                    rab.setRating(0);
+                    logText.setText("");
+                    titleText.setText("");
+                }
+                if (msg.what == MSG_ID.MSG_EMPTY_TO_FILL.ordinal()) {
                     rab.setRating(0);
                     logText.setText("");
                     titleText.setText("");
@@ -220,7 +227,16 @@ public class MainActivity extends AppCompatActivity
                 m_calendar.set(java.util.Calendar.YEAR, year);
                 m_calendar.set(java.util.Calendar.MONTH, monthOfYear);
                 m_calendar.set(java.util.Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
+                //if the date selected is not the date of the day we consider the date has been changed
+                Date d = new Date(System.currentTimeMillis());
+                if ((d.getDate() == m_calendar.get(java.util.Calendar.DAY_OF_MONTH)) &&
+                        (d.getMonth() == m_calendar.get(java.util.Calendar.MONTH)) &&
+                        ((d.getYear()+1900) == m_calendar.get(java.util.Calendar.YEAR))) {
+                    dateChangedByUser = false;
+                } else {
+                    dateChangedByUser = true;
+                }
+                updateLabel(false);
             }
 
         };
@@ -230,7 +246,8 @@ public class MainActivity extends AppCompatActivity
                 //Show the date picker, we configure it here
                 DatePickerDialog datePickerDialog = getDatePickerDialog();
                 if (datePickerDialog != null) {
-                    datePickerDialog.getDatePicker().setMaxDate(Calendar.getInstance().getTime().getTime());
+                    Date d = new Date(System.currentTimeMillis());
+                    datePickerDialog.getDatePicker().setMaxDate(d.getTime());
                     datePickerDialog.show();
                 }
                 // Hide the keyboard
@@ -279,12 +296,12 @@ public class MainActivity extends AppCompatActivity
         }.start();
     }
 
-    private void updateLabel() {
+    private void updateLabel(boolean isResume) {
         java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
         EditText edittext = (EditText) findViewById(R.id.dateTextView);
         edittext.setText(dateFormat.format(m_calendar.getTime()));
         //Fill the controls with the correct infos
-        fillTheInformations(false);
+        fillTheInformations(isResume);
     }
 
     private void launchActivityRateADay() {
@@ -310,7 +327,8 @@ public class MainActivity extends AppCompatActivity
         Intent diagramIntent = new Intent(getApplicationContext(), LogsActivity.class);
         startActivityForResult(diagramIntent, ACTIVITY_ID.ACTIVITY_LOGS.ordinal());
     }
-    private void  launchActivityFunnyStats() {
+
+    private void launchActivityFunnyStats() {
         Intent statsIntent = new Intent(getApplicationContext(), FunnyStatsActivity.class);
         startActivityForResult(statsIntent, ACTIVITY_ID.ACTIVITY_STATS.ordinal());
     }
@@ -373,7 +391,7 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
         //Initialize the labels
-        updateLabel();
+        updateLabel(false);
         return true;
     }
 
@@ -424,12 +442,20 @@ public class MainActivity extends AppCompatActivity
         EditText titleText = (EditText) findViewById(R.id.titleText);
         titleText.setEnabled(false);
         EditText logText = (EditText) findViewById(R.id.logText);
+        Date d = new Date(System.currentTimeMillis());
         logText.setEnabled(false);
-        m_calendar.setTimeInMillis(System.currentTimeMillis());
+        //If day has changed
+        if ((!dateChangedByUser) && ((d.getDate() != m_calendar.get(java.util.Calendar.DAY_OF_MONTH)) ||
+                (d.getMonth() != m_calendar.get(java.util.Calendar.MONTH)) ||
+                ((d.getYear()+1900) != m_calendar.get(java.util.Calendar.YEAR)))) {
+            m_calendar.setTimeInMillis(System.currentTimeMillis());
+        }
         datePickerDialog.updateDate(m_calendar.get(java.util.Calendar.YEAR),
                 m_calendar.get(java.util.Calendar.MONTH),
                 m_calendar.get(java.util.Calendar.DAY_OF_MONTH));
-        fillTheInformations(true);
+
+        //Initialize the labels
+        updateLabel(true);
     }
 
     protected void fillTheInformations(final boolean isResume) {
@@ -440,8 +466,11 @@ public class MainActivity extends AppCompatActivity
                 EditText titleText = (EditText) findViewById(R.id.titleText);
                 EditText logText = (EditText) findViewById(R.id.logText);
                 List<Day> days = db.dayDao().loadAllByDate(m_calendar.get(java.util.Calendar.DAY_OF_MONTH), m_calendar.get(java.util.Calendar.MONTH), m_calendar.get(java.util.Calendar.YEAR));
+
                 if (days.isEmpty()) {
                     if (isResume == false)
+                        handler.sendEmptyMessage(MSG_ID.MSG_EMPTY_TO_FILL.ordinal());
+                    else
                         handler.sendEmptyMessage(MSG_ID.MSG_EMPTY.ordinal());
                 } else {
                     Message msg_rating = Message.obtain();
