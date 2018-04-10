@@ -109,7 +109,7 @@ public class RateADay extends AppCompatActivity {
                 RatingBar rab = (RatingBar) findViewById(R.id.ratingBar);
                 EditText titleText = (EditText) findViewById(R.id.titleText);
                 EditText logText = (EditText) findViewById(R.id.logText);
-                List<Day> days = db.dayDao().loadAllByDate(m_calendar.get(java.util.Calendar.DAY_OF_MONTH), m_calendar.get(java.util.Calendar.MONTH), m_calendar.get(java.util.Calendar.YEAR));
+                List<Day> days = db.dayDao().getAllByDate(m_calendar.get(java.util.Calendar.DAY_OF_MONTH), m_calendar.get(java.util.Calendar.MONTH), m_calendar.get(java.util.Calendar.YEAR));
                 if (days.isEmpty()) {
                     handler.sendEmptyMessage(MSG_ID.MSG_EMPTY.ordinal());
                 } else {
@@ -146,6 +146,8 @@ public class RateADay extends AppCompatActivity {
                         m_calendar.get(Calendar.DAY_OF_MONTH),
                         m_calendar.get(Calendar.MONTH),
                         m_calendar.get(Calendar.YEAR),
+                        m_calendar.get(Calendar.WEEK_OF_YEAR),
+                        m_calendar.getTimeInMillis(),
                         (int) (rab.getRating()),
                         titleText.getText().toString(),
                         logText.getText().toString());

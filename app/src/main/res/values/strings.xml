@@ -159,7 +159,7 @@
     <string name="log_removed_cancel">Cancel</string>
     <string name="log_removed_ok">Yes, go ahead !</string>
     <string name="undo">UNDO</string>
-
-
-
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
 </resources>

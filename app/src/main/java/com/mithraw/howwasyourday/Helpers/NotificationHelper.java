@@ -11,8 +11,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v7.app.AppCompatDelegate;
 import android.widget.RemoteViews;
 
 import com.mithraw.howwasyourday.Activities.MainActivity;
@@ -98,7 +96,7 @@ public class NotificationHelper {
                 DaysDatabase db = DaysDatabase.getInstance(App.getApplication().getApplicationContext());
                 Calendar calendar = Calendar.getInstance();
                 //if the day has already been filled with a rating we don't show the notification
-                List<Day> days = db.dayDao().loadAllByDate(calendar.get(java.util.Calendar.DAY_OF_MONTH), calendar.get(java.util.Calendar.MONTH), calendar.get(java.util.Calendar.YEAR));
+                List<Day> days = db.dayDao().getAllByDate(calendar.get(java.util.Calendar.DAY_OF_MONTH), calendar.get(java.util.Calendar.MONTH), calendar.get(java.util.Calendar.YEAR));
                 if (!days.isEmpty()) {
                     Logger.getLogger("NotificationIntentService").log(new LogRecord(Level.INFO, "FMORALDO : triggerNotification : The day has already been rated, we skip the notification"));
                     return;

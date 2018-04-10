@@ -14,8 +14,8 @@ public interface DayDao {
     @Query("SELECT * FROM day ORDER BY year DESC, month DESC, day_of_the_month DESC")
     List<Day> getAll();
 
-    @Query("SELECT * FROM day WHERE day_of_the_month IS :dayOfTheMonth AND month IS :month AND year IS :year")
-    List<Day> loadAllByDate(int dayOfTheMonth, int month, int year);
+    @Query("SELECT * FROM day WHERE day_of_the_month IS :dayOfTheMonth AND month IS :month AND year IS :year ORDER BY year DESC, month DESC, day_of_the_month DESC")
+    List<Day> getAllByDate(int dayOfTheMonth, int month, int year);
 
     @Query("SELECT * FROM day WHERE day_of_the_week IS :dayOfTheWeek AND year IS :year")
     List<Day> loadAllByDayOfTheWeek(int dayOfTheWeek, int year);
@@ -50,8 +50,14 @@ public interface DayDao {
     @Query("SELECT AVG(rating) FROM day WHERE year IS :year")
     float getAverageRatingPerYear(int year);
 
+    @Query("SELECT * FROM day WHERE week IS :week AND year IS :year")
+    List<Day> getDaysPerWeekAndYear(int week, int year);
 
+    @Query("SELECT * FROM day WHERE date_time > :startDateInt AND date_time < :endDateInt AND day_of_the_week IN (:ids) ORDER BY year DESC, month DESC, day_of_the_month DESC")
+    List<Day> getByBoundsAndAdditions(long startDateInt, long endDateInt, int[] ids);
 
+    @Query("SELECT * FROM day WHERE date_time > :startDateInt AND date_time < :endDateInt ")
+    List<Day> getByBounds(long startDateInt, long endDateInt);
 
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)

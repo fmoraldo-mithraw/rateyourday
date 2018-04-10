@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.ShareActionProvider;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -231,7 +230,7 @@ public class MainActivity extends AppCompatActivity
                 Date d = new Date(System.currentTimeMillis());
                 if ((d.getDate() == m_calendar.get(java.util.Calendar.DAY_OF_MONTH)) &&
                         (d.getMonth() == m_calendar.get(java.util.Calendar.MONTH)) &&
-                        ((d.getYear()+1900) == m_calendar.get(java.util.Calendar.YEAR))) {
+                        ((d.getYear() + 1900) == m_calendar.get(java.util.Calendar.YEAR))) {
                     dateChangedByUser = false;
                 } else {
                     dateChangedByUser = true;
@@ -278,7 +277,7 @@ public class MainActivity extends AppCompatActivity
                     c.set(Calendar.DAY_OF_YEAR, c.get(Calendar.DAY_OF_YEAR) + 1);
                     Random r = new Random();
                     int rate = r.nextInt(5 - 1) + 1;
-                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), rate, "Balbalalala", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), (int) c.getTimeInMillis(), rate, "Balbalalala", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
                     db.dayDao().insertDay(d);
                 }
                 //Current Year
@@ -289,7 +288,7 @@ public class MainActivity extends AppCompatActivity
                     c.set(Calendar.DAY_OF_YEAR, c.get(Calendar.DAY_OF_YEAR) + 1);
                     Random r = new Random();
                     int rate = r.nextInt(5 - 1) + 1;
-                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), rate, "Balbalalala", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), (int) c.getTimeInMillis(), rate, "Balbalalala", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
                     db.dayDao().insertDay(d);
                 }
             }
@@ -363,7 +362,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
         getMenuInflater().inflate(R.menu.share_button, menu);
         MenuItem item = menu.findItem(R.id.menu_item_share);
         mShareActionProvider = (ShareActionProviderCustom) MenuItemCompat.getActionProvider(item);
@@ -393,22 +391,6 @@ public class MainActivity extends AppCompatActivity
         //Initialize the labels
         updateLabel(false);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            launchActivitySettings();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -447,7 +429,7 @@ public class MainActivity extends AppCompatActivity
         //If day has changed
         if ((!dateChangedByUser) && ((d.getDate() != m_calendar.get(java.util.Calendar.DAY_OF_MONTH)) ||
                 (d.getMonth() != m_calendar.get(java.util.Calendar.MONTH)) ||
-                ((d.getYear()+1900) != m_calendar.get(java.util.Calendar.YEAR)))) {
+                ((d.getYear() + 1900) != m_calendar.get(java.util.Calendar.YEAR)))) {
             m_calendar.setTimeInMillis(System.currentTimeMillis());
         }
         datePickerDialog.updateDate(m_calendar.get(java.util.Calendar.YEAR),
@@ -465,7 +447,9 @@ public class MainActivity extends AppCompatActivity
                 RatingBar rab = (RatingBar) findViewById(R.id.ratingBar);
                 EditText titleText = (EditText) findViewById(R.id.titleText);
                 EditText logText = (EditText) findViewById(R.id.logText);
-                List<Day> days = db.dayDao().loadAllByDate(m_calendar.get(java.util.Calendar.DAY_OF_MONTH), m_calendar.get(java.util.Calendar.MONTH), m_calendar.get(java.util.Calendar.YEAR));
+                if (db == null)
+                    return;
+                List<Day> days = db.dayDao().getAllByDate(m_calendar.get(java.util.Calendar.DAY_OF_MONTH), m_calendar.get(java.util.Calendar.MONTH), m_calendar.get(java.util.Calendar.YEAR));
 
                 if (days.isEmpty()) {
                     if (isResume == false)

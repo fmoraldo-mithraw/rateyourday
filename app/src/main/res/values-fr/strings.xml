@@ -158,4 +158,6 @@
     <string name="log_removed_cancel">Annuler</string>
     <string name="log_removed_ok">Oui, vas-y !</string>
     <string name="undo">ANNULER</string>
+    <string name="start_date">Date de début</string>
+    <string name="end_date">Date de fin</string>
 </resources>

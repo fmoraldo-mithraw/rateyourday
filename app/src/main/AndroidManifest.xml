@@ -19,11 +19,6 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <provider
-            android:name="com.facebook.FacebookContentProvider"
-            android:authorities="com.facebook.app.FacebookContentProvider163663807786742"
-            android:exported="true" />
-
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -36,14 +31,26 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".Activities.RateADay" />
+
         <activity
             android:name=".Activities.SettingsActivity"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/action_settings" />
+
+
+        <activity android:name=".Activities.DiagramActivity"
+            android:label="@string/action_stats_diagrams"/>
+
+        <activity
+            android:name=".Activities.LogsActivity"
+            android:label="@string/action_entry_logs"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".Activities.FunnyStatsActivity"
+            android:label="@string/action_funny_stats"/>
 
         <receiver android:name=".Tools.TimeAlarm">
             <intent-filter>
@@ -55,10 +62,10 @@
         <service
             android:name=".Services.NotificationIntentService"
             android:enabled="true" />
-
-        <activity android:name=".Activities.DiagramActivity" />
-        <activity android:name=".Activities.LogsActivity" />
-        <activity android:name=".Activities.FunnyStatsActivity"></activity>
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider163663807786742"
+            android:exported="true" />
     </application>
 
 </manifest>

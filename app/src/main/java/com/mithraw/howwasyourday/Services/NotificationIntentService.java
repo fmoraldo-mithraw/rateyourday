@@ -40,6 +40,8 @@ public class NotificationIntentService extends IntentService {
                     calendar.get(Calendar.DAY_OF_MONTH),
                     calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.WEEK_OF_YEAR),
+                    (int)calendar.getTimeInMillis(),
                     rate,
                     "",
                     "");

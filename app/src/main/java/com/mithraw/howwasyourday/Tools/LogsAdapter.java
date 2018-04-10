@@ -6,11 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,18 +17,15 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.mithraw.howwasyourday.Activities.MainActivity;
 import com.mithraw.howwasyourday.Activities.RateADay;
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
 
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.Calendar;
 import java.util.List;
+
 
 public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
@@ -174,6 +169,11 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
         notifyDataSetChanged();
         notifyItemRangeChanged(position, mDataSet.size());
     }
+
+    public void updateDataSet(List<Day> mDataSet) {
+        this.mDataSet = mDataSet;
+        notifyDataSetChanged();
+    }
     // END_INCLUDE(recyclerViewSampleViewHolder)
 
     /**
@@ -213,8 +213,6 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        Log.d(TAG, "Element " + position + " set.");
-
         // Get element from your dataset at this position and replace the contents of the view
         // with that element
         //TODO Initialize my CARD
@@ -222,9 +220,9 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
         cal.set(Calendar.DAY_OF_MONTH, mDataSet.get(position).getDay());
         cal.set(Calendar.MONTH, mDataSet.get(position).getMonth());
         cal.set(Calendar.YEAR, mDataSet.get(position).getYear());
-        SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd");
+        java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(App.getApplication());
         java.util.Date d = new java.util.Date(cal.getTimeInMillis());
-        viewHolder.getLogCardDate().setText(format.format(d));
+        viewHolder.getLogCardDate().setText(dateFormat.format(d));
         viewHolder.getLogCardRating().setRating(mDataSet.get(position).getRating());
         String logText = mDataSet.get(position).getLog();
         if ("".equals(logText)) {
