@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:orientation="vertical"
 
-   >
-    <!--
-    android:padding="10dp"
-    android:background="@drawable/card_shadows"-->
+    >
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
@@ -35,15 +34,35 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <ProgressBar
-                android:id="@+id/vertical_progressbar_monday"
-                style="@style/Widget.ProgressBar.Vertical"
-                android:layout_width="40dip"
-                android:layout_height="100dip"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center"
-                android:progressTint="#3366FF" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ProgressBar
+                    android:id="@+id/vertical_progressbar_monday"
+                    style="@style/Widget.ProgressBar.Vertical"
+                    android:layout_width="40dip"
+                    android:layout_height="100dip"
+                    android:gravity="center"
+                    android:progressTint="#3366FF"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="0dp" />
+
+                <TextView
+                    android:id="@+id/text_view_monday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:text="4.3"
+                    app:layout_constraintBottom_toBottomOf="@+id/vertical_progressbar_monday"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </android.support.constraint.ConstraintLayout>
 
             <TextView
                 android:id="@+id/textView2"
@@ -60,15 +79,37 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <ProgressBar
-                android:id="@+id/vertical_progressbar_tuesday"
-                style="@style/Widget.ProgressBar.Vertical"
-                android:layout_width="40dip"
-                android:layout_height="100dip"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center"
-                android:progressTint="#3370FA" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ProgressBar
+                    android:id="@+id/vertical_progressbar_tuesday"
+                    style="@style/Widget.ProgressBar.Vertical"
+                    android:layout_width="40dip"
+                    android:layout_height="100dip"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center"
+                    android:progressTint="#3370FA"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="0dp" />
+
+                <TextView
+                    android:id="@+id/text_view_tuesday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:text="4.3"
+                    app:layout_constraintBottom_toBottomOf="@+id/vertical_progressbar_tuesday"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </android.support.constraint.ConstraintLayout>
 
             <TextView
                 android:id="@+id/textView3"
@@ -85,15 +126,37 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <ProgressBar
-                android:id="@+id/vertical_progressbar_wednesday"
-                style="@style/Widget.ProgressBar.Vertical"
-                android:layout_width="40dip"
-                android:layout_height="100dip"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center"
-                android:progressTint="#337AF5" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ProgressBar
+                    android:id="@+id/vertical_progressbar_wednesday"
+                    style="@style/Widget.ProgressBar.Vertical"
+                    android:layout_width="40dip"
+                    android:layout_height="100dip"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center"
+                    android:progressTint="#337AF5"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="0dp" />
+
+                <TextView
+                    android:id="@+id/text_view_wednesday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:text="4.3"
+                    app:layout_constraintBottom_toBottomOf="@+id/vertical_progressbar_wednesday"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </android.support.constraint.ConstraintLayout>
 
             <TextView
                 android:id="@+id/textView4"
@@ -110,15 +173,37 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <ProgressBar
-                android:id="@+id/vertical_progressbar_thursday"
-                style="@style/Widget.ProgressBar.Vertical"
-                android:layout_width="40dip"
-                android:layout_height="100dip"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center"
-                android:progressTint="#3385F0" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ProgressBar
+                    android:id="@+id/vertical_progressbar_thursday"
+                    style="@style/Widget.ProgressBar.Vertical"
+                    android:layout_width="40dip"
+                    android:layout_height="100dip"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center"
+                    android:progressTint="#3385F0"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="0dp" />
+
+                <TextView
+                    android:id="@+id/text_view_thursday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:text="4.3"
+                    app:layout_constraintBottom_toBottomOf="@+id/vertical_progressbar_thursday"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </android.support.constraint.ConstraintLayout>
 
             <TextView
                 android:id="@+id/textView5"
@@ -135,15 +220,37 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <ProgressBar
-                android:id="@+id/vertical_progressbar_friday"
-                style="@style/Widget.ProgressBar.Vertical"
-                android:layout_width="40dip"
-                android:layout_height="100dip"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center"
-                android:progressTint="#338FEB" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ProgressBar
+                    android:id="@+id/vertical_progressbar_friday"
+                    style="@style/Widget.ProgressBar.Vertical"
+                    android:layout_width="40dip"
+                    android:layout_height="100dip"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center"
+                    android:progressTint="#338FEB"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="0dp" />
+
+                <TextView
+                    android:id="@+id/text_view_friday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:text="4.3"
+                    app:layout_constraintBottom_toBottomOf="@+id/vertical_progressbar_friday"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </android.support.constraint.ConstraintLayout>
 
             <TextView
                 android:id="@+id/textView6"
@@ -160,15 +267,37 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <ProgressBar
-                android:id="@+id/vertical_progressbar_saturday"
-                style="@style/Widget.ProgressBar.Vertical"
-                android:layout_width="40dip"
-                android:layout_height="100dip"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center"
-                android:progressTint="#3399E6" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ProgressBar
+                    android:id="@+id/vertical_progressbar_saturday"
+                    style="@style/Widget.ProgressBar.Vertical"
+                    android:layout_width="40dip"
+                    android:layout_height="100dip"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center"
+                    android:progressTint="#3399E6"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="0dp" />
+
+                <TextView
+                    android:id="@+id/text_view_saturday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:text="4.3"
+                    app:layout_constraintBottom_toBottomOf="@+id/vertical_progressbar_saturday"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </android.support.constraint.ConstraintLayout>
 
             <TextView
                 android:id="@+id/textView7"
@@ -185,15 +314,37 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <ProgressBar
-                android:id="@+id/vertical_progressbar_sunday"
-                style="@style/Widget.ProgressBar.Vertical"
-                android:layout_width="40dip"
-                android:layout_height="100dip"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center"
-                android:progressTint="#33A3E0" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ProgressBar
+                    android:id="@+id/vertical_progressbar_sunday"
+                    style="@style/Widget.ProgressBar.Vertical"
+                    android:layout_width="40dip"
+                    android:layout_height="100dip"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center"
+                    android:progressTint="#33A3E0"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="0dp" />
+
+                <TextView
+                    android:id="@+id/text_view_sunday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:text="4.3"
+                    app:layout_constraintBottom_toBottomOf="@+id/vertical_progressbar_sunday"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </android.support.constraint.ConstraintLayout>
 
             <TextView
                 android:id="@+id/textView8"
