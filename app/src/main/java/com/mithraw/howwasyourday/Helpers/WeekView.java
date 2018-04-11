@@ -14,7 +14,7 @@ public class WeekView {
 
     private View mView;
     boolean mShowNumbers = false;
-
+    String formatFloat = "%.2f";
     public WeekView(View view) {
         mView = view;
         updateVisibilityTexts();
@@ -35,7 +35,7 @@ public class WeekView {
     private void updateVisibilityTexts() {
         for (DAYS d : DAYS.values()) {
             if (mShowNumbers) {
-                if (!getTextView(d).getText().equals("0.0"))
+                if (!getTextView(d).getText().equals(String.format(Locale.ROOT, formatFloat, (float) 0))&& !getTextView(d).getText().equals(""))
                     getTextView(d).setVisibility(View.VISIBLE);
             } else
                 getTextView(d).setVisibility(View.GONE);
@@ -115,7 +115,7 @@ public class WeekView {
 
     public void updateDay(DAYS d, float value) {
         updateDay(getProgressBar(d), value);
-        getTextView(d).setText(String.format(Locale.ROOT, "%.1f", value));
+        getTextView(d).setText(String.format(Locale.ROOT, formatFloat, value));
     }
 
     public void updateDay(ProgressBar pb, float value) {

@@ -14,6 +14,7 @@ public class MonthView {
 
     private View mView;
     boolean mShowNumbers = false;
+    String formatFloat = "%.1f";
     public MonthView(View view) {
         mView = view;
         updateVisibilityTexts();
@@ -35,7 +36,7 @@ public class MonthView {
     private void updateVisibilityTexts() {
         for (MONTHS d : MONTHS.values()) {
             if (mShowNumbers) {
-                if (!getTextView(d).getText().equals("0.0"))
+                if (!getTextView(d).getText().equals(String.format(Locale.ROOT, formatFloat, (float) 0)))
                     getTextView(d).setVisibility(View.VISIBLE);
             } else
                 getTextView(d).setVisibility(View.GONE);
@@ -150,7 +151,7 @@ public class MonthView {
 
     public void updateMonth(MONTHS d, float value) {
         updateMonth(getProgressBar(d), value);
-        getTextView(d).setText(String.format(Locale.ROOT, "%.1f", value));
+        getTextView(d).setText(String.format(Locale.ROOT, formatFloat, value));
     }
 
     public void updateMonth(ProgressBar pb, float value) {

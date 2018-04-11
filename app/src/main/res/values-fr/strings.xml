@@ -160,4 +160,5 @@
     <string name="undo">ANNULER</string>
     <string name="start_date">Date de début</string>
     <string name="end_date">Date de fin</string>
+    <string name="custom_diagram_title">Diagramme Configurable</string>
 </resources>

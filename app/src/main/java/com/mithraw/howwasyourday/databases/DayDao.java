@@ -56,6 +56,9 @@ public interface DayDao {
     @Query("SELECT * FROM day WHERE date_time > :startDateInt AND date_time < :endDateInt AND day_of_the_week IN (:ids) ORDER BY year DESC, month DESC, day_of_the_month DESC")
     List<Day> getByBoundsAndAdditions(long startDateInt, long endDateInt, int[] ids);
 
+    @Query("SELECT AVG(rating) FROM day WHERE date_time > :startDateInt AND date_time < :endDateInt AND day_of_the_week IS :id")
+    float getAverageRatingByBoundsAndDayOfTheMonth(long startDateInt, long endDateInt, int id);
+
     @Query("SELECT * FROM day WHERE date_time > :startDateInt AND date_time < :endDateInt ")
     List<Day> getByBounds(long startDateInt, long endDateInt);
 
