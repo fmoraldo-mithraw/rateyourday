@@ -2,16 +2,20 @@ package com.mithraw.howwasyourday.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mithraw.howwasyourday.Helpers.RateView;
@@ -45,32 +49,28 @@ public class RateADay extends AppCompatActivity {
         //Retreive the database
         db = DaysDatabase.getInstance(getApplicationContext());
 
+        mTitleText =  findViewById(R.id.titleTextRate);
+        mLogText =  findViewById(R.id.logTextRate);
+
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                EditText titleText = (EditText) findViewById(R.id.titleText);
-                EditText logText = (EditText) findViewById(R.id.logText);
-
                 if (msg.what == MSG_ID.MSG_RATING.ordinal()) {
                     mRateView.setRating((Integer) (msg.obj));
-                    mTitleText.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-                    mLogText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                    allowFocusOnTexts(true);
                 } else if (msg.what == MSG_ID.MSG_LOG.ordinal()) {
-                    logText.setText((String) (msg.obj));
-                    mTitleText.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-                    mLogText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                    mLogText.setText((String) (msg.obj));
+                    allowFocusOnTexts(true);
 
                 } else if (msg.what == MSG_ID.MSG_TITLE.ordinal()) {
-                    titleText.setText((String) (msg.obj));
-                    mTitleText.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-                    mLogText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                    mTitleText.setText((String) (msg.obj));
+                    allowFocusOnTexts(true);
                 }
                 if (msg.what == MSG_ID.MSG_EMPTY.ordinal()) {
-                    titleText.setText("");
-                    logText.setText("");
+                    mTitleText.setText("");
+                    mLogText.setText("");
                     mRateView.setRating(0);
-                    mTitleText.setInputType(InputType.TYPE_NULL);
-                    mLogText.setInputType(InputType.TYPE_NULL);
+                    allowFocusOnTexts(false);
                 }
             }
         };
@@ -81,59 +81,64 @@ public class RateADay extends AppCompatActivity {
         m_calendar.set(java.util.Calendar.YEAR, intent.getIntExtra(EXTRA_DATE_YEAR, 0));
 
         // Adjusting the controls of the page
-        mTitleText = (EditText) findViewById(R.id.titleText);
-        mLogText = (EditText) findViewById(R.id.logText);
+
         mTitleText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (mRateView.getRating() == 0) {
+                    ((EditText)v).setText("");
                     Toast.makeText(getBaseContext(), R.string.cant_click, Toast.LENGTH_LONG).show();
                 } else {
-                    mTitleText.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-                    mLogText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                    allowFocusOnTexts(true);
                 }
+
                 return false;
             }
         });
+
         mLogText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (mRateView.getRating() == 0) {
+                    ((EditText)v).setText("");
                     Toast.makeText(getBaseContext(), R.string.cant_click, Toast.LENGTH_LONG).show();
                 } else {
-                    mTitleText.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-                    mLogText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                    allowFocusOnTexts(true);
                 }
                 return false;
             }
 
         });
-        EditText dateText = (EditText) findViewById(R.id.dateTextView);
-        mRateView = new RateView((View) findViewById(R.id.ratingBar));
 
+
+
+        TextView dateText = (TextView) findViewById(R.id.dateTextView);
+        mRateView = new RateView((View) findViewById(R.id.ratingBar));
         mRateView.setOnRateChanged(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                allowFocusOnTexts(true);
                 saveDay();
-                mTitleText.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-                mLogText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-
             }
         });
-       mTitleText.setEnabled(true);
-        mLogText.setEnabled(true);
-        mTitleText.setEnabled(true);
-        mLogText.setEnabled(true);
-        mTitleText.setInputType(InputType.TYPE_NULL);
-        mLogText.setInputType(InputType.TYPE_NULL);
+        allowFocusOnTexts(false);
 
-        dateText.setEnabled(false);
         //Fill the controls with the correct informations
         fillTheInformations();
         java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
         dateText.setText(dateFormat.format(m_calendar.getTime()));
     }
 
+    private void allowFocusOnTexts(boolean allow) {
+        if (allow) {
+            mTitleText.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
+            mLogText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
+        } else {
+            mTitleText.setInputType(InputType.TYPE_NULL);
+            mLogText.setInputType(InputType.TYPE_NULL);
+        }
+
+    }
     protected void fillTheInformations() {
         new Thread() {
             @Override
@@ -167,8 +172,6 @@ public class RateADay extends AppCompatActivity {
             public void run() {
                 if (mRateView.getRating() == 0)
                     return;
-                EditText titleText = (EditText) findViewById(R.id.titleText);
-                EditText logText = (EditText) findViewById(R.id.logText);
                 Day d = new Day(m_calendar.get(Calendar.DAY_OF_WEEK),
                         m_calendar.get(Calendar.DAY_OF_MONTH),
                         m_calendar.get(Calendar.MONTH),
@@ -176,8 +179,8 @@ public class RateADay extends AppCompatActivity {
                         m_calendar.get(Calendar.WEEK_OF_YEAR),
                         m_calendar.getTimeInMillis(),
                         (int) (mRateView.getRating()),
-                        titleText.getText().toString(),
-                        logText.getText().toString());
+                        mTitleText.getText().toString(),
+                        mLogText.getText().toString());
                 db.dayDao().insertDay(d);
             }
         }.start();

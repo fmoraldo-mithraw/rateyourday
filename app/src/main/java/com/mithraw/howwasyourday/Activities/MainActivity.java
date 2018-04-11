@@ -1,47 +1,50 @@
 package com.mithraw.howwasyourday.Activities;
 
 import android.annotation.SuppressLint;
-
-
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.support.v4.view.MenuItemCompat;
-import android.app.DatePickerDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.ShareActionProviderCustom;
-import android.view.View;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProviderCustom;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.DatePicker;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CalendarView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.facebook.share.model.ShareContent;
 import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.ShareMediaContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.widget.ShareDialog;
+import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.Helpers.NotificationHelper;
 import com.mithraw.howwasyourday.R;
+import com.mithraw.howwasyourday.Tools.LogsAdapter;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
 
@@ -61,13 +64,13 @@ public class MainActivity extends AppCompatActivity
 
     private static Context mContext;
     private static Activity mActivity;
-    private DatePickerDialog datePickerDialog = null;
     protected DaysDatabase db;
     protected static Handler handler;
-    protected final java.util.Calendar m_calendar = java.util.Calendar.getInstance();
+    protected static final java.util.Calendar m_calendar = java.util.Calendar.getInstance();
     private ShareActionProviderCustom mShareActionProvider = null;
     private Intent shareIntent;
     private boolean dateChangedByUser = false;
+    private Day mDay;
 
     public static Context getContext() {
         return mContext;
@@ -78,23 +81,32 @@ public class MainActivity extends AppCompatActivity
     }
 
     public static String getShareString() {
+        String shareBody = "";
         RatingBar rab = (RatingBar) MainActivity.getmActivity().findViewById(R.id.ratingBar);
-        EditText titleText = (EditText) MainActivity.getmActivity().findViewById(R.id.titleText);
-        EditText logText = (EditText) MainActivity.getmActivity().findViewById(R.id.logText);
-        EditText edittext = (EditText) MainActivity.getmActivity().findViewById(R.id.dateTextView);
-        String title = edittext.getText().toString() + " - " + titleText.getText().toString();
-        String shareBody = title + "\n" + (int) (rab.getRating()) + "/5\n" + logText.getText().toString();
+        TextView titleText = (TextView) MainActivity.getmActivity().findViewById(R.id.titleTextRate);
+        TextView logText = (TextView) MainActivity.getmActivity().findViewById(R.id.logText);
+        java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(App.getApplication());
+        java.util.Date d = new java.util.Date(m_calendar.getTimeInMillis());
+        if((logText!= null) && (titleText!=null) && (rab != null) ) {
+            String title = dateFormat.format(d) + " - " + titleText.getText().toString();
+            shareBody = title + "\n" + (int) (rab.getRating()) + "/5\n" + logText.getText().toString();
+        }
         return shareBody;
     }
 
     public static Bitmap getBitmapWithShareString() {
+        String shareBody = "";
+        String title = "";
         Resources res = MainActivity.getContext().getResources();
         RatingBar rab = (RatingBar) MainActivity.getmActivity().findViewById(R.id.ratingBar);
-        EditText titleText = (EditText) MainActivity.getmActivity().findViewById(R.id.titleText);
-        EditText logText = (EditText) MainActivity.getmActivity().findViewById(R.id.logText);
-        EditText edittext = (EditText) MainActivity.getmActivity().findViewById(R.id.dateTextView);
-        String title = edittext.getText().toString() + " - " + titleText.getText().toString();
-        String shareBody = (int) (rab.getRating()) + "/5 " + logText.getText().toString();
+        TextView titleText = (TextView) MainActivity.getmActivity().findViewById(R.id.titleTextRate);
+        TextView logText = (TextView) MainActivity.getmActivity().findViewById(R.id.logText);
+        java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(App.getApplication());
+        java.util.Date d = new java.util.Date(m_calendar.getTimeInMillis());
+        if((logText!= null) && (titleText!=null) && (rab != null) ) {
+            title = dateFormat.format(d) + " - " + titleText.getText().toString();
+            shareBody = title + "\n" + (int) (rab.getRating()) + "/5\n" + logText.getText().toString();
+        }
         if (140 < shareBody.length()) {
             shareBody = shareBody.substring(0, 136) + "...";
         }
@@ -125,6 +137,26 @@ public class MainActivity extends AppCompatActivity
         return image;
     }
 
+    private void setLogText(String value) {
+        TextView text = findViewById(R.id.logText);
+        ScrollView scrollViewMain = findViewById(R.id.scrollViewMain);
+        if (value.equals("")) {
+            scrollViewMain.setVisibility(View.GONE);
+        } else {
+            scrollViewMain.setVisibility(View.VISIBLE);
+            text.setText(value);
+        }
+    }
+
+    private void setTitleText(String value) {
+        TextView text = (TextView) findViewById(R.id.titleText);
+        if (value.equals("")) {
+            text.setVisibility(View.GONE);
+        } else {
+            text.setVisibility(View.VISIBLE);
+            text.setText(value);
+        }
+    }
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,50 +196,92 @@ public class MainActivity extends AppCompatActivity
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                RatingBar rab = (RatingBar) findViewById(R.id.ratingBar);
-                EditText titleText = (EditText) findViewById(R.id.titleText);
-                EditText logText = (EditText) findViewById(R.id.logText);
+                RatingBar rab = findViewById(R.id.ratingBar);
+                Button removeButton = findViewById(R.id.main_button_remove);
+                LinearLayout nothingLayout = findViewById(R.id.nothing_layout);
+                LinearLayout rateLayout = findViewById(R.id.rate_layout);
+
 
                 if (msg.what == MSG_ID.MSG_RATING.ordinal()) {
                     rab.setRating((Integer) (msg.obj));
+
                 } else if (msg.what == MSG_ID.MSG_LOG.ordinal()) {
-                    logText.setText((String) (msg.obj));
+                    setLogText((String) (msg.obj));
                 } else if (msg.what == MSG_ID.MSG_TITLE.ordinal()) {
-                    titleText.setText((String) (msg.obj));
+                    setTitleText((String) (msg.obj));
                 }
                 if (msg.what == MSG_ID.MSG_EMPTY.ordinal()) {
                     rab.setRating(0);
-                    logText.setText("");
-                    titleText.setText("");
+                    setLogText("");
+                    setTitleText("");
+                    removeButton.setEnabled(false);
+                    nothingLayout.setVisibility(View.VISIBLE);
+                    rateLayout.setVisibility(View.GONE);
                 }
                 if (msg.what == MSG_ID.MSG_EMPTY_TO_FILL.ordinal()) {
                     rab.setRating(0);
-                    logText.setText("");
-                    titleText.setText("");
+                    setLogText("");
+                    setTitleText("");
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
                     sharingIntent.putExtra(Intent.EXTRA_TEXT, "");
                     if (mShareActionProvider != null)
                         mShareActionProvider.setShareIntent(sharingIntent);
                     launchActivityRateADay();
+                    removeButton.setEnabled(false);
+                    nothingLayout.setVisibility(View.VISIBLE);
+                    rateLayout.setVisibility(View.GONE);
                 }
                 if (msg.what == MSG_ID.MSG_SENT.ordinal()) {
                     String shareBody = getShareString();
+                    removeButton.setEnabled(true);
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
                     sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
                     if (mShareActionProvider != null)
                         mShareActionProvider.setShareIntent(sharingIntent);
+                    nothingLayout.setVisibility(View.GONE);
+                    rateLayout.setVisibility(View.VISIBLE);
                 }
             }
         };
 
         //Setup the Edit button
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        Button editButton = findViewById(R.id.main_button_edit);
+        editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 launchActivityRateADay();
+            }
+        });
+        final Button removeButton = findViewById(R.id.main_button_remove);
+        removeButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                alertDialogBuilder.setMessage(R.string.log_removed)
+                        .setTitle(R.string.log_removed_title);
+                alertDialogBuilder.setPositiveButton(R.string.log_removed_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                DaysDatabase db = DaysDatabase.getInstance(App.getApplication().getApplicationContext());
+                                db.dayDao().delete(mDay);
+                                handler.sendEmptyMessage(MSG_ID.MSG_EMPTY.ordinal());
+                            }
+                        }.start();
+                    }
+                });
+                alertDialogBuilder.setNegativeButton(R.string.log_removed_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+                AlertDialog dialog = alertDialogBuilder.create();
+                dialog.show();
+
+
             }
         });
 
@@ -218,13 +292,12 @@ public class MainActivity extends AppCompatActivity
         rab.setMax(5);
 
         //  The the date controler
-        EditText edittext = (EditText) findViewById(R.id.dateTextView);
-        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+        CalendarView calendarView = findViewById(R.id.calendarView);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 m_calendar.set(java.util.Calendar.YEAR, year);
-                m_calendar.set(java.util.Calendar.MONTH, monthOfYear);
+                m_calendar.set(java.util.Calendar.MONTH, month);
                 m_calendar.set(java.util.Calendar.DAY_OF_MONTH, dayOfMonth);
                 //if the date selected is not the date of the day we consider the date has been changed
                 Date d = new Date(System.currentTimeMillis());
@@ -237,31 +310,16 @@ public class MainActivity extends AppCompatActivity
                 }
                 updateLabel(false);
             }
-
-        };
-        edittext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Show the date picker, we configure it here
-                DatePickerDialog datePickerDialog = getDatePickerDialog();
-                if (datePickerDialog != null) {
-                    Date d = new Date(System.currentTimeMillis());
-                    datePickerDialog.getDatePicker().setMaxDate(d.getTime());
-                    datePickerDialog.show();
-                }
-                // Hide the keyboard
-                View focused = getCurrentFocus();
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(focused.getWindowToken(), 0);
-            }
         });
+        calendarView.setDate(m_calendar.getTimeInMillis());
+        updateDateText();
+    }
 
-
-        //Create the DatePicker
-        datePickerDialog = new DatePickerDialog(MainActivity.this, date, m_calendar
-                .get(java.util.Calendar.YEAR), m_calendar.get(java.util.Calendar.MONTH),
-                m_calendar.get(java.util.Calendar.DAY_OF_MONTH));
-
+    private void updateDateText() {
+        TextView dateText = findViewById(R.id.dateTextView);
+        java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(App.getApplication());
+        java.util.Date d = new java.util.Date(m_calendar.getTimeInMillis());
+        dateText.setText(dateFormat.format(d));
     }
 
     private void fillDbWithJunk() {
@@ -297,8 +355,9 @@ public class MainActivity extends AppCompatActivity
 
     private void updateLabel(boolean isResume) {
         java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
-        EditText edittext = (EditText) findViewById(R.id.dateTextView);
-        edittext.setText(dateFormat.format(m_calendar.getTime()));
+        CalendarView calendarView = findViewById(R.id.calendarView);
+        calendarView.setDate(m_calendar.getTimeInMillis());
+        updateDateText();
         //Fill the controls with the correct infos
         fillTheInformations(isResume);
     }
@@ -421,20 +480,15 @@ public class MainActivity extends AppCompatActivity
         super.onResume();  // Always call the superclass method first
         RatingBar rab = (RatingBar) findViewById(R.id.ratingBar);
         rab.setIsIndicator(true);
-        EditText titleText = (EditText) findViewById(R.id.titleText);
-        titleText.setEnabled(false);
-        EditText logText = (EditText) findViewById(R.id.logText);
         Date d = new Date(System.currentTimeMillis());
-        logText.setEnabled(false);
         //If day has changed
         if ((!dateChangedByUser) && ((d.getDate() != m_calendar.get(java.util.Calendar.DAY_OF_MONTH)) ||
                 (d.getMonth() != m_calendar.get(java.util.Calendar.MONTH)) ||
                 ((d.getYear() + 1900) != m_calendar.get(java.util.Calendar.YEAR)))) {
             m_calendar.setTimeInMillis(System.currentTimeMillis());
         }
-        datePickerDialog.updateDate(m_calendar.get(java.util.Calendar.YEAR),
-                m_calendar.get(java.util.Calendar.MONTH),
-                m_calendar.get(java.util.Calendar.DAY_OF_MONTH));
+        CalendarView calendarView = findViewById(R.id.calendarView);
+        calendarView.setDate(m_calendar.getTimeInMillis());
 
         //Initialize the labels
         updateLabel(true);
@@ -444,9 +498,6 @@ public class MainActivity extends AppCompatActivity
         new Thread() {
             @Override
             public void run() {
-                RatingBar rab = (RatingBar) findViewById(R.id.ratingBar);
-                EditText titleText = (EditText) findViewById(R.id.titleText);
-                EditText logText = (EditText) findViewById(R.id.logText);
                 if (db == null)
                     return;
                 List<Day> days = db.dayDao().getAllByDate(m_calendar.get(java.util.Calendar.DAY_OF_MONTH), m_calendar.get(java.util.Calendar.MONTH), m_calendar.get(java.util.Calendar.YEAR));
@@ -457,6 +508,7 @@ public class MainActivity extends AppCompatActivity
                     else
                         handler.sendEmptyMessage(MSG_ID.MSG_EMPTY.ordinal());
                 } else {
+                    mDay = days.get(0);
                     Message msg_rating = Message.obtain();
                     msg_rating.what = MSG_ID.MSG_RATING.ordinal();
                     msg_rating.obj = days.get(0).getRating();
@@ -475,9 +527,5 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }.start();
-    }
-
-    public DatePickerDialog getDatePickerDialog() {
-        return datePickerDialog;
     }
 }

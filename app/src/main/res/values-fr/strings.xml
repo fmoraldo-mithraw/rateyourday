@@ -162,4 +162,5 @@
     <string name="end_date">Date de fin</string>
     <string name="custom_diagram_title">Diagramme Configurable</string>
     <string name="cant_click">Vous devez d\'abord noter votre journée avant de la décire</string>
+    <string name="nothing_main">Aucune information à la date séléctionnée</string>
 </resources>
