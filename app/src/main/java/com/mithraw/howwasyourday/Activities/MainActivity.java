@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity
         String shareBody = "";
         RatingBar rab = (RatingBar) MainActivity.getmActivity().findViewById(R.id.ratingBar);
         TextView titleText = (TextView) MainActivity.getmActivity().findViewById(R.id.titleTextRate);
-        TextView logText = (TextView) MainActivity.getmActivity().findViewById(R.id.logText);
+        TextView logText = (TextView) MainActivity.getmActivity().findViewById(R.id.logTextRate);
         java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(App.getApplication());
         java.util.Date d = new java.util.Date(m_calendar.getTimeInMillis());
         if((logText!= null) && (titleText!=null) && (rab != null) ) {
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity
         Resources res = MainActivity.getContext().getResources();
         RatingBar rab = (RatingBar) MainActivity.getmActivity().findViewById(R.id.ratingBar);
         TextView titleText = (TextView) MainActivity.getmActivity().findViewById(R.id.titleTextRate);
-        TextView logText = (TextView) MainActivity.getmActivity().findViewById(R.id.logText);
+        TextView logText = (TextView) MainActivity.getmActivity().findViewById(R.id.logTextRate);
         java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(App.getApplication());
         java.util.Date d = new java.util.Date(m_calendar.getTimeInMillis());
         if((logText!= null) && (titleText!=null) && (rab != null) ) {
@@ -399,9 +399,9 @@ public class MainActivity extends AppCompatActivity
             if (resultCode != 0) {
                 Resources res = getResources();
                 if (resultCode > 2)
-                    Snackbar.make(getCurrentFocus(), res.getString(R.string.save_the_day_good), 5000).show();
+                    Snackbar.make(getCurrentFocus(), res.getString(R.string.save_the_day_good), 2000).show();
                 else
-                    Snackbar.make(getCurrentFocus(), res.getString(R.string.save_the_day_bad), 5000).show();
+                    Snackbar.make(getCurrentFocus(), res.getString(R.string.save_the_day_bad), 2000).show();
             }
         } else if (requestCode == ACTIVITY_ID.ACTIVITY_SETTINGS.ordinal()) {
             //TODO Make something
