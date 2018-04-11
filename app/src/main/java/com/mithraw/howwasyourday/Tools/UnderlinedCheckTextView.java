@@ -12,7 +12,7 @@ import android.view.View;
 public class UnderlinedCheckTextView extends AppCompatTextView implements View.OnClickListener {
 
     boolean isChecked = true;
-    OnClickListener _wrappedOnClickListener;
+
 
     public UnderlinedCheckTextView(Context context) {
         super(context);
@@ -47,7 +47,7 @@ public class UnderlinedCheckTextView extends AppCompatTextView implements View.O
             setTypeface(Typeface.create(getTypeface(), Typeface.NORMAL), Typeface.NORMAL);
         }
     }
-
+    OnClickListener _wrappedOnClickListener;
     @Override
     public void onClick(View v) {
         setChecked(!isChecked());

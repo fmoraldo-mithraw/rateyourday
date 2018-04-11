@@ -2,15 +2,19 @@ package com.mithraw.howwasyourday.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.RatingBar;
+import android.widget.Toast;
 
+import com.mithraw.howwasyourday.Helpers.RateView;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
@@ -26,7 +30,9 @@ public class RateADay extends AppCompatActivity {
     public static final String EXTRA_DATE_DAY = "extra_date_day";
     public static final String EXTRA_DATE_MONTH = "extra_date_month";
     public static final String EXTRA_DATE_YEAR = "extra_date_year";
-
+    EditText mTitleText;
+    EditText mLogText;
+    RateView mRateView;
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +48,11 @@ public class RateADay extends AppCompatActivity {
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                RatingBar rab = (RatingBar) findViewById(R.id.ratingBar);
                 EditText titleText = (EditText) findViewById(R.id.titleText);
                 EditText logText = (EditText) findViewById(R.id.logText);
 
                 if (msg.what == MSG_ID.MSG_RATING.ordinal()) {
-                    rab.setRating((Integer) (msg.obj));
+                    mRateView.setRating((Integer) (msg.obj));
                     titleText.setEnabled(true);
                     logText.setEnabled(true);
                 } else if (msg.what == MSG_ID.MSG_LOG.ordinal()) {
@@ -62,7 +67,7 @@ public class RateADay extends AppCompatActivity {
                 if (msg.what == MSG_ID.MSG_EMPTY.ordinal()) {
                     titleText.setText("");
                     logText.setText("");
-                    rab.setRating(0);
+                    mRateView.setRating(0);
                     titleText.setEnabled(false);
                     logText.setEnabled(false);
                 }
@@ -75,40 +80,56 @@ public class RateADay extends AppCompatActivity {
         m_calendar.set(java.util.Calendar.YEAR, intent.getIntExtra(EXTRA_DATE_YEAR, 0));
 
         // Adjusting the controls of the page
-        EditText titleText = (EditText) findViewById(R.id.titleText);
-        EditText logText = (EditText) findViewById(R.id.logText);
-        EditText dateText = (EditText) findViewById(R.id.dateTextView);
-        RatingBar rab = (RatingBar) findViewById(R.id.ratingBar);
-        rab.setIsIndicator(false);
-        rab.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+        mTitleText = (EditText) findViewById(R.id.titleText);
+        mLogText = (EditText) findViewById(R.id.logText);
+        mTitleText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                saveDay();
-                EditText titleText = (EditText) findViewById(R.id.titleText);
-                EditText logText = (EditText) findViewById(R.id.logText);
-                titleText.setEnabled(true);
-                logText.setEnabled(true);
+            public void onClick(View v) {
+                if (mRateView.getRating() == 0) {
+                    Toast.makeText(getBaseContext(), R.string.cant_click, Toast.LENGTH_LONG).show();
+                    View focused = getCurrentFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(focused.getWindowToken(), 0);
+                }
             }
         });
-        titleText.setEnabled(false);
-        logText.setEnabled(false);
+        mLogText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mRateView.getRating() == 0) {
+                    Toast.makeText(getBaseContext(), R.string.cant_click, Toast.LENGTH_LONG).show();
+                    View focused = getCurrentFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(focused.getWindowToken(), 0);
+                }
+            }
+        });
+        EditText dateText = (EditText) findViewById(R.id.dateTextView);
+        mRateView = new RateView((View) findViewById(R.id.ratingBar));
+
+        mRateView.setOnRateChanged(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveDay();
+                mTitleText.setEnabled(true);
+                mLogText.setEnabled(true);
+
+            }
+        });
+        mTitleText.setEnabled(false);
+        mLogText.setEnabled(false);
         dateText.setEnabled(false);
 
         //Fill the controls with the correct informations
         fillTheInformations();
         java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
         dateText.setText(dateFormat.format(m_calendar.getTime()));
-
-
     }
 
     protected void fillTheInformations() {
         new Thread() {
             @Override
             public void run() {
-                RatingBar rab = (RatingBar) findViewById(R.id.ratingBar);
-                EditText titleText = (EditText) findViewById(R.id.titleText);
-                EditText logText = (EditText) findViewById(R.id.logText);
                 List<Day> days = db.dayDao().getAllByDate(m_calendar.get(java.util.Calendar.DAY_OF_MONTH), m_calendar.get(java.util.Calendar.MONTH), m_calendar.get(java.util.Calendar.YEAR));
                 if (days.isEmpty()) {
                     handler.sendEmptyMessage(MSG_ID.MSG_EMPTY.ordinal());
@@ -130,15 +151,13 @@ public class RateADay extends AppCompatActivity {
                 }
             }
         }.start();
-
     }
 
     protected boolean saveDay() {
         new Thread() {
             @Override
             public void run() {
-                RatingBar rab = (RatingBar) findViewById(R.id.ratingBar);
-                if(rab.getRating() == 0)
+                if (mRateView.getRating() == 0)
                     return;
                 EditText titleText = (EditText) findViewById(R.id.titleText);
                 EditText logText = (EditText) findViewById(R.id.logText);
@@ -148,22 +167,20 @@ public class RateADay extends AppCompatActivity {
                         m_calendar.get(Calendar.YEAR),
                         m_calendar.get(Calendar.WEEK_OF_YEAR),
                         m_calendar.getTimeInMillis(),
-                        (int) (rab.getRating()),
+                        (int) (mRateView.getRating()),
                         titleText.getText().toString(),
                         logText.getText().toString());
                 db.dayDao().insertDay(d);
             }
         }.start();
-        RatingBar rab = (RatingBar) findViewById(R.id.ratingBar);
-        if(rab.getRating() == 0)
+        if (mRateView.getRating() == 0)
             return false;
         return true;
     }
     private void endActivity() {
         Intent myIntent = getIntent();
-        RatingBar rab = (RatingBar) findViewById(R.id.ratingBar);
         if(saveDay())
-            setResult((int)rab.getRating(),myIntent);
+            setResult((int) mRateView.getRating(), myIntent);
         else
             setResult(Activity.RESULT_CANCELED,myIntent);
         finish();

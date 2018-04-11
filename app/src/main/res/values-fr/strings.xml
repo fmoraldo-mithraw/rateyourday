@@ -161,4 +161,5 @@
     <string name="start_date">Date de début</string>
     <string name="end_date">Date de fin</string>
     <string name="custom_diagram_title">Diagramme Configurable</string>
+    <string name="cant_click">Vous devez d\'abord noter votre journée avant de la décire</string>
 </resources>

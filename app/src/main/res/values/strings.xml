@@ -163,4 +163,5 @@
     <string name="start_date">Start date</string>
     <string name="end_date">End date</string>
     <string name="custom_diagram_title">Custom diagram</string>
+    <string name="cant_click">You must rate your day before describing it</string>
 </resources>

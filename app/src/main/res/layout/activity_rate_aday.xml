@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:showIn="@layout/app_bar_second"
+    android:id="@+id/constraintLayoutRate"
     tools:context="com.mithraw.howwasyourday.Activities.RateADay">
 
     <EditText
@@ -28,9 +29,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <RatingBar
+    <include
         android:id="@+id/ratingBar"
-        style="@style/Widget.AppCompat.RatingBar"
+        layout="@layout/rating_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -39,12 +40,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="40dp"
         android:layout_weight="1"
-        android:clickable="false"
-        android:isIndicator="true"
-        android:longClickable="false"
-        android:numStars="5"
-        android:rating="0"
-        android:stepSize="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
@@ -59,7 +54,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:ems="10"
-        android:enabled="false"
+        android:enabled="true"
         android:hint="@string/day_resume"
         android:inputType="textMultiLine"
         android:visibility="visible"
@@ -79,7 +74,7 @@
         android:layout_marginTop="12dp"
         android:layout_weight="1"
         android:ems="10"
-        android:enabled="false"
+        android:enabled="true"
         android:hint="@string/hint_Title"
         android:inputType="textPersonName"
         android:text="@string/day_title"

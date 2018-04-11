@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <ToggleButton
+        android:id="@+id/star1"
+        style="@style/toggleImageButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="right"
+        android:background="@drawable/ic_toggle_bg"
+        android:checked="false" />
+
+    <ToggleButton
+        android:id="@+id/star2"
+        style="@style/toggleImageButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="right"
+        android:layout_weight="1"
+        android:background="@drawable/ic_toggle_bg" />
+
+    <ToggleButton
+        android:id="@+id/star3"
+        style="@style/toggleImageButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="right"
+        android:layout_weight="1"
+        android:background="@drawable/ic_toggle_bg" />
+
+    <ToggleButton
+        android:id="@+id/star4"
+        style="@style/toggleImageButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="right"
+        android:layout_weight="1"
+        android:background="@drawable/ic_toggle_bg" />
+
+    <ToggleButton
+        android:id="@+id/star5"
+        style="@style/toggleImageButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="right"
+        android:layout_weight="1"
+        android:background="@drawable/ic_toggle_bg" />
+
+</LinearLayout>
