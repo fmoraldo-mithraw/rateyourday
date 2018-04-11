@@ -57,6 +57,7 @@
         android:enabled="true"
         android:hint="@string/day_resume"
         android:inputType="textMultiLine"
+        android:selectAllOnFocus="true"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -77,11 +78,10 @@
         android:enabled="true"
         android:hint="@string/hint_Title"
         android:inputType="textPersonName"
-        android:text="@string/day_title"
+        android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar"
-        tools:text="@string/day_title" />
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
 
 </android.support.constraint.ConstraintLayout>
