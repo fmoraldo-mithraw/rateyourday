@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
@@ -125,6 +126,7 @@ public class DiagramActivity extends AppCompatActivity {
                 long startDateInt = cal.getTimeInMillis();
                 Logger.getLogger("LogsAdapter").log(new LogRecord(Level.INFO, "FMORALDO : LogsAdapter date : " + startDateInt));
                 cal.setTime(endDate);
+                cal.add(Calendar.DAY_OF_MONTH,1);
                 long endDateInt = cal.getTimeInMillis();
 
                 float avgMonday = db.dayDao().getAverageRatingByBoundsAndDayOfTheMonth(startDateInt, endDateInt, Calendar.MONDAY);
@@ -182,8 +184,7 @@ public class DiagramActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         db = DaysDatabase.getInstance(getApplicationContext());
         Resources res = getResources();
-        WeekView viewCustom = new WeekView((View) findViewById(R.id.custom_week));
-        //viewCustom.setTitle(res.getString(R.string.custom_diagram_title));
+
         View myView = findViewById(R.id.custom_week);
         myView.findViewById(R.id.title).setVisibility(View.GONE);
 
@@ -340,7 +341,7 @@ public class DiagramActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        updateDataSet();
         new Thread() {
             @Override
             public void run() {

@@ -50,7 +50,7 @@
         android:layout_marginTop="26dp"
         android:ems="10"
         android:hint="@string/hint_Title"
-        android:inputType="textAutoCorrect|textAutoComplete|textPersonName"
+        android:inputType="textAutoCorrect|textAutoComplete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ratingBar" />

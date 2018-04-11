@@ -279,6 +279,7 @@ public class LogsActivity extends AppCompatActivity {
                 long startDateInt = cal.getTimeInMillis();
                 Logger.getLogger("LogsAdapter").log(new LogRecord(Level.INFO, "FMORALDO : LogsAdapter date : " + startDateInt));
                 cal.setTime(endDate);
+                cal.add(Calendar.DAY_OF_MONTH,1);
                 long endDateInt = cal.getTimeInMillis();
 
                 boolean monday = ((UnderlinedCheckTextView) findViewById(R.id.checked_text_view_monday)).isChecked();

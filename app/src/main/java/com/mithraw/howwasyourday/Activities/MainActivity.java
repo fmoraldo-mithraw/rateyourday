@@ -44,7 +44,6 @@ import com.facebook.share.widget.ShareDialog;
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.Helpers.NotificationHelper;
 import com.mithraw.howwasyourday.R;
-import com.mithraw.howwasyourday.Tools.LogsAdapter;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
 
@@ -503,9 +502,9 @@ public class MainActivity extends AppCompatActivity
                 List<Day> days = db.dayDao().getAllByDate(m_calendar.get(java.util.Calendar.DAY_OF_MONTH), m_calendar.get(java.util.Calendar.MONTH), m_calendar.get(java.util.Calendar.YEAR));
 
                 if (days.isEmpty()) {
-                    if (isResume == false)
+                    /*if (isResume == false)
                         handler.sendEmptyMessage(MSG_ID.MSG_EMPTY_TO_FILL.ordinal());
-                    else
+                    else*/
                         handler.sendEmptyMessage(MSG_ID.MSG_EMPTY.ordinal());
                 } else {
                     mDay = days.get(0);
