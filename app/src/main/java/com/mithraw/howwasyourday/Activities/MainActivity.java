@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -36,6 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mithraw.howwasyourday.App;
+import com.mithraw.howwasyourday.BuildConfig;
 import com.mithraw.howwasyourday.Helpers.NotificationHelper;
 import com.mithraw.howwasyourday.Helpers.SharingHelper;
 import com.mithraw.howwasyourday.R;
@@ -94,6 +97,7 @@ public class MainActivity extends AppCompatActivity
             text.setText(value);
         }
     }
+
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +132,11 @@ public class MainActivity extends AppCompatActivity
         //Setup the navigation view (whatever it is)
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Fill the version number
+        View headerView = navigationView.getHeaderView(0);
+        TextView version = headerView.findViewById(R.id.textViewVersion);
+        version.setText(BuildConfig.VERSION_NAME);
 
         //Setup the thread message handler
         handler = new Handler() {

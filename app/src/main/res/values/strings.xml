@@ -166,6 +166,7 @@
     <string name="cant_click">You must rate your day before describing it</string>
     <string name="nothing_main">No information on the selected day</string>
     <string name="cant_expand">You can\'t expand an empty card</string>
+    <string name="custom_diagram_hint">Customize your own diagram by entering your own range of dates</string>
 
 
 </resources>

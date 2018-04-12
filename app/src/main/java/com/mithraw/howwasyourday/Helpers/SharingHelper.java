@@ -13,6 +13,7 @@ import android.support.v7.widget.ShareActionProviderCustom;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.facebook.share.model.ShareContent;
 import com.facebook.share.model.ShareHashtag;
@@ -42,7 +43,7 @@ mSharingHelper.attachToButton(button);
 mSharingHelper.updateDatas();
  */
 public class SharingHelper {
-    static CardView mCardView;
+    CardView mCardView;
     private ShareActionProviderCustom mShareActionProvider = null;
     private Intent mShareIntent;
     private Activity mActivity;
@@ -135,6 +136,17 @@ public class SharingHelper {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                updateDatas();
+                Resources res = mActivity.getResources();
+                mActivity.startActivity(Intent.createChooser(mShareIntent, res.getString(R.string.share_via)));
+            }
+        });
+    }
+    public void attachToImageButton(ImageButton b) {
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateDatas();
                 Resources res = mActivity.getResources();
                 mActivity.startActivity(Intent.createChooser(mShareIntent, res.getString(R.string.share_via)));
             }

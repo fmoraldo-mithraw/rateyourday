@@ -7,13 +7,17 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.mithraw.howwasyourday.App;
+import com.mithraw.howwasyourday.Helpers.SharingHelper;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Helpers.WeekView;
 import com.mithraw.howwasyourday.Helpers.MonthView;
@@ -76,7 +80,11 @@ public class DiagramActivity extends AppCompatActivity {
         NOVEMBER_ALL_TIME,
         DECEMBER_ALL_TIME
     }
-
+    SharingHelper mSharingHelperCustom ;
+    SharingHelper mSharingHelperWeekCurYear;
+    SharingHelper mSharingHelperWeekAllYear;
+    SharingHelper mSharingHelperMonthCurYear;
+    SharingHelper mSharingHelperMonthAllYear;
     private DatePickerDialog startDatePickerDialog = null;
     private DatePickerDialog endDatePickerDialog = null;
     private Date startDate;
@@ -102,6 +110,7 @@ public class DiagramActivity extends AppCompatActivity {
             datePickerDialog.show();
         }
     }
+    
     private void updateDateTextView(TextView tv, Date d) {
         java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(App.getApplication());
         tv.setText(dateFormat.format(d));
@@ -117,6 +126,7 @@ public class DiagramActivity extends AppCompatActivity {
         }
         updateDataSet();
     }
+    
     private void updateDataSet(){
         new Thread() {
             @Override
@@ -185,20 +195,52 @@ public class DiagramActivity extends AppCompatActivity {
         db = DaysDatabase.getInstance(getApplicationContext());
         Resources res = getResources();
 
+        //Init layouts
         View myView = findViewById(R.id.custom_week);
-        myView.findViewById(R.id.title).setVisibility(View.GONE);
+        ((TextView)myView.findViewById(R.id.title)).setText(R.string.custom_diagram_title);
+        TextView title2 = findViewById(R.id.title2);
+        CardView cvCustom = findViewById(R.id.cardViewCustom);
+        ImageButton ibCustom= myView.findViewById(R.id.share_diagram);
+        mSharingHelperCustom =  new SharingHelper(cvCustom,this,
+                ibCustom, title2);
+        mSharingHelperCustom.attachToImageButton(ibCustom);
 
-        WeekView viewCur = new WeekView((View) findViewById(R.id.current_year_week));
+        View viewWeekCurYear = findViewById(R.id.current_year_week);
+        WeekView viewCur = new WeekView(viewWeekCurYear);
         viewCur.setTitle(res.getString(R.string.current_diagram_title));
+        CardView cvWeekCurYear = findViewById(R.id.cardViewWeekCurYear);
+        ImageButton ibWeekCurYear= viewWeekCurYear.findViewById(R.id.share_diagram);
+        mSharingHelperWeekCurYear =  new SharingHelper(cvWeekCurYear,this,
+                ibWeekCurYear);
+        mSharingHelperWeekCurYear.attachToImageButton(ibWeekCurYear);
 
-        WeekView viewAll = new WeekView((View) findViewById(R.id.all_time_week));
+        View viewWeekAllYear = findViewById(R.id.all_time_week);
+        WeekView viewAll = new WeekView(viewWeekAllYear );
         viewAll.setTitle(res.getString(R.string.all_years_diagram_title));
+        CardView cvWeekAllYear = findViewById(R.id.cardViewWeekAllYear);
+        ImageButton ibWeekAllYear= viewWeekAllYear.findViewById(R.id.share_diagram);
+        mSharingHelperWeekAllYear =  new SharingHelper(cvWeekAllYear,this,
+                ibWeekAllYear);
+        mSharingHelperWeekAllYear.attachToImageButton(ibWeekAllYear);
 
-        MonthView viewYearCur = new MonthView((View) findViewById(R.id.current_months));
+        View viewMonthCurrentYear = findViewById(R.id.current_months);
+        MonthView viewYearCur = new MonthView(viewMonthCurrentYear);
         viewYearCur.setTitle(res.getString(R.string.current_months_diagram_title));
+        CardView cvMonthCurYear = findViewById(R.id.cardViewMonthCurYear);
+        ImageButton ibMonthCurYear= viewMonthCurrentYear.findViewById(R.id.share_diagram);
+        mSharingHelperMonthCurYear =  new SharingHelper(cvMonthCurYear,this,
+                ibMonthCurYear);
+        mSharingHelperMonthCurYear.attachToImageButton(ibMonthCurYear);
 
-        MonthView viewYearAll = new MonthView((View) findViewById(R.id.all_time_months));
+        View viewMonthAllYear = findViewById(R.id.all_time_months);
+        MonthView viewYearAll = new MonthView(viewMonthAllYear);
         viewYearAll.setTitle(res.getString(R.string.all_years_months_diagram_title));
+        CardView cvMonthAllYear = findViewById(R.id.cardViewMonthAllYear);
+        ImageButton ibMonthAllYear= viewMonthAllYear.findViewById(R.id.share_diagram);
+        mSharingHelperMonthAllYear =  new SharingHelper(cvMonthAllYear,this,
+                ibMonthAllYear);
+        mSharingHelperMonthAllYear.attachToImageButton(ibMonthAllYear);
+
         //Setup the date listener
         //StarDate
         startDate = new Date(118, 0, 1);

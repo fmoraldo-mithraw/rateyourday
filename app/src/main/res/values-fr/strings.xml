@@ -164,4 +164,5 @@
     <string name="cant_click">Vous devez d\'abord noter votre journée avant de la décire</string>
     <string name="nothing_main">Aucune information à la date séléctionnée</string>
     <string name="cant_expand">Vous ne pouvez agrandir cet espace si aucune donnée n\'est remplie</string>
+    <string name="custom_diagram_hint">Personnalisez votre propre diagramme en entrant les dates de votre choix</string>
 </resources>
