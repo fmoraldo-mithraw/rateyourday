@@ -7,11 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,13 +17,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.ShareActionProviderCustom;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,13 +35,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.share.model.ShareContent;
-import com.facebook.share.model.ShareHashtag;
-import com.facebook.share.model.ShareMediaContent;
-import com.facebook.share.model.SharePhoto;
-import com.facebook.share.widget.ShareDialog;
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.Helpers.NotificationHelper;
+import com.mithraw.howwasyourday.Helpers.SharingHelper;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
@@ -62,7 +51,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_EMPTY_TO_FILL, MSG_SENT}
+    private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT}
 
     public enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS, ACTIVITY_LOGS, ACTIVITY_STATS}
 
@@ -72,10 +61,10 @@ public class MainActivity extends AppCompatActivity
     protected DaysDatabase db;
     protected static Handler handler;
     protected static final java.util.Calendar m_calendar = java.util.Calendar.getInstance();
-    private ShareActionProviderCustom mShareActionProvider = null;
-    private Intent shareIntent;
     private boolean dateChangedByUser = false;
     private Day mDay;
+    private static CardView mCardView;
+    private SharingHelper mSharingHelper;
 
     public static Context getContext() {
         return mContext;
@@ -83,63 +72,6 @@ public class MainActivity extends AppCompatActivity
 
     public static Activity getmActivity() {
         return mActivity;
-    }
-
-    public static String getShareString() {
-        String shareBody = "";
-        RatingBar rab = (RatingBar) MainActivity.getmActivity().findViewById(R.id.ratingBar);
-        TextView titleText = (TextView) MainActivity.getmActivity().findViewById(R.id.titleTextRate);
-        TextView logText = (TextView) MainActivity.getmActivity().findViewById(R.id.logTextRate);
-        java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(App.getApplication());
-        java.util.Date d = new java.util.Date(m_calendar.getTimeInMillis());
-        if((logText!= null) && (titleText!=null) && (rab != null) ) {
-            String title = dateFormat.format(d) + " - " + titleText.getText().toString();
-            shareBody = title + "\n" + (int) (rab.getRating()) + "/5\n" + logText.getText().toString();
-        }
-        return shareBody;
-    }
-
-    public static Bitmap getBitmapWithShareString() {
-        String shareBody = "";
-        String title = "";
-        Resources res = MainActivity.getContext().getResources();
-        RatingBar rab = (RatingBar) MainActivity.getmActivity().findViewById(R.id.ratingBar);
-        TextView titleText = (TextView) MainActivity.getmActivity().findViewById(R.id.titleTextRate);
-        TextView logText = (TextView) MainActivity.getmActivity().findViewById(R.id.logTextRate);
-        java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(App.getApplication());
-        java.util.Date d = new java.util.Date(m_calendar.getTimeInMillis());
-        if((logText!= null) && (titleText!=null) && (rab != null) ) {
-            title = dateFormat.format(d) + " - " + titleText.getText().toString();
-            shareBody = title + "\n" + (int) (rab.getRating()) + "/5\n" + logText.getText().toString();
-        }
-        if (140 < shareBody.length()) {
-            shareBody = shareBody.substring(0, 136) + "...";
-        }
-
-        Bitmap src = BitmapFactory.decodeResource(res, R.mipmap.ic_launcher);
-        int totalWidth = src.getWidth() + 400;
-        Bitmap image = Bitmap.createBitmap(totalWidth, src.getHeight(), Bitmap.Config.ARGB_8888);
-
-        Canvas cs = new Canvas(image);
-        Paint tPaint = new Paint();
-        tPaint.setTextSize(20);
-        tPaint.setTypeface(Typeface.create("Arial", Typeface.NORMAL));
-        tPaint.setColor(Color.WHITE);
-        tPaint.setStyle(Paint.Style.FILL);
-        cs.drawBitmap(src, 0f, 0f, null);
-        float height = tPaint.measureText("yY");
-        float width = tPaint.measureText(title);
-        cs.drawText(title, src.getWidth(), height + 15f, tPaint);
-        tPaint.setTextSize(17);
-        int iteratorHeight = 2;
-        int sizeLine = 47;
-        for (int i = 0; i < shareBody.length(); i += sizeLine) {
-            cs.drawText(shareBody.substring(i, (i + sizeLine > shareBody.length() ? shareBody.length() : i + sizeLine)), src.getWidth(), 10 + (height + 4f) * iteratorHeight, tPaint);
-            iteratorHeight++;
-        }
-
-
-        return image;
     }
 
     private void setLogText(String value) {
@@ -169,8 +101,11 @@ public class MainActivity extends AppCompatActivity
         mActivity = this;
         setContentView(R.layout.activity_main);
         mContext = this;
+        mCardView = this.findViewById(R.id.cardViewLittle);
 
-
+        mSharingHelper = new SharingHelper(mCardView,this,
+                this.findViewById(R.id.button_layout),
+                this.findViewById(R.id.expand_button));
         // Setup the notifications
         NotificationHelper.buildChannel();
         NotificationHelper.setupNotificationStatus();
@@ -179,9 +114,6 @@ public class MainActivity extends AppCompatActivity
         db = DaysDatabase.getInstance(getApplicationContext());
         //TODO WARNING REMOVE THAT ON PRODUTION
         //fillDbWithJunk();
-        //Setup the sharing intent
-        shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
 
         //Setup the ActionBar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -221,31 +153,13 @@ public class MainActivity extends AppCompatActivity
                     removeButton.setEnabled(false);
                     nothingLayout.setVisibility(View.VISIBLE);
                     rateLayout.setVisibility(View.GONE);
-                }
-                if (msg.what == MSG_ID.MSG_EMPTY_TO_FILL.ordinal()) {
-                    rab.setRating(0);
-                    setLogText("");
-                    setTitleText("");
-                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                    sharingIntent.setType("text/plain");
-                    sharingIntent.putExtra(Intent.EXTRA_TEXT, "");
-                    if (mShareActionProvider != null)
-                        mShareActionProvider.setShareIntent(sharingIntent);
-                    launchActivityRateADay();
-                    removeButton.setEnabled(false);
-                    nothingLayout.setVisibility(View.VISIBLE);
-                    rateLayout.setVisibility(View.GONE);
+                    mSharingHelper.updateDatas();
                 }
                 if (msg.what == MSG_ID.MSG_SENT.ordinal()) {
-                    String shareBody = getShareString();
                     removeButton.setEnabled(true);
-                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                    sharingIntent.setType("text/plain");
-                    sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                    if (mShareActionProvider != null)
-                        mShareActionProvider.setShareIntent(sharingIntent);
                     nothingLayout.setVisibility(View.GONE);
                     rateLayout.setVisibility(View.VISIBLE);
+                    mSharingHelper.updateDatas();
                 }
             }
         };
@@ -385,7 +299,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateLabel(boolean isResume) {
-        java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
         CalendarView calendarView = findViewById(R.id.calendarView);
         calendarView.setDate(m_calendar.getTimeInMillis());
         updateDateText();
@@ -454,30 +367,7 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.share_button, menu);
         MenuItem item = menu.findItem(R.id.menu_item_share);
-        mShareActionProvider = (ShareActionProviderCustom) MenuItemCompat.getActionProvider(item);
-        mShareActionProvider.setOnShareTargetSelectedListener(
-                new ShareActionProviderCustom.OnShareTargetSelectedListener() {
-                    @Override
-                    public boolean onShareTargetSelected(ShareActionProviderCustom actionProvider, Intent intent) {
-                        final String appName = intent.getComponent().getPackageName();
-                        Resources res = getResources();
-                        if ("com.facebook.katana".equals(appName)) {
-                            SharePhoto photo = new SharePhoto.Builder().setBitmap(getBitmapWithShareString())
-                                    .setCaption(getShareString())
-                                    .build();
-                            ShareContent shareContent = new ShareMediaContent.Builder()
-                                    .addMedium(photo)
-                                    .setShareHashtag(new ShareHashtag.Builder()
-                                            .setHashtag(res.getString(R.string.hashtag))
-                                            .build())
-                                    .build();
-                            ShareDialog shareDialog = new ShareDialog(MainActivity.getmActivity());
-                            shareDialog.show(shareContent, ShareDialog.Mode.AUTOMATIC);
-                            return true;
-                        }
-                        return false;
-                    }
-                });
+        mSharingHelper.attachToMenuItem(item);
         //Initialize the labels
         updateLabel(false);
         return true;
@@ -534,9 +424,6 @@ public class MainActivity extends AppCompatActivity
                 List<Day> days = db.dayDao().getAllByDate(m_calendar.get(java.util.Calendar.DAY_OF_MONTH), m_calendar.get(java.util.Calendar.MONTH), m_calendar.get(java.util.Calendar.YEAR));
 
                 if (days.isEmpty()) {
-                    /*if (isResume == false)
-                        handler.sendEmptyMessage(MSG_ID.MSG_EMPTY_TO_FILL.ordinal());
-                    else*/
                     mDay = null;
                     handler.sendEmptyMessage(MSG_ID.MSG_EMPTY.ordinal());
                 } else {

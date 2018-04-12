@@ -35,7 +35,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.RateADay" />
+        <activity android:name=".Activities.RateADay"
+            android:label="@string/app_name"/>
         <activity
             android:name=".Activities.SettingsActivity"
             android:label="@string/action_settings" />
@@ -49,6 +50,7 @@
         <activity
             android:name=".Activities.FunnyStatsActivity"
             android:label="@string/action_funny_stats" />
+        <activity android:name=".Activities.ExpandedDayActivity"></activity>
 
         <receiver android:name=".Tools.TimeAlarm">
             <intent-filter>
@@ -65,8 +67,16 @@
             android:name="com.facebook.FacebookContentProvider"
             android:authorities="com.facebook.app.FacebookContentProvider163663807786742"
             android:exported="true" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.mithraw.howwasyourday.fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
 
-        <activity android:name=".Activities.ExpandedDayActivity"></activity>
     </application>
 
 </manifest>
