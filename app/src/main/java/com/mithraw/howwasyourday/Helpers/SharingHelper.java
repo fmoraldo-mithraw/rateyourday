@@ -66,11 +66,13 @@ public class SharingHelper {
     public Bitmap getBitmapWithShareString() {
         Map<View, Integer> previousState = new HashMap<>();
         previousState.clear();
+        Bitmap image = null;
         for (View view : mListViewToHide) {
             previousState.put(view, view.getVisibility());
             view.setVisibility(View.GONE);
         }
-        Bitmap image = Bitmap.createBitmap(mCardView.getDrawingCache());
+        if ((mCardView != null) && (mCardView.getVisibility() != View.GONE))
+            image = Bitmap.createBitmap(mCardView.getDrawingCache());
         for (View view : mListViewToHide) {
             view.setVisibility(previousState.get(view));
         }
@@ -97,7 +99,9 @@ public class SharingHelper {
             File cachePath = new File(App.getApplication().getApplicationContext().getCacheDir(), "images");
             cachePath.mkdirs(); // don't forget to make the directory
             FileOutputStream stream = new FileOutputStream(cachePath + "/image.png"); // overwrites this image every time
-            getBitmapWithShareString().compress(Bitmap.CompressFormat.PNG, 100, stream);
+            Bitmap image = getBitmapWithShareString();
+            if(image != null)
+                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
             stream.close();
         } catch (IOException e) {
             e.printStackTrace();
