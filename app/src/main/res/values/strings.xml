@@ -107,7 +107,7 @@
     <string name="action_entry_logs">Entry log</string>
     <string name="action_stats_diagrams">Diagrams</string>
     <string name="action_funny_stats">Interesting datas</string>
-    <string name="action_donate">Donate to the author</string>
+    <string name="action_donate">Make a gift to the author</string>
     <string name="action_about_the_author">About the author</string>
     <string name="hashtag">#RateYourDay</string>
     <string name="monday">mon</string>
@@ -167,6 +167,9 @@
     <string name="nothing_main">No information on the selected day</string>
     <string name="cant_expand">You can\'t expand an empty card</string>
     <string name="custom_diagram_hint">Customize your own diagram by entering your own range of dates</string>
-
+    <string name="donate_text">In order to help people, this application is free.\nIn order to make it lighter and usable by all Android devices, it\'s Ad free.\nYou can support the author of the application by making him a gift through Paypal :</string>
+    <string name="donate_link">https://paypal.me/pools/c/83t6e5qfy7</string>
+    <string name="about_the_autho_text">Hi ! My name is Fabien \'Mithraw\' Moraldo, i\'m born in the 1985, and i like doing things, yeah, just like you ! We are so much the same !\nNo kidding, i\'m just a regular dude, who will be happy if you enjoyed his work.\nBut must of all, i would be nobody without my friends, so a big thanks to the friends who supported me, and helped me testing the app :</string>
+    <string name="about_the_autho_friends">- HowlBurn\n- Gio\n- Arita\n- Loki\n- Clifford1313</string>
 
 </resources>

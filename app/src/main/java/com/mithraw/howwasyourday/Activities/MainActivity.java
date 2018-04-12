@@ -343,6 +343,15 @@ public class MainActivity extends AppCompatActivity
         Intent statsIntent = new Intent(getApplicationContext(), FunnyStatsActivity.class);
         startActivityForResult(statsIntent, ACTIVITY_ID.ACTIVITY_STATS.ordinal());
     }
+    private void launchActivityDonation() {
+        Intent donationIntent = new Intent(getApplicationContext(), DonationActivity.class);
+        startActivity(donationIntent);
+    }
+    private void launchActivityAboutTheAuthor() {
+        Intent aboutTheAutorIntent = new Intent(getApplicationContext(), AboutTheAuthorActivity.class);
+        startActivity(aboutTheAutorIntent);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -398,6 +407,12 @@ public class MainActivity extends AppCompatActivity
         }
         if (id == R.id.nav_funny_stats) {
             launchActivityFunnyStats();
+        }
+        if(id == R.id.nav_donate) {
+            launchActivityDonation();
+        }
+        if(id == R.id.nav_about_the_author) {
+            launchActivityAboutTheAuthor();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
