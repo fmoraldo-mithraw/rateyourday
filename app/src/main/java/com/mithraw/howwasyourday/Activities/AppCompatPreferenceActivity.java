@@ -27,12 +27,6 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
     protected int mFragmentCount = 0;
     protected Fragment mCurrentFragment;
 
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        super.onAttachFragment(fragment);
-        mCurrentFragment = fragment;
-        mFragmentCount++;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,14 +117,8 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Logger.getLogger("SettingsActivity").log(new LogRecord(Level.INFO, "FMORALDO : AppCompat.onOptionsItemSelected"));
-        goBack();
-        super.onOptionsItemSelected(item);
+        onBackPressed();
         return true;
     }
 
-    private void goBack() {
-        if (mFragmentCount > 0)
-            mFragmentCount--;
-    }
 }

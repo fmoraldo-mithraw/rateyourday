@@ -25,6 +25,9 @@ import com.mithraw.howwasyourday.databases.DaysDatabase;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 public class RateADay extends AppCompatActivity {
     private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY}
@@ -37,6 +40,8 @@ public class RateADay extends AppCompatActivity {
     EditText mTitleText;
     EditText mLogText;
     RateView mRateView;
+    int mFlagsTitle;
+    int mFlagsLog;
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +55,9 @@ public class RateADay extends AppCompatActivity {
         db = DaysDatabase.getInstance(getApplicationContext());
 
         mTitleText =  findViewById(R.id.titleTextRate);
+        mFlagsTitle = mTitleText.getInputType();
         mLogText =  findViewById(R.id.logTextRate);
+        mFlagsLog = mLogText.getInputType();
 
         handler = new Handler() {
             @Override
@@ -131,11 +138,13 @@ public class RateADay extends AppCompatActivity {
 
     private void allowFocusOnTexts(boolean allow) {
         if (allow) {
-            mTitleText.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
-            mLogText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
+            mTitleText.setInputType(mFlagsTitle);
+            mLogText.setInputType(mFlagsLog);
+            Logger.getLogger("SettingsActivity").log(new LogRecord(Level.INFO, "FMORALDO : allowFocusOnTexts " + mLogText.getInputType()));
         } else {
             mTitleText.setInputType(InputType.TYPE_NULL);
             mLogText.setInputType(InputType.TYPE_NULL);
+
         }
 
     }

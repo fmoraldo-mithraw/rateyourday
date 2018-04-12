@@ -726,15 +726,9 @@ public class FunnyStatsActivity extends AppCompatActivity {
 
     }
 
-
-    public void onBackPressed() {
-        finish();
-        return;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        finish();
+        onBackPressed();
         return true;
     }
 }

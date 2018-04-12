@@ -333,22 +333,4 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Logger.getLogger("SettingsActivity").log(new LogRecord(Level.INFO, "FMORALDO : SettingsActivity.onOptionsItemSelected"));
-        goBack();
-        super.onOptionsItemSelected(item);
-        return true;
-    }
-
-    private void goBack() {
-        int count = mFragmentCount;
-        Logger.getLogger("SettingsActivity").log(new LogRecord(Level.INFO, "FMORALDO : number of fragments :" + count));
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1)
-            count = 0;
-        if (count == 0) {
-            finish();
-        }
-    }
 }

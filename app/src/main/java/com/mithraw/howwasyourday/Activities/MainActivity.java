@@ -18,12 +18,16 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.ShareActionProviderCustom;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -31,10 +35,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.share.model.ShareContent;
 import com.facebook.share.model.ShareHashtag;
@@ -58,7 +64,7 @@ public class MainActivity extends AppCompatActivity
 
     private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_EMPTY_TO_FILL, MSG_SENT}
 
-    private enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS, ACTIVITY_LOGS, ACTIVITY_STATS}
+    public enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS, ACTIVITY_LOGS, ACTIVITY_STATS}
 
 
     private static Context mContext;
@@ -178,7 +184,7 @@ public class MainActivity extends AppCompatActivity
         shareIntent.setType("text/plain");
 
         //Setup the ActionBar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -199,7 +205,6 @@ public class MainActivity extends AppCompatActivity
                 Button removeButton = findViewById(R.id.main_button_remove);
                 LinearLayout nothingLayout = findViewById(R.id.nothing_layout);
                 LinearLayout rateLayout = findViewById(R.id.rate_layout);
-
 
                 if (msg.what == MSG_ID.MSG_RATING.ordinal()) {
                     rab.setRating((Integer) (msg.obj));
@@ -244,7 +249,17 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         };
-
+        //Setup the expand button
+        ImageButton expandButton = findViewById(R.id.expand_button);
+        expandButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ((mDay != null) && (((RatingBar)findViewById(R.id.ratingBar)).getRating() != 0))
+                    expandDay(v);
+                else
+                    Toast.makeText(getBaseContext(), R.string.cant_expand, Toast.LENGTH_LONG).show();
+            }
+        });
         //Setup the Edit button
         Button editButton = findViewById(R.id.main_button_edit);
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -266,7 +281,8 @@ public class MainActivity extends AppCompatActivity
                             @Override
                             public void run() {
                                 DaysDatabase db = DaysDatabase.getInstance(App.getApplication().getApplicationContext());
-                                db.dayDao().delete(mDay);
+                                if (mDay != null)
+                                    db.dayDao().delete(mDay);
                                 handler.sendEmptyMessage(MSG_ID.MSG_EMPTY.ordinal());
                             }
                         }.start();
@@ -314,6 +330,22 @@ public class MainActivity extends AppCompatActivity
         updateDateText();
     }
 
+    private void expandDay(View v) {
+
+        Intent intent = new Intent(this, ExpandedDayActivity.class);
+        intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_DATE, (String)((TextView)this.findViewById(R.id.dateTextView)).getText().toString());
+        intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_TITLE, (String)((TextView)this.findViewById(R.id.titleText)).getText().toString());
+        intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_LOG, (String)((TextView)this.findViewById(R.id.logText)).getText().toString());
+        intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_RATE, (float) ((RatingBar)this.findViewById(R.id.ratingBar)).getRating());
+        CardView cv = this.findViewById(R.id.cardViewLittle);
+        Pair<View, String> p = new Pair<View, String>(cv, ExpandedDayActivity.VIEW_NAME);
+        ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this, p);
+
+        // Now we can start the Activity, providing the activity options as a bundle
+        ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
+        // END_INCLUDE(start_activity)
+    }
     private void updateDateText() {
         TextView dateText = findViewById(R.id.dateTextView);
         java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(App.getApplication());
@@ -505,7 +537,8 @@ public class MainActivity extends AppCompatActivity
                     /*if (isResume == false)
                         handler.sendEmptyMessage(MSG_ID.MSG_EMPTY_TO_FILL.ordinal());
                     else*/
-                        handler.sendEmptyMessage(MSG_ID.MSG_EMPTY.ordinal());
+                    mDay = null;
+                    handler.sendEmptyMessage(MSG_ID.MSG_EMPTY.ordinal());
                 } else {
                     mDay = days.get(0);
                     Message msg_rating = Message.obtain();

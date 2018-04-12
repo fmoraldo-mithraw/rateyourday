@@ -388,14 +388,8 @@ public class DiagramActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        finish();
-        return;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        finish();
+        onBackPressed();
         return true;
     }
 }
