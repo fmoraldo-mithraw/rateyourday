@@ -2,11 +2,13 @@ package com.mithraw.howwasyourday.Helpers;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.v4.content.FileProvider;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.ShareActionProviderCustom;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import com.commonsware.cwac.provider.StreamProvider;
 import com.facebook.share.model.ShareContent;
 import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.ShareMediaContent;
@@ -30,7 +33,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 /*  In order to share things from cardViews, you have to first init your
 SharingHelper mSharingHelper =  new SharingHelper(mCardView,this,
@@ -59,7 +66,7 @@ public class SharingHelper {
         mCardView = cardView;
         mCardView.setDrawingCacheEnabled(true);
         mActivity = activity;
-        mShareIntent = doIntent();
+        mShareIntent = new Intent();
         mListViewToHide = new ArrayList<>();
     }
 
@@ -71,8 +78,11 @@ public class SharingHelper {
             previousState.put(view, view.getVisibility());
             view.setVisibility(View.GONE);
         }
-        if ((mCardView != null) && (mCardView.getVisibility() != View.GONE))
-            image = Bitmap.createBitmap(mCardView.getDrawingCache());
+        if ((mCardView != null) && (mCardView.getVisibility() != View.GONE)) {
+            Bitmap tempBmp = mCardView.getDrawingCache();
+            if (tempBmp != null)
+                image = Bitmap.createBitmap(tempBmp);
+        }
         for (View view : mListViewToHide) {
             view.setVisibility(previousState.get(view));
         }
@@ -83,15 +93,27 @@ public class SharingHelper {
     private Intent doIntent() {
         File imagePath = new File(mActivity.getBaseContext().getCacheDir(), "images");
         File newFile = new File(imagePath, "image.png");
-        Uri contentUri = FileProvider.getUriForFile(mActivity.getBaseContext(), "com.mithraw.howwasyourday.fileprovider", newFile);
-        Intent shareIntent = new Intent();
+        Uri contentUri = StreamProvider.getUriForFile("com.mithraw.howwasyourday.fileprovider", newFile);
+
+        Logger.getLogger("SharingHelper").log(new LogRecord(Level.INFO, "FMORALDO : doIntent mms : " + contentUri));
+        mShareIntent = new Intent();
         if (contentUri != null) {
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
-            shareIntent.setDataAndType(contentUri, mActivity.getContentResolver().getType(contentUri));
-            shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+            mShareIntent.setAction(Intent.ACTION_SEND);
+            mShareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+            mShareIntent.setData(contentUri);
+            mShareIntent.setType("image/png");
+            mShareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+            //Fix permissions
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                List<ResolveInfo> resInfoList = App.getContext().getPackageManager().queryIntentActivities(mShareIntent, PackageManager.MATCH_ALL);
+                for (ResolveInfo resolveInfo : resInfoList) {
+                    String packageName = resolveInfo.activityInfo.packageName;
+                    mActivity.getBaseContext().grantUriPermission(packageName, contentUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                }
+            }
+            //mShareIntent.setDataAndType(contentUri, mActivity.getContentResolver().getType(contentUri));
         }
-        return shareIntent;
+        return mShareIntent;
     }
 
     public void updateDatas() {
@@ -106,7 +128,9 @@ public class SharingHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        mShareIntent = doIntent();
+        doIntent();
+        if (mShareActionProvider != null)
+            mShareActionProvider.setShareIntent(mShareIntent);
     }
 
     public void attachToMenuItem(MenuItem item) {
@@ -117,6 +141,7 @@ public class SharingHelper {
                     @Override
                     public boolean onShareTargetSelected(ShareActionProviderCustom actionProvider, Intent intent) {
                         final String appName = intent.getComponent().getPackageName();
+                        updateDatas();
                         Resources res = mActivity.getResources();
                         if ("com.facebook.katana".equals(appName)) {
                             SharePhoto photo = new SharePhoto.Builder().setBitmap(getBitmapWithShareString())

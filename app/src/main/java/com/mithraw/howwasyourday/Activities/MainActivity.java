@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity
                 } else {
                     dateChangedByUser = true;
                 }
-                updateLabel(false);
+                updateLabel();
             }
         });
         calendarView.setDate(m_calendar.getTimeInMillis());
@@ -307,12 +307,12 @@ public class MainActivity extends AppCompatActivity
         }.start();
     }
 
-    private void updateLabel(boolean isResume) {
+    private void updateLabel() {
         CalendarView calendarView = findViewById(R.id.calendarView);
         calendarView.setDate(m_calendar.getTimeInMillis());
         updateDateText();
         //Fill the controls with the correct infos
-        fillTheInformations(isResume);
+        fillTheInformations();
     }
 
     private void launchActivityRateADay() {
@@ -386,8 +386,6 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.share_button, menu);
         MenuItem item = menu.findItem(R.id.menu_item_share);
         mSharingHelper.attachToMenuItem(item);
-        //Initialize the labels
-        updateLabel(false);
         return true;
     }
 
@@ -436,10 +434,10 @@ public class MainActivity extends AppCompatActivity
         calendarView.setDate(m_calendar.getTimeInMillis());
 
         //Initialize the labels
-        updateLabel(true);
+        updateLabel();
     }
 
-    protected void fillTheInformations(final boolean isResume) {
+    protected void fillTheInformations() {
         new Thread() {
             @Override
             public void run() {
