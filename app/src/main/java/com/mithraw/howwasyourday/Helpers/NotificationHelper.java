@@ -78,8 +78,10 @@ public class NotificationHelper {
             calendar.setTimeInMillis(calendar.getTimeInMillis() + 86400000);
         }
 
+        Resources res = App.getApplication().getResources();
+        String notificationIntentAction = res.getString(R.string.notificationIntentAction);
         Intent intent = new Intent(App.getApplication().getApplicationContext(), TimeAlarm.class);
-        intent.setAction("com.mithraw.howwasyourday.alarm");
+        intent.setAction(notificationIntentAction);
         alarmMgr = (AlarmManager) App.getApplication().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         alarmIntent = PendingIntent.getBroadcast(App.getApplication().getApplicationContext(), 0, intent, 0);
         alarmMgr.cancel(alarmIntent);

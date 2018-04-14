@@ -44,7 +44,8 @@ public class NotificationIntentService extends IntentService {
                     (int)calendar.getTimeInMillis(),
                     rate,
                     "",
-                    "");
+                    "",
+                    false);
             db.dayDao().insertDay(d);
             Looper.prepare();
             Toast.makeText(getBaseContext(), toastString, Toast.LENGTH_LONG).show();

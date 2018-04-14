@@ -140,7 +140,7 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
                                 @Override
                                 public void run() {
                                     DaysDatabase db = DaysDatabase.getInstance(App.getApplication().getApplicationContext());
-                                    db.dayDao().delete(day);
+                                    db.dayDao().remove(day.setRemoved(true));
                                     Message msg_rating = Message.obtain();
                                     msg_rating.what = MSG_ID.REMOVE_LOG.ordinal();
                                     msg_rating.obj = mPosition;

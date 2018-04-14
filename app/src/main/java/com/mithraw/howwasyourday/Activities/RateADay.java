@@ -189,7 +189,8 @@ public class RateADay extends AppCompatActivity {
                         m_calendar.getTimeInMillis(),
                         (int) (mRateView.getRating()),
                         mTitleText.getText().toString(),
-                        mLogText.getText().toString());
+                        mLogText.getText().toString(),
+                        false);
                 db.dayDao().insertDay(d);
             }
         }.start();

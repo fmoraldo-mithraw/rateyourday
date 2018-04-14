@@ -171,5 +171,10 @@
     <string name="donate_link">https://paypal.me/pools/c/83t6e5qfy7</string>
     <string name="about_the_autho_text">Hi ! My name is Fabien \'Mithraw\' Moraldo, i\'m born in the 1985, and i like doing things, yeah, just like you ! We are so much the same !\nNo kidding, i\'m just a regular dude, who will be happy if you enjoyed his work.\nBut must of all, i would be nobody without my friends, so a big thanks to the friends who supported me, and helped me testing the app :</string>
     <string name="about_the_autho_friends">- HowlBurn\n- Gio\n- Arita\n- Loki\n- Clifford1313</string>
+    <string name="issue_google_sign_in">An error occured during the connection to your google account</string>
+    <string name="reconnect_google_sign_in">Reconnect</string>
+    <string name="ok_google_sign_in">You are successfully connected to your google account</string>
+    <string name="notificationIntentAction">com.mithraw.howwasyourday.notification</string>
+    <string name="syncIntentAction">com.mithraw.howwasyourday.sync</string>
 
 </resources>

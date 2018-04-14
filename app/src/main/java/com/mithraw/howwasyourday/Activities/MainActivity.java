@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -39,8 +40,10 @@ import android.widget.Toast;
 
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.BuildConfig;
+import com.mithraw.howwasyourday.Helpers.GoogleSignInHelper;
 import com.mithraw.howwasyourday.Helpers.NotificationHelper;
 import com.mithraw.howwasyourday.Helpers.SharingHelper;
+import com.mithraw.howwasyourday.Helpers.SyncLauncher;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
@@ -54,11 +57,11 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT}
+    private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT, MSG_UPDATE}
 
-    public enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS, ACTIVITY_LOGS, ACTIVITY_STATS}
+    public enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS, ACTIVITY_LOGS, ACTIVITY_STATS, GOOGLE_SIGNIN}
 
-
+    private SharingHelper mSharingHelper;
     private static Context mContext;
     private static Activity mActivity;
     protected DaysDatabase db;
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity
     private boolean dateChangedByUser = false;
     private Day mDay;
     private static CardView mCardView;
-    private SharingHelper mSharingHelper;
+
 
     public static Context getContext() {
         return mContext;
@@ -97,7 +100,6 @@ public class MainActivity extends AppCompatActivity
             text.setText(value);
         }
     }
-
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +108,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         mContext = this;
         mCardView = this.findViewById(R.id.cardViewLittle);
+        String timeSync = PreferenceManager.getDefaultSharedPreferences(getContext()).getString("sync_frequency","180");
+        if( timeSync != "Never") {
+            GoogleSignInHelper.getInstance(this).doSignIn(new SyncLauncher());
+        }
 
         mSharingHelper = new SharingHelper(mCardView,this,
                 this.findViewById(R.id.button_layout),
@@ -180,7 +186,7 @@ public class MainActivity extends AppCompatActivity
                 if ((mDay != null) && (((RatingBar)findViewById(R.id.ratingBar)).getRating() != 0))
                     expandDay(v);
                 else
-                    Toast.makeText(getBaseContext(), R.string.cant_expand, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), R.string.cant_expand, Toast.LENGTH_SHORT).show();
             }
         });
         //Setup the Edit button
@@ -205,7 +211,7 @@ public class MainActivity extends AppCompatActivity
                             public void run() {
                                 DaysDatabase db = DaysDatabase.getInstance(App.getApplication().getApplicationContext());
                                 if (mDay != null)
-                                    db.dayDao().delete(mDay);
+                                    db.dayDao().remove(mDay.setRemoved(true));
                                 handler.sendEmptyMessage(MSG_ID.MSG_EMPTY.ordinal());
                             }
                         }.start();
@@ -269,6 +275,7 @@ public class MainActivity extends AppCompatActivity
         ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
         // END_INCLUDE(start_activity)
     }
+
     private void updateDateText() {
         TextView dateText = findViewById(R.id.dateTextView);
         java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(App.getApplication());
@@ -289,7 +296,7 @@ public class MainActivity extends AppCompatActivity
                     c.set(Calendar.DAY_OF_YEAR, c.get(Calendar.DAY_OF_YEAR) + 1);
                     Random r = new Random();
                     int rate = r.nextInt(5 - 1) + 1;
-                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), (int) c.getTimeInMillis(), rate, "Balbalalala", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), (int) c.getTimeInMillis(), rate, "Balbalalala", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",false);
                     db.dayDao().insertDay(d);
                 }
                 //Current Year
@@ -300,7 +307,7 @@ public class MainActivity extends AppCompatActivity
                     c.set(Calendar.DAY_OF_YEAR, c.get(Calendar.DAY_OF_YEAR) + 1);
                     Random r = new Random();
                     int rate = r.nextInt(5 - 1) + 1;
-                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), (int) c.getTimeInMillis(), rate, "Balbalalala", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat");
+                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), (int) c.getTimeInMillis(), rate, "Balbalalala", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",false);
                     db.dayDao().insertDay(d);
                 }
             }
@@ -343,15 +350,28 @@ public class MainActivity extends AppCompatActivity
         Intent statsIntent = new Intent(getApplicationContext(), FunnyStatsActivity.class);
         startActivityForResult(statsIntent, ACTIVITY_ID.ACTIVITY_STATS.ordinal());
     }
+
     private void launchActivityDonation() {
         Intent donationIntent = new Intent(getApplicationContext(), DonationActivity.class);
         startActivity(donationIntent);
     }
+
     private void launchActivityAboutTheAuthor() {
         Intent aboutTheAutorIntent = new Intent(getApplicationContext(), AboutTheAuthorActivity.class);
         startActivity(aboutTheAutorIntent);
     }
 
+    public class ReconnectListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            new Thread() {
+                @Override
+                public void run() {
+                    GoogleSignInHelper.getInstance(mActivity).connectToSignInAccount(new SyncLauncher());
+                }
+            }.start();
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -367,6 +387,14 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (requestCode == ACTIVITY_ID.ACTIVITY_SETTINGS.ordinal()) {
             //TODO Make something
+        } else if(requestCode == ACTIVITY_ID.GOOGLE_SIGNIN.ordinal()){
+            Resources res = App.getApplication().getResources();
+            if (resultCode == Activity.RESULT_OK) {
+                // App is authorized, you can go back to sending the API request
+                GoogleSignInHelper.getInstance(this).doSignIn(new SyncLauncher());
+            } else {
+                Snackbar.make(getCurrentFocus(), res.getString(R.string.issue_google_sign_in), 2000).setAction(R.string.reconnect_google_sign_in, new ReconnectListener()).show();
+            }
         }
     }
 

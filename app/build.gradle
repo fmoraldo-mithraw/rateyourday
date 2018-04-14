@@ -49,4 +49,7 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
     implementation "android.arch.persistence.room:rxjava2:1.0.0"
     implementation 'com.commonsware.cwac:provider:0.5.3'
+    implementation 'com.google.android.gms:play-services-drive:15.0.0'
+    implementation 'com.google.android.gms:play-services-identity:15.0.0'
+    implementation 'com.google.android.gms:play-services-auth:15.0.0'
 }

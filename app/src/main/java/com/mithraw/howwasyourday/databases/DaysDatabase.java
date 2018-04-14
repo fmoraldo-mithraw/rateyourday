@@ -10,22 +10,71 @@ import android.content.Context;
 import android.database.Cursor;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-@Database(entities = Day.class, version = 3, exportSchema = false)
+@Database(entities = Day.class, version = 4, exportSchema = false)
 public abstract class DaysDatabase extends RoomDatabase {
     public abstract DayDao dayDao();
 
     private static DaysDatabase ourInstance = null;
+    private static DaysDatabase backupInstance = null;
+    private static final String databaseName = "database-name";
+    private static final String databaseBackupName = "database-backup";
+    private static Context mCtx;
+
+    public static String getDatabaseBackupName() {
+        return databaseBackupName;
+    }
+    public static String getDatabaseName() {
+        return databaseName;
+    }
 
     public static DaysDatabase getInstance(Context ctx) {
         if (ourInstance == null) {
+            mCtx = ctx;
             ourInstance = Room.databaseBuilder(ctx,
-                    DaysDatabase.class, "database-name").addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3).build();
+                    DaysDatabase.class, databaseName).addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3).addMigrations(MIGRATION_3_4).build();
         }
         return ourInstance;
+    }
+    public static void cleanDatabase(DaysDatabase database){
+        List<Day> ds = database.dayDao().getAllRemoved();
+        for (Day d: ds) {
+            database.dayDao().delete(d);
+        }
+    }
+    public static void copyBackupToDatabase(Context ctx){
+        List<Day> ds = getBackupNewInstance(ctx).dayDao().getAll();
+        Logger.getLogger("DaysDatabase").log(new LogRecord(Level.INFO, "FMORALDO : copyBackupToDatabase : count "+ds.size()));
+        for (Day d: ds) {
+            try {
+                getInstance(ctx).dayDao().insertDayNoForce(d);
+            }catch(Exception e){
+
+            }
+        }
+    }
+
+    public static void copyDatabaseToBackup(Context ctx){
+        for (Day d: getInstance(ctx).dayDao().getAlIncludingRemoved()) {
+            getBackupNewInstance(ctx).dayDao().insertDay(d);
+        }
+    }
+    public static DaysDatabase getBackupInstance(Context ctx) {
+        if (backupInstance == null) {
+            mCtx = ctx;
+            backupInstance = Room.databaseBuilder(ctx,
+                    DaysDatabase.class, databaseBackupName).addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3).addMigrations(MIGRATION_3_4).build();
+        }
+        return backupInstance;
+    }
+    public static DaysDatabase getBackupNewInstance(Context ctx) {
+        backupInstance = Room.databaseBuilder(ctx,
+                DaysDatabase.class, databaseBackupName).addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3).addMigrations(MIGRATION_3_4).build();
+        return backupInstance;
     }
 
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {
@@ -58,6 +107,13 @@ public abstract class DaysDatabase extends RoomDatabase {
             }
             database.execSQL("CREATE INDEX index_Day_week_year on day (week, year);");
             database.execSQL("CREATE INDEX index_Day_date_time on day (date_time);");
+        }
+    };
+    static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE day ADD is_removed INTEGER DEFAULT 0 NOT NULL;");
+            database.execSQL("CREATE INDEX index_Day_is_removed on day (is_removed);");
         }
     };
 

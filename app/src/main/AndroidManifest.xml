@@ -57,7 +57,8 @@
         <receiver android:name=".Tools.TimeAlarm">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="com.mithraw.howwasyourday.alarm" />
+                <action android:name="@string/notificationIntentAction" />
+                <action android:name="@string/syncIntentAction" />
             </intent-filter>
         </receiver>
 

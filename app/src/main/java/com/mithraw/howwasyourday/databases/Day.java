@@ -6,7 +6,10 @@ import android.arch.persistence.room.Index;
 
 
 @Entity(primaryKeys = {"day_of_the_month", "month", "year"},
-        indices = {@Index(value = {"day_of_the_week"}, unique = false), @Index(value = {"week", "year"}, unique = false), @Index(value = {"date_time"}, unique = false)})
+        indices = {@Index(value = {"day_of_the_week"}, unique = false),
+                @Index(value = {"week", "year"}, unique = false),
+                @Index(value = {"date_time"}, unique = false),
+                @Index(value = {"is_removed"}, unique = false)})
 public class Day {
 
     @ColumnInfo(name = "day_of_the_week")
@@ -22,7 +25,17 @@ public class Day {
     private long date_time;
     private int week;
 
-    public Day(int dayOfTheWeek, int day, int month, int year, int week, long date_time, int rating, String titleText, String log) {
+    public boolean isIs_removed() {
+        return is_removed;
+    }
+
+    public void setIs_removed(boolean is_removed) {
+        this.is_removed = is_removed;
+    }
+
+    private boolean is_removed;
+
+    public Day(int dayOfTheWeek, int day, int month, int year, int week, long date_time, int rating, String titleText, String log, boolean is_removed) {
         this.dayOfTheWeek = dayOfTheWeek;
         this.day = day;
         this.month = month;
@@ -32,6 +45,7 @@ public class Day {
         this.log = log;
         this.week = week;
         this.date_time = date_time;
+        this.is_removed = is_removed;
     }
 
     public int getDay() {
@@ -104,5 +118,10 @@ public class Day {
 
     public void setWeek(int week) {
         this.week = week;
+    }
+
+    public Day setRemoved(boolean is_removed) {
+        this.is_removed = is_removed;
+        return this;
     }
 }

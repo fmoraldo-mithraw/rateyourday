@@ -22,6 +22,8 @@ import android.view.MenuItem;
 
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.Helpers.NotificationHelper;
+import com.mithraw.howwasyourday.Helpers.PreferenceHelper;
+import com.mithraw.howwasyourday.Helpers.ThreadSyncDatas;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Tools.Hour;
 
@@ -59,7 +61,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 // the preference's 'entries' list.
                 ListPreference listPreference = (ListPreference) preference;
                 int index = listPreference.findIndexOfValue(stringValue);
-
                 // Set the summary to reflect the new value.
                 preference.setSummary(
                         index >= 0
@@ -70,6 +71,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);
+            }
+            if(preference.getKey().equals("sync_frequency")){
+                if(!value.equals(PreferenceManager.getDefaultSharedPreferences(App.getContext()).getString("sync_frequency","180")))
+                    ThreadSyncDatas.reSchedule(PreferenceHelper.toTime((String)value));
             }
 
             return true;
