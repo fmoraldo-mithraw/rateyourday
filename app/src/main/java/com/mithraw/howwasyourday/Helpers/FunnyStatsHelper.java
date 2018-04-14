@@ -15,6 +15,9 @@ import com.mithraw.howwasyourday.R;
 
 import java.util.Calendar;
 
+/*
+Handle the CardViews from funnyStats screen
+ */
 public class FunnyStatsHelper {
     SharingHelper mShareHelper;
     Activity mActivity;
@@ -26,6 +29,7 @@ public class FunnyStatsHelper {
         this.mCardView = cardView;
         this.mActivity = activity;
         this.mPreferenceName = preferenceName;
+        // Set the click listener for showing the share button
         mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,6 +49,8 @@ public class FunnyStatsHelper {
                 }
             }
         });
+
+        //Configure the close button
         LinearLayout layout = (LinearLayout) mCardView.findViewById(R.id.layout_share);
         ImageButton btnClose = mCardView.findViewById(R.id.close_button);
         if (layout != null) {
@@ -77,6 +83,7 @@ public class FunnyStatsHelper {
                 dialog.show();
             }
         });
+        //End of the configuration of the close button
 
     }
 

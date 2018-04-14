@@ -9,6 +9,9 @@ import android.view.View;
 
 import com.mithraw.howwasyourday.R;
 
+/*
+Show the donation screen : Point to my paypal pool : R.string.donate_link
+ */
 public class DonationActivity extends AppCompatActivity {
 
     @Override

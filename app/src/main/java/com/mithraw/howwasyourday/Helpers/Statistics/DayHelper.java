@@ -3,6 +3,9 @@ package com.mithraw.howwasyourday.Helpers.Statistics;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+/*
+Format the day rate in the FunnyStat Screen
+ */
 public class DayHelper extends StatisticsHelper  {
     static private DayHelper mDayHelper = null;
 

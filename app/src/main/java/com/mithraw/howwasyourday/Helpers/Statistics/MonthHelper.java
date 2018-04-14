@@ -3,6 +3,9 @@ package com.mithraw.howwasyourday.Helpers.Statistics;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+/*
+Format the rate of the month in FunnyStats
+ */
 public class MonthHelper extends StatisticsHelper {
     static private MonthHelper mMonthHelper = null;
 

@@ -8,17 +8,20 @@ import android.support.v7.widget.CardView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RatingBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.mithraw.howwasyourday.R;
 
+/*
+Show an expanded view of the Day
+ */
 public class ExpandedDayActivity extends AppCompatActivity {
     public final static String EXTRA_PARAM_DATE = "ExpandedDayActivity_Date";
     public final static String EXTRA_PARAM_RATE = "ExpandedDayActivity_Rate";
     public final static String EXTRA_PARAM_TITLE = "ExpandedDayActivity_Title";
     public final static String EXTRA_PARAM_LOG = "ExpandedDayActivity_Log";
 
+    // View name for the transition
     public final static String VIEW_NAME = "cardview";
 
     @Override

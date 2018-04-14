@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,9 @@ import com.mithraw.howwasyourday.databases.DaysDatabase;
 import java.util.Calendar;
 import java.util.List;
 
-
+/*
+Display a log card in the logActivity recycler view
+ */
 public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 

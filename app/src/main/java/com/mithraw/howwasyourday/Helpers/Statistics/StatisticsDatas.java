@@ -1,16 +1,14 @@
 package com.mithraw.howwasyourday.Helpers.Statistics;
 
-import com.mithraw.howwasyourday.databases.Day;
-
+/*
+One data of the stats for FunnyStats
+ */
 public class StatisticsDatas {
     private float rate = 0;
     private int id = 0;
 
 
     public StatisticsDatas() {
-    }
-    public StatisticsDatas(Day day) {
-
     }
 
     public float getRate() {

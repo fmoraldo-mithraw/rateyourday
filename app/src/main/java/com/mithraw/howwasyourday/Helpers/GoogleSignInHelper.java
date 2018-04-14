@@ -17,12 +17,34 @@ import com.mithraw.howwasyourday.Activities.MainActivity;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Tools.OnGoogleSignInSuccessListener;
 
+/*
+Manage Google Sign in main handlers
+Send the Sign in intent
+Used that way :
+    GoogleSignInHelper.getInstance(mActivity).doSignIn(new SyncLauncher());
+
+Retrieve the intent Activity by doing :
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == GoogleSignInHelper.GOOGLE_SIGNIN_ACTIVITY_ID){
+            Resources res = App.getApplication().getResources();
+            if (resultCode == Activity.RESULT_OK) {
+                // App is authorized, you can go back to sending the API request
+                GoogleSignInHelper.getInstance(this).doSignIn(new SyncLauncher());
+            } else {
+                Snackbar.make(getCurrentFocus(), res.getString(R.string.issue_google_sign_in), 2000).setAction(R.string.reconnect_google_sign_in, new ReconnectListener()).show();
+            }
+        }
+    }
+
+ */
 public class GoogleSignInHelper {
 
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount mGoogleSignInAccount = null;
     static Activity mActivity;
     static GoogleSignInHelper mInstance = null;
+    public static int GOOGLE_SIGNIN_ACTIVITY_ID = 666;
 
     public void setActivity(Activity mActivity) {
         this.mActivity = mActivity;
@@ -102,7 +124,7 @@ public class GoogleSignInHelper {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Intent in = getGoogleSignInClient().getSignInIntent();
-                                mActivity.startActivityForResult(in, MainActivity.ACTIVITY_ID.GOOGLE_SIGNIN.ordinal());
+                                mActivity.startActivityForResult(in, GOOGLE_SIGNIN_ACTIVITY_ID);
                             }
                         });
     }

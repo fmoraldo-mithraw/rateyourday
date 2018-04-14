@@ -1,5 +1,8 @@
 package com.mithraw.howwasyourday.Helpers.Statistics;
 
+/*
+Format the year rate in the FunnyStat Screen
+ */
 public class YearHelper extends StatisticsHelper  {
     static private YearHelper mYearHelper = null;
 

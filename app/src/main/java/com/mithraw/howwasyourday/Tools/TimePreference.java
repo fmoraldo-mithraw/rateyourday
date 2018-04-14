@@ -10,6 +10,9 @@ import android.widget.TimePicker;
 
 import com.mithraw.howwasyourday.App;
 
+/*
+Display a dialog for choosing time on the setting screen
+ */
 public class TimePreference extends DialogPreference {
     private int lastHour=0;
     private int lastMinute=0;
@@ -29,7 +32,6 @@ public class TimePreference extends DialogPreference {
 
     public TimePreference(Context ctxt, AttributeSet attrs) {
         super(ctxt, attrs);
-
         setPositiveButtonText("Set");
         setNegativeButtonText("Cancel");
     }

@@ -2,23 +2,20 @@ package com.mithraw.howwasyourday.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mithraw.howwasyourday.Helpers.RateView;
+import com.mithraw.howwasyourday.Helpers.RateViewHelper;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
@@ -29,8 +26,13 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+/*
+RateADay Activity shows a screen that permit you to save informations on the day
+Saved on a ratingView click or when returned
+ */
 public class RateADay extends AppCompatActivity {
     private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY}
+
     protected final java.util.Calendar m_calendar = java.util.Calendar.getInstance();
     protected DaysDatabase db;
     protected static Handler handler;
@@ -39,10 +41,11 @@ public class RateADay extends AppCompatActivity {
     public static final String EXTRA_DATE_YEAR = "extra_date_year";
     EditText mTitleText;
     EditText mLogText;
-    RateView mRateView;
+    RateViewHelper mRateView;
     int mFlagsTitle;
     int mFlagsLog;
-    @SuppressLint("HandlerLeak")
+
+    @SuppressLint({"HandlerLeak", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +54,7 @@ public class RateADay extends AppCompatActivity {
         //Add the back button to the activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //Retreive the database
+        //Retrieve the database
         db = DaysDatabase.getInstance(getApplicationContext());
 
         mTitleText =  findViewById(R.id.titleTextRate);
@@ -118,9 +121,8 @@ public class RateADay extends AppCompatActivity {
         });
 
 
-
         TextView dateText = (TextView) findViewById(R.id.dateTextView);
-        mRateView = new RateView((View) findViewById(R.id.ratingBar));
+        mRateView = new RateViewHelper((View) findViewById(R.id.ratingBar));
         mRateView.setOnRateChanged(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,6 +150,7 @@ public class RateADay extends AppCompatActivity {
         }
 
     }
+
     protected void fillTheInformations() {
         new Thread() {
             @Override
@@ -198,6 +201,7 @@ public class RateADay extends AppCompatActivity {
             return false;
         return true;
     }
+
     private void endActivity() {
         Intent myIntent = getIntent();
         if(saveDay())

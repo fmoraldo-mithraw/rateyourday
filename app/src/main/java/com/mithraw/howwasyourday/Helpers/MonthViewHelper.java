@@ -9,13 +9,18 @@ import com.mithraw.howwasyourday.R;
 
 import java.util.Locale;
 
-public class MonthView {
+/*
+Month helper for diagrams
+On click show the numbers
+ */
+public class MonthViewHelper {
     public enum MONTHS {JANUARY, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY, AUGUST, SEPTEMBER, OCTOBER, NOVEMBER, DECEMBER}
 
     private View mView;
     boolean mShowNumbers = false;
     String formatFloat = "%.1f";
-    public MonthView(View view) {
+
+    public MonthViewHelper(View view) {
         mView = view;
         updateVisibilityTexts();
         mView.setOnClickListener(new View.OnClickListener() {

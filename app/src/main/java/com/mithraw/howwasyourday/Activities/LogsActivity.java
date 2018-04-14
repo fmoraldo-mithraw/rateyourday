@@ -4,16 +4,15 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
@@ -36,6 +35,9 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+/*
+Show the logs of days with filters showed on the action
+ */
 public class LogsActivity extends AppCompatActivity {
     public enum MSG_ID {
         DAYS_RECEIVED,
@@ -59,7 +61,6 @@ public class LogsActivity extends AppCompatActivity {
     private AppCompatActivity mActivity;
     protected List<Day> mDataset = null;
     protected DaysDatabase db;
-    private Menu menu;
     LinearLayout mLayout;
     ProgressBar mProgressBar;
 
@@ -147,7 +148,6 @@ public class LogsActivity extends AppCompatActivity {
         });
 
         //Init the recycler view
-
         SwipeableRecyclerViewTouchListener swipeTouchListener =
                 new SwipeableRecyclerViewTouchListener(mRecyclerView,
                         new SwipeableRecyclerViewTouchListener.SwipeListener() {
@@ -191,7 +191,6 @@ public class LogsActivity extends AppCompatActivity {
                                 removeItem(reverseSortedPositions);
                             }
                         });
-
         mRecyclerView.addOnItemTouchListener(swipeTouchListener);
 
         //Initialize the recyclerView things (throught the handler)
@@ -214,6 +213,7 @@ public class LogsActivity extends AppCompatActivity {
                 }
             }
         };
+
         //Setup the date listener
         //StarDate
         startDate = new Date(118, 0, 1);

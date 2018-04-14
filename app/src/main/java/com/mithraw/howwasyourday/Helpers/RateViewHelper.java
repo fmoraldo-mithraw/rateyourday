@@ -1,15 +1,14 @@
 package com.mithraw.howwasyourday.Helpers;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
 import com.mithraw.howwasyourday.R;
 
-public class RateView  {
+/*
+Manage the way the rateview layout behave
+ */
+public class RateViewHelper {
     private int mRating = 0;
     private View mView;
 
@@ -24,15 +23,15 @@ public class RateView  {
         star3.setChecked(false);
         star4.setChecked(false);
         star5.setChecked(false);
-        if(mRating>0)
+        if (mRating > 0)
             star1.setChecked(true);
-        if(mRating>1)
+        if (mRating > 1)
             star2.setChecked(true);
-        if(mRating>2)
+        if (mRating > 2)
             star3.setChecked(true);
-        if(mRating>3)
+        if (mRating > 3)
             star4.setChecked(true);
-        if(mRating>4)
+        if (mRating > 4)
             star5.setChecked(true);
     }
 
@@ -43,7 +42,7 @@ public class RateView  {
     ToggleButton star5;
     View.OnClickListener _wrappedOnClickListener;
 
-    public RateView(View view) {
+    public RateViewHelper(View view) {
         mView = view;
         star1 = view.findViewById(R.id.star1);
         star1.setOnClickListener(new View.OnClickListener() {
@@ -116,8 +115,9 @@ public class RateView  {
             }
         });
     }
-    public void setOnRateChanged(View.OnClickListener wrappedOnClickListener){
-            _wrappedOnClickListener = wrappedOnClickListener;
+
+    public void setOnRateChanged(View.OnClickListener wrappedOnClickListener) {
+        _wrappedOnClickListener = wrappedOnClickListener;
     }
 
 }

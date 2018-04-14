@@ -8,7 +8,9 @@ import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.view.View;
 
-
+/*
+Override of a textView to do the days clickable that are underlined when selected
+ */
 public class UnderlinedCheckTextView extends AppCompatTextView implements View.OnClickListener {
 
     boolean isChecked = true;

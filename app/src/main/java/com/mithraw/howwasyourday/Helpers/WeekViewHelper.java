@@ -9,13 +9,18 @@ import com.mithraw.howwasyourday.R;
 
 import java.util.Locale;
 
-public class WeekView {
+/*
+Week helper for diagrams
+On click show the numbers
+ */
+public class WeekViewHelper {
     public enum DAYS {MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY}
 
     private View mView;
     boolean mShowNumbers = false;
     String formatFloat = "%.2f";
-    public WeekView(View view) {
+
+    public WeekViewHelper(View view) {
         mView = view;
         updateVisibilityTexts();
         mView.setOnClickListener(new View.OnClickListener() {
@@ -35,7 +40,7 @@ public class WeekView {
     private void updateVisibilityTexts() {
         for (DAYS d : DAYS.values()) {
             if (mShowNumbers) {
-                if (!getTextView(d).getText().equals(String.format(Locale.ROOT, formatFloat, (float) 0))&& !getTextView(d).getText().equals(""))
+                if (!getTextView(d).getText().equals(String.format(Locale.ROOT, formatFloat, (float) 0)) && !getTextView(d).getText().equals(""))
                     getTextView(d).setVisibility(View.VISIBLE);
             } else
                 getTextView(d).setVisibility(View.GONE);

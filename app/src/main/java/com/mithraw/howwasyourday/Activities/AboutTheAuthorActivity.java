@@ -1,11 +1,15 @@
 package com.mithraw.howwasyourday.Activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.mithraw.howwasyourday.R;
 
+/*
+Activity About the author
+Describe me and my friends
+ */
 public class AboutTheAuthorActivity extends AppCompatActivity {
 
     @Override

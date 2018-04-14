@@ -1,23 +1,14 @@
 package com.mithraw.howwasyourday.Activities;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.mithraw.howwasyourday.App;
@@ -35,12 +26,12 @@ import com.mithraw.howwasyourday.databases.DaysDatabase;
 import java.util.Calendar;
 import java.util.List;
 
-
+/*
+Show interesting stats
+ */
 public class FunnyStatsActivity extends AppCompatActivity {
     private DaysDatabase db;
     protected static Handler handler;
-    CardView lastCardviewRemoved = null;
-    String lastKeyRemoved = "";
     FunnyStatsHelper mStatHelperNothing;
     FunnyStatsHelper mStatHelperLastWeek;
     FunnyStatsHelper mStatHelperCurrentMonth;
@@ -221,6 +212,7 @@ public class FunnyStatsActivity extends AppCompatActivity {
         CardView cv = findViewById(R.id.card_view_nothing_interesting);
         CheckHidingStatuses();
         boolean showCard = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("stats_show_nothing_interresting", true);
+        //Default we show the nothing interesting card -> will be removed if other are there
         if (showCard)
             cv.setVisibility(View.VISIBLE);
         CardView cvLastWeek = findViewById(R.id.card_view_last_week);

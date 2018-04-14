@@ -1,6 +1,5 @@
 package com.mithraw.howwasyourday.Activities;
 
-import android.app.Fragment;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -13,10 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 /**
  * A {@link android.preference.PreferenceActivity} which implements and proxies the necessary calls
  * to be used with AppCompat.
@@ -24,9 +19,6 @@ import java.util.logging.Logger;
 public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
 
     private AppCompatDelegate mDelegate;
-    protected int mFragmentCount = 0;
-    protected Fragment mCurrentFragment;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

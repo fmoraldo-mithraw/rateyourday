@@ -6,7 +6,9 @@ import com.google.android.gms.drive.DriveClient;
 import com.google.android.gms.drive.DriveResourceClient;
 import com.mithraw.howwasyourday.App;
 
-
+/*
+Manage Google Drive main handlers
+ */
 public class DriveHelper {
     DriveResourceClient mDriveResourceClient;
     DriveClient mDriveClient;

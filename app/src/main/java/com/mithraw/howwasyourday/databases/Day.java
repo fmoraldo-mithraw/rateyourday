@@ -4,7 +4,9 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 
-
+/*
+Item Day class for database use
+ */
 @Entity(primaryKeys = {"day_of_the_month", "month", "year"},
         indices = {@Index(value = {"day_of_the_week"}, unique = false),
                 @Index(value = {"week", "year"}, unique = false),

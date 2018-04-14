@@ -3,34 +3,33 @@ package com.mithraw.howwasyourday.Activities;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.mithraw.howwasyourday.App;
+import com.mithraw.howwasyourday.Helpers.MonthViewHelper;
 import com.mithraw.howwasyourday.Helpers.SharingHelper;
+import com.mithraw.howwasyourday.Helpers.WeekViewHelper;
 import com.mithraw.howwasyourday.R;
-import com.mithraw.howwasyourday.Helpers.WeekView;
-import com.mithraw.howwasyourday.Helpers.MonthView;
-import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+/*
+Provide diagrams to the user with the help of weekview and monthview
+ */
 public class DiagramActivity extends AppCompatActivity {
     private enum TYPE_DATE {START_DATE, END_DATE}
     private enum MSG_ID {
@@ -206,7 +205,7 @@ public class DiagramActivity extends AppCompatActivity {
         mSharingHelperCustom.attachToImageButton(ibCustom);
 
         View viewWeekCurYear = findViewById(R.id.current_year_week);
-        WeekView viewCur = new WeekView(viewWeekCurYear);
+        WeekViewHelper viewCur = new WeekViewHelper(viewWeekCurYear);
         viewCur.setTitle(res.getString(R.string.current_diagram_title));
         CardView cvWeekCurYear = findViewById(R.id.cardViewWeekCurYear);
         ImageButton ibWeekCurYear= viewWeekCurYear.findViewById(R.id.share_diagram);
@@ -215,7 +214,7 @@ public class DiagramActivity extends AppCompatActivity {
         mSharingHelperWeekCurYear.attachToImageButton(ibWeekCurYear);
 
         View viewWeekAllYear = findViewById(R.id.all_time_week);
-        WeekView viewAll = new WeekView(viewWeekAllYear );
+        WeekViewHelper viewAll = new WeekViewHelper(viewWeekAllYear);
         viewAll.setTitle(res.getString(R.string.all_years_diagram_title));
         CardView cvWeekAllYear = findViewById(R.id.cardViewWeekAllYear);
         ImageButton ibWeekAllYear= viewWeekAllYear.findViewById(R.id.share_diagram);
@@ -224,7 +223,7 @@ public class DiagramActivity extends AppCompatActivity {
         mSharingHelperWeekAllYear.attachToImageButton(ibWeekAllYear);
 
         View viewMonthCurrentYear = findViewById(R.id.current_months);
-        MonthView viewYearCur = new MonthView(viewMonthCurrentYear);
+        MonthViewHelper viewYearCur = new MonthViewHelper(viewMonthCurrentYear);
         viewYearCur.setTitle(res.getString(R.string.current_months_diagram_title));
         CardView cvMonthCurYear = findViewById(R.id.cardViewMonthCurYear);
         ImageButton ibMonthCurYear= viewMonthCurrentYear.findViewById(R.id.share_diagram);
@@ -233,7 +232,7 @@ public class DiagramActivity extends AppCompatActivity {
         mSharingHelperMonthCurYear.attachToImageButton(ibMonthCurYear);
 
         View viewMonthAllYear = findViewById(R.id.all_time_months);
-        MonthView viewYearAll = new MonthView(viewMonthAllYear);
+        MonthViewHelper viewYearAll = new MonthViewHelper(viewMonthAllYear);
         viewYearAll.setTitle(res.getString(R.string.all_years_months_diagram_title));
         CardView cvMonthAllYear = findViewById(R.id.cardViewMonthAllYear);
         ImageButton ibMonthAllYear= viewMonthAllYear.findViewById(R.id.share_diagram);
@@ -279,102 +278,102 @@ public class DiagramActivity extends AppCompatActivity {
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                WeekView viewCur = new WeekView((View) findViewById(R.id.current_year_week));
-                WeekView viewCustom = new WeekView((View) findViewById(R.id.custom_week));
-                WeekView viewAll = new WeekView((View) findViewById(R.id.all_time_week));
-                MonthView viewYearCur = new MonthView((View) findViewById(R.id.current_months));
-                MonthView viewYearAll = new MonthView((View) findViewById(R.id.all_time_months));
+                WeekViewHelper viewCur = new WeekViewHelper((View) findViewById(R.id.current_year_week));
+                WeekViewHelper viewCustom = new WeekViewHelper((View) findViewById(R.id.custom_week));
+                WeekViewHelper viewAll = new WeekViewHelper((View) findViewById(R.id.all_time_week));
+                MonthViewHelper viewYearCur = new MonthViewHelper((View) findViewById(R.id.current_months));
+                MonthViewHelper viewYearAll = new MonthViewHelper((View) findViewById(R.id.all_time_months));
 
                 if (msg.what == MSG_ID.MONDAY_CUSTOM.ordinal()) {
-                    viewCustom.updateDay(WeekView.DAYS.MONDAY, (float) msg.obj);
+                    viewCustom.updateDay(WeekViewHelper.DAYS.MONDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.TUESDAY_CUSTOM.ordinal()) {
-                    viewCustom.updateDay(WeekView.DAYS.TUESDAY, (float) msg.obj);
+                    viewCustom.updateDay(WeekViewHelper.DAYS.TUESDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.WEDNESDAY_CUSTOM.ordinal()) {
-                    viewCustom.updateDay(WeekView.DAYS.WEDNESDAY, (float) msg.obj);
+                    viewCustom.updateDay(WeekViewHelper.DAYS.WEDNESDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.THURSDAY_CUSTOM.ordinal()) {
-                    viewCustom.updateDay(WeekView.DAYS.THURSDAY, (float) msg.obj);
+                    viewCustom.updateDay(WeekViewHelper.DAYS.THURSDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.FRIDAY_CUSTOM.ordinal()) {
-                    viewCustom.updateDay(WeekView.DAYS.FRIDAY, (float) msg.obj);
+                    viewCustom.updateDay(WeekViewHelper.DAYS.FRIDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.SATURDAY_CUSTOM.ordinal()) {
-                    viewCustom.updateDay(WeekView.DAYS.SATURDAY, (float) msg.obj);
+                    viewCustom.updateDay(WeekViewHelper.DAYS.SATURDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.SUNDAY_CUSTOM.ordinal()) {
-                    viewCustom.updateDay(WeekView.DAYS.SUNDAY, (float) msg.obj);
+                    viewCustom.updateDay(WeekViewHelper.DAYS.SUNDAY, (float) msg.obj);
                 }else if (msg.what == MSG_ID.MONDAY_CURRENT_YEAR.ordinal()) {
-                    viewCur.updateDay(WeekView.DAYS.MONDAY, (float) msg.obj);
+                    viewCur.updateDay(WeekViewHelper.DAYS.MONDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.TUESDAY_CURRENT_YEAR.ordinal()) {
-                    viewCur.updateDay(WeekView.DAYS.TUESDAY, (float) msg.obj);
+                    viewCur.updateDay(WeekViewHelper.DAYS.TUESDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.WEDNESDAY_CURRENT_YEAR.ordinal()) {
-                    viewCur.updateDay(WeekView.DAYS.WEDNESDAY, (float) msg.obj);
+                    viewCur.updateDay(WeekViewHelper.DAYS.WEDNESDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.THURSDAY_CURRENT_YEAR.ordinal()) {
-                    viewCur.updateDay(WeekView.DAYS.THURSDAY, (float) msg.obj);
+                    viewCur.updateDay(WeekViewHelper.DAYS.THURSDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.FRIDAY_CURRENT_YEAR.ordinal()) {
-                    viewCur.updateDay(WeekView.DAYS.FRIDAY, (float) msg.obj);
+                    viewCur.updateDay(WeekViewHelper.DAYS.FRIDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.SATURDAY_CURRENT_YEAR.ordinal()) {
-                    viewCur.updateDay(WeekView.DAYS.SATURDAY, (float) msg.obj);
+                    viewCur.updateDay(WeekViewHelper.DAYS.SATURDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.SUNDAY_CURRENT_YEAR.ordinal()) {
-                    viewCur.updateDay(WeekView.DAYS.SUNDAY, (float) msg.obj);
+                    viewCur.updateDay(WeekViewHelper.DAYS.SUNDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.MONDAY_ALL_YEARS.ordinal()) {
-                    viewAll.updateDay(WeekView.DAYS.MONDAY, (float) msg.obj);
+                    viewAll.updateDay(WeekViewHelper.DAYS.MONDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.TUESDAY_ALL_YEARS.ordinal()) {
-                    viewAll.updateDay(WeekView.DAYS.TUESDAY, (float) msg.obj);
+                    viewAll.updateDay(WeekViewHelper.DAYS.TUESDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.WEDNESDAY_ALL_YEARS.ordinal()) {
-                    viewAll.updateDay(WeekView.DAYS.WEDNESDAY, (float) msg.obj);
+                    viewAll.updateDay(WeekViewHelper.DAYS.WEDNESDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.THURSDAY_ALL_YEARS.ordinal()) {
-                    viewAll.updateDay(WeekView.DAYS.THURSDAY, (float) msg.obj);
+                    viewAll.updateDay(WeekViewHelper.DAYS.THURSDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.FRIDAY_ALL_YEARS.ordinal()) {
-                    viewAll.updateDay(WeekView.DAYS.FRIDAY, (float) msg.obj);
+                    viewAll.updateDay(WeekViewHelper.DAYS.FRIDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.SATURDAY_ALL_YEARS.ordinal()) {
-                    viewAll.updateDay(WeekView.DAYS.SATURDAY, (float) msg.obj);
+                    viewAll.updateDay(WeekViewHelper.DAYS.SATURDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.SUNDAY_ALL_YEARS.ordinal()) {
-                    viewAll.updateDay(WeekView.DAYS.SUNDAY, (float) msg.obj);
+                    viewAll.updateDay(WeekViewHelper.DAYS.SUNDAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.JANUARY_CURRENT_YEAR.ordinal()) {
-                    viewYearCur.updateMonth(MonthView.MONTHS.JANUARY, (float) msg.obj);
+                    viewYearCur.updateMonth(MonthViewHelper.MONTHS.JANUARY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.FEBRUARY_CURRENT_YEAR.ordinal()) {
-                    viewYearCur.updateMonth(MonthView.MONTHS.FEBRUARY, (float) msg.obj);
+                    viewYearCur.updateMonth(MonthViewHelper.MONTHS.FEBRUARY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.MARCH_CURRENT_YEAR.ordinal()) {
-                    viewYearCur.updateMonth(MonthView.MONTHS.MARCH, (float) msg.obj);
+                    viewYearCur.updateMonth(MonthViewHelper.MONTHS.MARCH, (float) msg.obj);
                 } else if (msg.what == MSG_ID.APRIL_CURRENT_YEAR.ordinal()) {
-                    viewYearCur.updateMonth(MonthView.MONTHS.APRIL, (float) msg.obj);
+                    viewYearCur.updateMonth(MonthViewHelper.MONTHS.APRIL, (float) msg.obj);
                 } else if (msg.what == MSG_ID.MAY_CURRENT_YEAR.ordinal()) {
-                    viewYearCur.updateMonth(MonthView.MONTHS.MAY, (float) msg.obj);
+                    viewYearCur.updateMonth(MonthViewHelper.MONTHS.MAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.JUNE_CURRENT_YEAR.ordinal()) {
-                    viewYearCur.updateMonth(MonthView.MONTHS.JUNE, (float) msg.obj);
+                    viewYearCur.updateMonth(MonthViewHelper.MONTHS.JUNE, (float) msg.obj);
                 } else if (msg.what == MSG_ID.JULY_CURRENT_YEAR.ordinal()) {
-                    viewYearCur.updateMonth(MonthView.MONTHS.JULY, (float) msg.obj);
+                    viewYearCur.updateMonth(MonthViewHelper.MONTHS.JULY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.AUGUST_CURRENT_YEAR.ordinal()) {
-                    viewYearCur.updateMonth(MonthView.MONTHS.AUGUST, ( float)msg.obj);
+                    viewYearCur.updateMonth(MonthViewHelper.MONTHS.AUGUST, (float) msg.obj);
                 } else if (msg.what == MSG_ID.SEPTEMBER_CURRENT_YEAR.ordinal()) {
-                    viewYearCur.updateMonth(MonthView.MONTHS.SEPTEMBER, (float) msg.obj);
+                    viewYearCur.updateMonth(MonthViewHelper.MONTHS.SEPTEMBER, (float) msg.obj);
                 } else if (msg.what == MSG_ID.OCTOBER_CURRENT_YEAR.ordinal()) {
-                    viewYearCur.updateMonth(MonthView.MONTHS.OCTOBER, (float) msg.obj);
+                    viewYearCur.updateMonth(MonthViewHelper.MONTHS.OCTOBER, (float) msg.obj);
                 } else if (msg.what == MSG_ID.NOVEMBER_CURRENT_YEAR.ordinal()) {
-                    viewYearCur.updateMonth(MonthView.MONTHS.NOVEMBER, (float) msg.obj);
+                    viewYearCur.updateMonth(MonthViewHelper.MONTHS.NOVEMBER, (float) msg.obj);
                 } else if (msg.what == MSG_ID.DECEMBER_CURRENT_YEAR.ordinal()) {
-                    viewYearCur.updateMonth(MonthView.MONTHS.DECEMBER, (float) msg.obj);
+                    viewYearCur.updateMonth(MonthViewHelper.MONTHS.DECEMBER, (float) msg.obj);
                 } else if (msg.what == MSG_ID.JANUARY_ALL_TIME.ordinal()) {
-                    viewYearAll.updateMonth(MonthView.MONTHS.JANUARY, (float) msg.obj);
+                    viewYearAll.updateMonth(MonthViewHelper.MONTHS.JANUARY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.FEBRUARY_ALL_TIME.ordinal()) {
-                    viewYearAll.updateMonth(MonthView.MONTHS.FEBRUARY, (float) msg.obj);
+                    viewYearAll.updateMonth(MonthViewHelper.MONTHS.FEBRUARY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.MARCH_ALL_TIME.ordinal()) {
-                    viewYearAll.updateMonth(MonthView.MONTHS.MARCH, (float) msg.obj);
+                    viewYearAll.updateMonth(MonthViewHelper.MONTHS.MARCH, (float) msg.obj);
                 } else if (msg.what == MSG_ID.APRIL_ALL_TIME.ordinal()) {
-                    viewYearAll.updateMonth(MonthView.MONTHS.APRIL, (float) msg.obj);
+                    viewYearAll.updateMonth(MonthViewHelper.MONTHS.APRIL, (float) msg.obj);
                 } else if (msg.what == MSG_ID.MAY_ALL_TIME.ordinal()) {
-                    viewYearAll.updateMonth(MonthView.MONTHS.MAY, (float) msg.obj);
+                    viewYearAll.updateMonth(MonthViewHelper.MONTHS.MAY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.JUNE_ALL_TIME.ordinal()) {
-                    viewYearAll.updateMonth(MonthView.MONTHS.JUNE, (float) msg.obj);
+                    viewYearAll.updateMonth(MonthViewHelper.MONTHS.JUNE, (float) msg.obj);
                 } else if (msg.what == MSG_ID.JULY_ALL_TIME.ordinal()) {
-                    viewYearAll.updateMonth(MonthView.MONTHS.JULY, (float) msg.obj);
+                    viewYearAll.updateMonth(MonthViewHelper.MONTHS.JULY, (float) msg.obj);
                 } else if (msg.what == MSG_ID.AUGUST_ALL_TIME.ordinal()) {
-                    viewYearAll.updateMonth(MonthView.MONTHS.AUGUST, (float) msg.obj);
+                    viewYearAll.updateMonth(MonthViewHelper.MONTHS.AUGUST, (float) msg.obj);
                 } else if (msg.what == MSG_ID.SEPTEMBER_ALL_TIME.ordinal()) {
-                    viewYearAll.updateMonth(MonthView.MONTHS.SEPTEMBER, (float) msg.obj);
+                    viewYearAll.updateMonth(MonthViewHelper.MONTHS.SEPTEMBER, (float) msg.obj);
                 } else if (msg.what == MSG_ID.OCTOBER_ALL_TIME.ordinal()) {
-                    viewYearAll.updateMonth(MonthView.MONTHS.OCTOBER, (float) msg.obj);
+                    viewYearAll.updateMonth(MonthViewHelper.MONTHS.OCTOBER, (float) msg.obj);
                 } else if (msg.what == MSG_ID.NOVEMBER_ALL_TIME.ordinal()) {
-                    viewYearAll.updateMonth(MonthView.MONTHS.NOVEMBER, (float) msg.obj);
+                    viewYearAll.updateMonth(MonthViewHelper.MONTHS.NOVEMBER, (float) msg.obj);
                 } else if (msg.what == MSG_ID.DECEMBER_ALL_TIME.ordinal()) {
-                    viewYearAll.updateMonth(MonthView.MONTHS.DECEMBER, (float) msg.obj);
+                    viewYearAll.updateMonth(MonthViewHelper.MONTHS.DECEMBER, (float) msg.obj);
                 }
             }
         };

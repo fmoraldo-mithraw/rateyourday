@@ -20,6 +20,9 @@ import java.util.logging.Logger;
 
 import io.reactivex.annotations.Nullable;
 
+/*
+The intent for the notifications star buttons
+ */
 public class NotificationIntentService extends IntentService {
 
     /**

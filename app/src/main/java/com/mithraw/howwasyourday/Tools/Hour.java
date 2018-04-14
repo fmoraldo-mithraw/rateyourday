@@ -1,5 +1,8 @@
 package com.mithraw.howwasyourday.Tools;
 
+/*
+Tool to provide int from string hour
+ */
 public class Hour {
     private String hour;
     private String minute;

@@ -37,6 +37,9 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+/*
+Save data to your drive
+ */
 public class ThreadSyncDatas extends Thread {
     static boolean isRunning = false;
     GoogleSignInAccount mGoogleSignInAccount;

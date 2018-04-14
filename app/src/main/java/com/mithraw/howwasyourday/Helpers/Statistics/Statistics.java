@@ -1,5 +1,10 @@
 package com.mithraw.howwasyourday.Helpers.Statistics;
 
+/*
+A simple class that reflect the stats
+Used for days, month and year time by filling the good data
+Used in Funny Stats
+ */
 public class Statistics {
 
     StatisticsDatas favoriteDay = null;

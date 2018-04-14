@@ -15,6 +15,10 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+/*
+Manage the db
+Two handlers, the backup db to save the db safely and the regular one
+ */
 @Database(entities = Day.class, version = 4, exportSchema = false)
 public abstract class DaysDatabase extends RoomDatabase {
     public abstract DayDao dayDao();

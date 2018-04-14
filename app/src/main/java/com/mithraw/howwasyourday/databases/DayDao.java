@@ -9,10 +9,14 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+/*
+DayDao, all the methods used to interact with the database
+ */
 @Dao
 public interface DayDao {
     @Query("SELECT * FROM day WHERE is_removed IS NOT 0")
     List<Day> getAllRemoved();
+
     @Query("SELECT * FROM day")
     List<Day> getAlIncludingRemoved();
 

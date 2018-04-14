@@ -5,10 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -53,13 +50,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+/*
+Main Activity, show a calendar view and a card with the day selected (default today)
+Manage the menu
+ */
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT, MSG_UPDATE}
 
-    public enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS, ACTIVITY_LOGS, ACTIVITY_STATS, GOOGLE_SIGNIN}
+    public enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS, ACTIVITY_LOGS, ACTIVITY_STATS}
 
     private SharingHelper mSharingHelper;
     private static Context mContext;
@@ -387,7 +388,7 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (requestCode == ACTIVITY_ID.ACTIVITY_SETTINGS.ordinal()) {
             //TODO Make something
-        } else if(requestCode == ACTIVITY_ID.GOOGLE_SIGNIN.ordinal()){
+        } else if(requestCode == GoogleSignInHelper.GOOGLE_SIGNIN_ACTIVITY_ID){
             Resources res = App.getApplication().getResources();
             if (resultCode == Activity.RESULT_OK) {
                 // App is authorized, you can go back to sending the API request

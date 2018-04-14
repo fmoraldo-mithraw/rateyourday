@@ -16,8 +16,8 @@ import android.widget.RemoteViews;
 import com.mithraw.howwasyourday.Activities.MainActivity;
 import com.mithraw.howwasyourday.Activities.RateADay;
 import com.mithraw.howwasyourday.App;
-import com.mithraw.howwasyourday.Services.NotificationIntentService;
 import com.mithraw.howwasyourday.R;
+import com.mithraw.howwasyourday.Services.NotificationIntentService;
 import com.mithraw.howwasyourday.Tools.Hour;
 import com.mithraw.howwasyourday.Tools.TimeAlarm;
 import com.mithraw.howwasyourday.databases.Day;
@@ -29,7 +29,10 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-
+/*
+Notification helper
+Build them, and schedule them
+ */
 public class NotificationHelper {
     private static String CHANNEL_ID = "rate_your_day_channel";
     private static AlarmManager alarmMgr;

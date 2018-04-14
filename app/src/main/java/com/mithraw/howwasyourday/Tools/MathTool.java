@@ -1,5 +1,8 @@
 package com.mithraw.howwasyourday.Tools;
 
+/*
+Do the true mod(%)
+ */
 public class MathTool {
     public static int floorMod(int value, int mod) {
         int ret = value%mod;
