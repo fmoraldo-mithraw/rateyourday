@@ -128,14 +128,12 @@
                     android:enabled="true"
                     android:hint="@string/hint_Title"
                     android:inputType="textPersonName"
-                    android:text="@string/day_title"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ratingBar"
-                    tools:text="@string/day_title" />
+                    app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
 
                 <ScrollView
                     android:id="@+id/scrollViewMain"

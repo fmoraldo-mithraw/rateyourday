@@ -176,5 +176,7 @@
     <string name="ok_google_sign_in">You are successfully connected to your google account</string>
     <string name="notificationIntentAction">com.mithraw.howwasyourday.notification</string>
     <string name="syncIntentAction">com.mithraw.howwasyourday.sync</string>
+    <string name="expand_button_text">EXPAND</string>
+
 
 </resources>

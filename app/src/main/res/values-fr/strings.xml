@@ -171,4 +171,5 @@
     <string name="issue_google_sign_in">Une erreur s\'est produite lors de la connexion à votre compte Google</string>
     <string name="reconnect_google_sign_in">Se reconnecter</string>
     <string name="ok_google_sign_in">Vous êtes connecté à votre compte Google</string>
+    <string name="expand_button_text">DEVELOPPER</string>
 </resources>

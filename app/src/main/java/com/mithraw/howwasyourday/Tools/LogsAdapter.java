@@ -6,6 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.mithraw.howwasyourday.Activities.ExpandedDayActivity;
 import com.mithraw.howwasyourday.Activities.RateADay;
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.R;
@@ -49,6 +53,7 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
         Day mDay;
         Button btnEdit;
         Button btnRemove;
+        Button btnExpand;
         Activity mParent;
         View mView;
         int mPosition;
@@ -79,6 +84,7 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
 
             btnEdit = (Button) v.findViewById(R.id.log_card_button_edit);
             btnRemove = (Button) v.findViewById(R.id.log_card_button_remove);
+            btnExpand = (Button) v.findViewById(R.id.log_card_button_expand);
             //TODO set onClick methods
 
         }
@@ -157,8 +163,23 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
                     });
                     AlertDialog dialog = alertDialogBuilder.create();
                     dialog.show();
+                }
+            });
+            btnExpand.setOnClickListener(new Button.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setBtnLayoutExtented(false);
+                    Intent intent = new Intent(mParent, ExpandedDayActivity.class);
+                    intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_DATE, (String)((TextView)mView.findViewById(R.id.log_card_date)).getText().toString());
+                    intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_TITLE, (String)((TextView)mView.findViewById(R.id.log_card_title)).getText().toString());
+                    intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_LOG, (String)((TextView)mView.findViewById(R.id.log_card_text)).getText().toString());
+                    intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_RATE, (float) ((RatingBar)mView.findViewById(R.id.log_card_rating)).getRating());
+                    Pair<View, String> p = new Pair<View, String>(mView, ExpandedDayActivity.VIEW_NAME);
+                    ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            mParent, p);
 
-
+                    // Now we can start the Activity, providing the activity options as a bundle
+                    ActivityCompat.startActivity(mParent, intent, activityOptions.toBundle());
                 }
             });
         }
