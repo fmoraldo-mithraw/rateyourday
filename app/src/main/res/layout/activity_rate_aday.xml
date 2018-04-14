@@ -50,7 +50,7 @@
         android:layout_marginTop="26dp"
         android:ems="10"
         android:hint="@string/hint_Title"
-        android:inputType="textAutoCorrect|textAutoComplete"
+        android:inputType="textCapSentences|textAutoCorrect|textAutoComplete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
@@ -65,7 +65,7 @@
         android:layout_marginStart="10dp"
         android:ems="10"
         android:hint="@string/day_resume"
-        android:inputType="textMultiLine"
+        android:inputType="textCapSentences|textMultiLine"
         android:lines="6"
         android:maxLines="100"
         android:minLines="1"
