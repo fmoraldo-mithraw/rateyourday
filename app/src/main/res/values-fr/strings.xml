@@ -111,7 +111,7 @@
     <string name="action_stats_diagrams">Diagrammes</string>
     <string name="action_funny_stats">Données intéressantes</string>
     <string name="action_donate">Faire un cadeau a l\'auteur</string>
-    <string name="action_about_the_author">A propos de l\'auteur</string>
+    <string name="action_about_the_author">À propos de l\'auteur</string>
     <string name="hashtag">#NoteTaJournée</string>
     <string name="monday">lun</string>
     <string name="tuesday">mar</string>
@@ -148,8 +148,8 @@
     <string name="last_year_title">L\'année dernière</string>
     <string name="worst_month">Pire mois :</string>
     <string name="all_time_title">De tout temps</string>
-    <string name="favorite_year">Favorite year :</string>
-    <string name="worst_year">Worst year :</string>
+    <string name="favorite_year">Année préférée :</string>
+    <string name="worst_year">Pire année :</string>
     <string name="nothing_interesting">Désolé, mais je n\'ai pour le moment pas assez de données pour trouver des statistiques intéressantes à te montrer.\nContinue de noter tes journées et j\'en aurai bientôt a te proposer mon ami !</string>
     <string name="nothing_interesting_title">Rien d\'intéressant</string>
     <string name="entry_removed">Entrée supprimée.</string>
@@ -176,7 +176,11 @@
     <string name="reconnect_google_sign_in">Se reconnecter</string>
     <string name="ok_google_sign_in">Vous êtes connecté à votre compte Google</string>
     <string name="expand_button_text">DEVELOPPER</string>
-    <string name="action_about_the_app">A propos de l\'application</string>
+    <string name="action_about_the_app">Àpropos de l\'application</string>
     <string name="about_the_app_main_text">Cette application est sous licence GPL3 et vous pouvez retrouver son code source ici :</string>
     <string name="about_the_app_main_text2">Vous pouvez retrouver sa politique d\'utilisation ici :</string>
+    <string name="sync_switch_text">Àctiver la syncronisation Google Drive</string>
+    <string name="notification_switch_text">Me rappeler de noter ma journée</string>
+    <string name="first_use__text">Choisissez avec sagesse :</string>
+    <string name="first_use_title">Écran de première utilisation</string>
 </resources>

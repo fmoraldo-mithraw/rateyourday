@@ -72,7 +72,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 preference.setSummary(stringValue);
             }
             if(preference.getKey().equals("sync_frequency")){
-                if(!value.equals(PreferenceManager.getDefaultSharedPreferences(App.getContext()).getString("sync_frequency","180")))
+                if(!value.equals(PreferenceManager.getDefaultSharedPreferences(App.getContext()).getString("sync_frequency","1440")))
                     ThreadSyncDatas.reSchedule(PreferenceHelper.toTime((String)value));
             }
 

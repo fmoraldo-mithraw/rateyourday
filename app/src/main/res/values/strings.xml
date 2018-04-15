@@ -186,7 +186,10 @@
     <string name="about_the_app_main_text2">You can find it\'s privacy policy here :</string>
     <string name="about_the_app_main_github"><u>https://github.com/fmoraldo-mithraw/rateyourday</u></string>
     <string name="about_the_app_main_privacy_policy"><u>http://www.rateyourday.ovh</u></string>
-
+    <string name="sync_switch_text">Activate Google Drive Sync</string>
+    <string name="notification_switch_text">Notify me to rate my day</string>
+    <string name="first_use__text">Choose wisely :</string>
+    <string name="first_use_title">First use screen</string>
 
 
 </resources>

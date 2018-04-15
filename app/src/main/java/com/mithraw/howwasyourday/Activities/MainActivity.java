@@ -15,6 +15,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -37,6 +38,7 @@ import android.widget.Toast;
 
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.BuildConfig;
+import com.mithraw.howwasyourday.Dialogs.FirstUseDialog;
 import com.mithraw.howwasyourday.Helpers.GoogleSignInHelper;
 import com.mithraw.howwasyourday.Helpers.NotificationHelper;
 import com.mithraw.howwasyourday.Helpers.SharingHelper;
@@ -113,17 +115,28 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         mContext = this;
         mCardView = this.findViewById(R.id.cardViewLittle);
+
+        //Display the first use Screen
+        if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("first_use_screen_showed", false) == false) {
+            DialogFragment newFragment = new FirstUseDialog();
+            newFragment.show(getSupportFragmentManager(), "first_use_fragment");
+        }
+        //Connect to GoogleSignIn
+        boolean firstTimeScreenShowed = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("first_use_screen_showed", false);
         String timeSync = PreferenceManager.getDefaultSharedPreferences(getContext()).getString("sync_frequency","180");
-        if( timeSync != "Never") {
+        if ((timeSync != "0") && (firstTimeScreenShowed == true)) { // If the first use screen is currently shown we don't do the GoogleSignIn, the first use screen will do it
             GoogleSignInHelper.getInstance(this).doSignIn(new SyncLauncher());
         }
 
+        //Init the share helper
         mSharingHelper = new SharingHelper(mCardView,this,
                 this.findViewById(R.id.button_layout),
                 this.findViewById(R.id.expand_button));
+
         // Setup the notifications
         NotificationHelper.buildChannel();
-        NotificationHelper.setupNotificationStatus();
+        if (firstTimeScreenShowed == true) // If the first use screen is currently shown we don't setup the notifications, the first use screen will do it
+            NotificationHelper.setupNotificationStatus();
 
         //Setup the database
         db = DaysDatabase.getInstance(getApplicationContext());
