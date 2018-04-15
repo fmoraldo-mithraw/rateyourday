@@ -381,6 +381,11 @@ public class MainActivity extends AppCompatActivity
         startActivity(aboutTheAutorIntent);
     }
 
+    private void launchActivityAboutTheApp() {
+        Intent aboutTheAppIntent = new Intent(getApplicationContext(), AboutTheAppActivity.class);
+        startActivity(aboutTheAppIntent);
+    }
+
     public class ReconnectListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -459,6 +464,9 @@ public class MainActivity extends AppCompatActivity
         }
         if(id == R.id.nav_about_the_author) {
             launchActivityAboutTheAuthor();
+        }
+        if(id == R.id.nav_about_the_app) {
+            launchActivityAboutTheApp();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

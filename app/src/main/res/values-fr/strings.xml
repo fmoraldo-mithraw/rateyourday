@@ -47,20 +47,24 @@
 
     <string name="pref_title_sync_frequency">Sync frequency</string>
     <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
+        <item>6 heures</item>
+        <item>12 heures</item>
+        <item>1 jour</item>
+        <item>2 jours</item>
+        <item>3 jours</item>
+        <item>4 jours</item>
+        <item>1 semaine</item>
+        <item>Jamais</item>
     </string-array>
     <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
         <item>360</item>
-        <item>-1</item>
+        <item>720</item>
+        <item>1440</item>
+        <item>2880</item>
+        <item>4320</item>
+        <item>5760</item>
+        <item>10080</item>
+        <item>0</item>
     </string-array>
 
     <string-array name="list_preference_entries">
@@ -172,4 +176,7 @@
     <string name="reconnect_google_sign_in">Se reconnecter</string>
     <string name="ok_google_sign_in">Vous êtes connecté à votre compte Google</string>
     <string name="expand_button_text">DEVELOPPER</string>
+    <string name="action_about_the_app">A propos de l\'application</string>
+    <string name="about_the_app_main_text">Cette application est sous licence GPL3 et vous pouvez retrouver son code source ici :</string>
+    <string name="about_the_app_main_text2">Vous pouvez retrouver sa politique d\'utilisation ici :</string>
 </resources>

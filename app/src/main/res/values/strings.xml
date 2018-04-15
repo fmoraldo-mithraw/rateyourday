@@ -48,20 +48,24 @@
 
     <string name="pref_title_sync_frequency">Sync frequency</string>
     <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
         <item>6 hours</item>
+        <item>12 hours</item>
+        <item>1 day</item>
+        <item>2 days</item>
+        <item>3 days</item>
+        <item>4 days</item>
+        <item>1 week</item>
         <item>Never</item>
     </string-array>
     <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
         <item>360</item>
-        <item>-1</item>
+        <item>720</item>
+        <item>1440</item>
+        <item>2880</item>
+        <item>4320</item>
+        <item>5760</item>
+        <item>10080</item>
+        <item>0</item>
     </string-array>
 
     <string-array name="list_preference_entries">
@@ -109,6 +113,7 @@
     <string name="action_funny_stats">Interesting datas</string>
     <string name="action_donate">Make a gift to the author</string>
     <string name="action_about_the_author">About the author</string>
+    <string name="action_about_the_app">About the application</string>
     <string name="hashtag">#RateYourDay</string>
     <string name="monday">mon</string>
     <string name="tuesday">tue</string>
@@ -177,6 +182,11 @@
     <string name="notificationIntentAction">com.mithraw.howwasyourday.notification</string>
     <string name="syncIntentAction">com.mithraw.howwasyourday.sync</string>
     <string name="expand_button_text">EXPAND</string>
+    <string name="about_the_app_main_text">This application is open source and licenced under GPL3 you can find its source code here:</string>
+    <string name="about_the_app_main_text2">You can find it\'s privacy policy here :</string>
+    <string name="about_the_app_main_github"><u>https://github.com/fmoraldo-mithraw/rateyourday</u></string>
+    <string name="about_the_app_main_privacy_policy"><u>http://www.rateyourday.ovh</u></string>
+
 
 
 </resources>
