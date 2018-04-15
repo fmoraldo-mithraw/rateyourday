@@ -84,21 +84,25 @@ public class MainActivity extends AppCompatActivity
     private void setLogText(String value) {
         TextView text = findViewById(R.id.logText);
         ScrollView scrollViewMain = findViewById(R.id.scrollViewMain);
-        if (value.equals("")) {
-            scrollViewMain.setVisibility(View.GONE);
-        } else {
-            scrollViewMain.setVisibility(View.VISIBLE);
-            text.setText(value);
+        if ((scrollViewMain != null) && (text != null)) {
+            if (value.equals("")) {
+                scrollViewMain.setVisibility(View.GONE);
+            } else {
+                scrollViewMain.setVisibility(View.VISIBLE);
+                text.setText(value);
+            }
         }
     }
 
     private void setTitleText(String value) {
         TextView text = (TextView) findViewById(R.id.titleText);
-        if (value.equals("")) {
-            text.setVisibility(View.GONE);
-        } else {
-            text.setVisibility(View.VISIBLE);
-            text.setText(value);
+        if (text != null) {
+            if (value.equals("")) {
+                text.setVisibility(View.GONE);
+            } else {
+                text.setVisibility(View.VISIBLE);
+                text.setText(value);
+            }
         }
     }
     @SuppressLint("HandlerLeak")
@@ -151,31 +155,44 @@ public class MainActivity extends AppCompatActivity
             public void handleMessage(Message msg) {
                 RatingBar rab = findViewById(R.id.ratingBar);
                 Button removeButton = findViewById(R.id.main_button_remove);
+                Button editButton = findViewById(R.id.main_button_edit);
                 LinearLayout nothingLayout = findViewById(R.id.nothing_layout);
                 LinearLayout rateLayout = findViewById(R.id.rate_layout);
-
                 if (msg.what == MSG_ID.MSG_RATING.ordinal()) {
-                    rab.setRating((Integer) (msg.obj));
-
+                    if ((rab != null) && (msg.obj != null))
+                        rab.setRating((Integer) (msg.obj));
                 } else if (msg.what == MSG_ID.MSG_LOG.ordinal()) {
-                    setLogText((String) (msg.obj));
+                    if (msg.obj != null)
+                        setLogText((String) (msg.obj));
                 } else if (msg.what == MSG_ID.MSG_TITLE.ordinal()) {
-                    setTitleText((String) (msg.obj));
+                    if (msg.obj != null)
+                        setTitleText((String) (msg.obj));
                 }
                 if (msg.what == MSG_ID.MSG_EMPTY.ordinal()) {
-                    rab.setRating(0);
-                    setLogText("");
-                    setTitleText("");
-                    removeButton.setEnabled(false);
-                    nothingLayout.setVisibility(View.VISIBLE);
-                    rateLayout.setVisibility(View.GONE);
-                    mSharingHelper.updateDatas();
+                    if ((rab != null) &&
+                            (removeButton != null) &&
+                            (editButton != null) &&
+                            (nothingLayout != null) &&
+                            (rateLayout != null)) {
+                        rab.setRating(0);
+                        setLogText("");
+                        setTitleText("");
+                        removeButton.setEnabled(false);
+                        nothingLayout.setVisibility(View.VISIBLE);
+                        rateLayout.setVisibility(View.GONE);
+                        editButton.setText(R.string.app_name);
+                    }
                 }
                 if (msg.what == MSG_ID.MSG_SENT.ordinal()) {
-                    removeButton.setEnabled(true);
-                    nothingLayout.setVisibility(View.GONE);
-                    rateLayout.setVisibility(View.VISIBLE);
-                    mSharingHelper.updateDatas();
+                    if ((removeButton != null) &&
+                            (editButton != null) &&
+                            (nothingLayout != null) &&
+                            (rateLayout != null)) {
+                        removeButton.setEnabled(true);
+                        nothingLayout.setVisibility(View.GONE);
+                        rateLayout.setVisibility(View.VISIBLE);
+                        editButton.setText(R.string.edit_button_text);
+                    }
                 }
             }
         };

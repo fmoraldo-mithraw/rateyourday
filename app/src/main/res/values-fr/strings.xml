@@ -13,7 +13,7 @@
     <string name="save_button_text">Sauver la journée</string>
     <string name="save_the_day_good">Journée sauvée ! Mais elle n\'en avait pas vraiment besoin, elle avait l\'air déjà super cette journée !</string>
     <string name="save_the_day_bad">Journée sauvée ! Et dieu sait que tu en avais besoin !</string>
-    <string name="share_title">Share</string>
+    <string name="share_title">Partager</string>
     <string name="share_via">Partager via</string>
     <string name="title_activity_settings">Configuration</string>
 
@@ -165,9 +165,9 @@
     <string name="nothing_main">Aucune information à la date séléctionnée</string>
     <string name="cant_expand">Vous ne pouvez agrandir cet espace si aucune donnée n\'est remplie</string>
     <string name="custom_diagram_hint">Personnalisez votre propre diagramme en entrant les dates de votre choix</string>
-    <string name="donate_text">Afin d\'aider les gens, cette application est gratuite. \nAfin de la rendre plus légere et utilisable sur tous les appareils Android, elle est sans publicité.\nVous pouvez soutenir l'auteur de l'application en lui faisant un don via Pay Pal :</string>
+    <string name="donate_text">Afin d\'aider les gens, cette application est gratuite. \nAfin de la rendre plus légere et utilisable sur tous les appareils Android, elle est sans publicité.\nVous pouvez soutenir l\'auteur de l\'application en lui faisant un don via Pay Pal :</string>
     <string name="donate_link">https://paypal.me/pools/c/83t6e5qfy7</string>
-    <string name="about_the_autho_text">Salut ! Mon nom est Fabien \'Mithraw\' Moraldo, je suis né en 1985, et j\'aime faire des trucs, oui, comme toi ! On est tellement trop pareil !\nBlague a part, je suis juste un mec ordinaire, qui sera déjà bien content si t\'as apprécié son travail.\nMais, avant toute chose, je ne serais rien sans mes amis, donc un grand merci à ceux qui m'ont soutenu, et m\'ont aidés à tester l\'application :</string>
+    <string name="about_the_autho_text">Salut ! Mon nom est Fabien \'Mithraw\' Moraldo, je suis né en 1985, et j\'aime faire des trucs, oui, comme toi ! On est tellement trop pareil !\nBlague a part, je suis juste un mec ordinaire, qui sera déjà bien content si t\'as apprécié son travail.\nMais, avant toute chose, je ne serais rien sans mes amis, donc un grand merci à ceux qui m\'ont soutenu, et m\'ont aidés à tester l\'application :</string>
     <string name="issue_google_sign_in">Une erreur s\'est produite lors de la connexion à votre compte Google</string>
     <string name="reconnect_google_sign_in">Se reconnecter</string>
     <string name="ok_google_sign_in">Vous êtes connecté à votre compte Google</string>
