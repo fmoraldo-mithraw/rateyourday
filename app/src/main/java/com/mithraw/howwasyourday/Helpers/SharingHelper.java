@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -23,6 +24,7 @@ import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.ShareMediaContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.widget.ShareDialog;
+import com.mithraw.howwasyourday.Activities.MainActivity;
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.R;
 
@@ -80,8 +82,18 @@ public class SharingHelper {
         }
         if ((mCardView != null) && (mCardView.getVisibility() != View.GONE)) {
             Bitmap tempBmp = mCardView.getDrawingCache();
-            if (tempBmp != null)
+            if (tempBmp != null) {
+                Resources res =  MainActivity.getContext().getResources();
                 image = Bitmap.createBitmap(tempBmp);
+                Bitmap icon = BitmapHelper.drawableToBitmap(res.getDrawable(R.mipmap.ic_launcher));
+                if (icon != null) {
+                    Bitmap iconResized = Bitmap.createScaledBitmap(icon,100, 100, true);
+                    if(iconResized != null) {
+                        Canvas cs = new Canvas(image);
+                        cs.drawBitmap(iconResized, image.getWidth() - iconResized.getWidth() + 5, 5, null);
+                    }
+                }
+            }
         }
         for (View view : mListViewToHide) {
             view.setVisibility(previousState.get(view));

@@ -181,6 +181,7 @@ public class MainActivity extends AppCompatActivity
                         nothingLayout.setVisibility(View.VISIBLE);
                         rateLayout.setVisibility(View.GONE);
                         editButton.setText(R.string.app_name);
+                        mSharingHelper.updateDatas();
                     }
                 }
                 if (msg.what == MSG_ID.MSG_SENT.ordinal()) {
@@ -192,6 +193,7 @@ public class MainActivity extends AppCompatActivity
                         nothingLayout.setVisibility(View.GONE);
                         rateLayout.setVisibility(View.VISIBLE);
                         editButton.setText(R.string.edit_button_text);
+                        mSharingHelper.updateDatas();
                     }
                 }
             }
