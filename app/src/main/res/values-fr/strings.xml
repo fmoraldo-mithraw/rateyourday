@@ -183,4 +183,8 @@
     <string name="notification_switch_text">Me rappeler de noter ma journée</string>
     <string name="first_use__text">Choisissez avec sagesse :</string>
     <string name="first_use_title">Écran de première utilisation</string>
+    <string name="button_previous">previous</string>
+    <string name="button_next">next</string>
+    <string name="checkbox_never_show_tips">Never display any tips again</string>
+    <string name="title_tips">Tips</string>
 </resources>

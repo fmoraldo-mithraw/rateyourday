@@ -16,7 +16,6 @@
     <string name="share_title">Share</string>
     <string name="share_via">Share via</string>
     <string name="title_activity_settings">Settings</string>
-    <string name="facebook_app_id">163663807786742</string>
 
     <!-- Strings related to Settings -->
 
@@ -190,6 +189,10 @@
     <string name="notification_switch_text">Notify me to rate my day</string>
     <string name="first_use__text">Choose wisely :</string>
     <string name="first_use_title">First use screen</string>
+    <string name="button_previous">previous</string>
+    <string name="button_next">next</string>
+    <string name="checkbox_never_show_tips">Never display any tips again</string>
+    <string name="title_tips">Tips</string>
 
 
 </resources>

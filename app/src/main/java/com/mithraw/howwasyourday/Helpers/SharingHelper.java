@@ -19,11 +19,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.commonsware.cwac.provider.StreamProvider;
-import com.facebook.share.model.ShareContent;
-import com.facebook.share.model.ShareHashtag;
-import com.facebook.share.model.ShareMediaContent;
-import com.facebook.share.model.SharePhoto;
-import com.facebook.share.widget.ShareDialog;
 import com.mithraw.howwasyourday.Activities.MainActivity;
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.R;
@@ -154,20 +149,6 @@ public class SharingHelper {
                     public boolean onShareTargetSelected(ShareActionProviderCustom actionProvider, Intent intent) {
                         final String appName = intent.getComponent().getPackageName();
                         updateDatas();
-                        Resources res = mActivity.getResources();
-                        if ("com.facebook.katana".equals(appName)) {
-                            SharePhoto photo = new SharePhoto.Builder().setBitmap(getBitmapWithShareString())
-                                    .build();
-                            ShareContent shareContent = new ShareMediaContent.Builder()
-                                    .addMedium(photo)
-                                    .setShareHashtag(new ShareHashtag.Builder()
-                                            .setHashtag(res.getString(R.string.hashtag))
-                                            .build())
-                                    .build();
-                            ShareDialog shareDialog = new ShareDialog(mActivity);
-                            shareDialog.show(shareContent, ShareDialog.Mode.AUTOMATIC);
-                            return true;
-                        }
                         return false;
                     }
                 });

@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity
 
     public enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS, ACTIVITY_LOGS, ACTIVITY_STATS}
 
-    private SharingHelper mSharingHelper;
     private static Context mContext;
     private static Activity mActivity;
     protected DaysDatabase db;
@@ -128,11 +127,6 @@ public class MainActivity extends AppCompatActivity
             GoogleSignInHelper.getInstance(this).doSignIn(new SyncLauncher());
         }
 
-        //Init the share helper
-        mSharingHelper = new SharingHelper(mCardView,this,
-                this.findViewById(R.id.button_layout),
-                this.findViewById(R.id.expand_button));
-
         // Setup the notifications
         NotificationHelper.buildChannel();
         if (firstTimeScreenShowed == true) // If the first use screen is currently shown we don't setup the notifications, the first use screen will do it
@@ -194,7 +188,6 @@ public class MainActivity extends AppCompatActivity
                         nothingLayout.setVisibility(View.VISIBLE);
                         rateLayout.setVisibility(View.GONE);
                         editButton.setText(R.string.app_name);
-                        mSharingHelper.updateDatas();
                     }
                 }
                 if (msg.what == MSG_ID.MSG_SENT.ordinal()) {
@@ -206,7 +199,6 @@ public class MainActivity extends AppCompatActivity
                         nothingLayout.setVisibility(View.GONE);
                         rateLayout.setVisibility(View.VISIBLE);
                         editButton.setText(R.string.edit_button_text);
-                        mSharingHelper.updateDatas();
                     }
                 }
             }
@@ -449,9 +441,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.share_button, menu);
-        MenuItem item = menu.findItem(R.id.menu_item_share);
-        mSharingHelper.attachToMenuItem(item);
+        /*getMenuInflater().inflate(R.menu.share_button, menu);
+        MenuItem item = menu.findItem(R.id.menu_item_share);*/
         return true;
     }
 

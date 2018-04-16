@@ -9,8 +9,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.ImageButton;
 
 import com.mithraw.howwasyourday.R;
+import com.mithraw.howwasyourday.Helpers.SharingHelper;
 
 /*
 Show an expanded view of the Day
@@ -20,7 +22,7 @@ public class ExpandedDayActivity extends AppCompatActivity {
     public final static String EXTRA_PARAM_RATE = "ExpandedDayActivity_Rate";
     public final static String EXTRA_PARAM_TITLE = "ExpandedDayActivity_Title";
     public final static String EXTRA_PARAM_LOG = "ExpandedDayActivity_Log";
-
+    private SharingHelper mSharingHelper;
     // View name for the transition
     public final static String VIEW_NAME = "cardview";
 
@@ -42,12 +44,16 @@ public class ExpandedDayActivity extends AppCompatActivity {
             titleTextView.setText(title);
         TextView logTextView = findViewById(R.id.logText);
         String log = intent.getStringExtra(EXTRA_PARAM_LOG);
-        if (title.equals(""))
+        if (log.equals(""))
             logTextView.setVisibility(View.GONE);
         else
             logTextView.setText(log);
         ((RatingBar)findViewById(R.id.ratingBar)).setRating(intent.getFloatExtra(EXTRA_PARAM_RATE,0));
         ViewCompat.setTransitionName(cv, VIEW_NAME);
+        //Init the share helper
+        mSharingHelper = new SharingHelper(cv,this,
+                this.findViewById(R.id.share_view));
+        mSharingHelper.attachToImageButton((ImageButton)this.findViewById(R.id.share_view));
     }
 
     @Override
