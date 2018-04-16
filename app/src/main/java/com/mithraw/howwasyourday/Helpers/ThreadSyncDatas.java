@@ -147,26 +147,35 @@ public class ThreadSyncDatas extends Thread {
             @Override
             public Task<Void> then(@NonNull Task<DriveContents> task) {
                 try {
-                    Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO : retrieveDbAndUpdate continueWithTask"));
+                    Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO : retrieveDb continueWithTask"));
                     final DriveContents driveContents = task.getResult();
                     InputStream inputStream = driveContents.getInputStream();
-                    //Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO : retrieveDbAndUpdate ParcelFileDescriptor size: " + pfd.getStatSize()));
+                    long totalSize = driveContents.getParcelFileDescriptor().getStatSize();
+                    Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO : retrieveDb size: " + totalSize));
                     File file = App.getContext().getDatabasePath(DaysDatabase.getDatabaseBackupName()).getAbsoluteFile();
                     file.delete();
+                    if (totalSize != 0) {
+                        Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO : retrieveDb backup path: " + App.getContext().getDatabasePath(DaysDatabase.getDatabaseBackupName()).getAbsolutePath()));
+                        FileOutputStream fileOutput = new FileOutputStream(App.getContext().getDatabasePath(DaysDatabase.getDatabaseBackupName()).getAbsoluteFile());
+                        OutputStream cos = CryptHelper.getCipherOutputStream(fileOutput);
+                        if (cos != null) {
+                            byte[] buffer = new byte[1024];
+                            int bufferLength;
 
-                    Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO : retrieveDbAndUpdate backup path: " + App.getContext().getDatabasePath(DaysDatabase.getDatabaseBackupName()).getAbsolutePath()));
-                    FileOutputStream fileOutput = new FileOutputStream(App.getContext().getDatabasePath(DaysDatabase.getDatabaseBackupName()).getAbsoluteFile());
-                    byte[] buffer = new byte[1024];
-                    int bufferLength;
-                    while ((bufferLength = inputStream.read(buffer)) > 0) {
-                        fileOutput.write(buffer, 0, bufferLength);
+                            while ((bufferLength = inputStream.read(buffer)) > 0) {
+                                cos.write(buffer, 0, bufferLength);
+                            }
+                            cos.flush();
+                            cos.close();
+
+                            fileOutput.close();
+                            inputStream.close();
+
+                        }
                     }
-                    fileOutput.close();
-                    inputStream.close();
                     updateDb(driveFile);
-
-
                 } catch (Exception e) {
+                    Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO : retrieveDb Exception: " + e.getMessage()));
                 }
                 return null;
             }
@@ -184,7 +193,7 @@ public class ThreadSyncDatas extends Thread {
                             @Override
                             public void run() {
                                 try {
-                                    Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO : retrieveDbAndUpdate size of the Database Backup Before:" + App.getContext().getDatabasePath(DaysDatabase.getDatabaseBackupName()).getAbsoluteFile().length()));
+                                    Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO : updateDb size of the Database Backup Before:" + App.getContext().getDatabasePath(DaysDatabase.getDatabaseBackupName()).getAbsoluteFile().length()));
                                 } catch (Exception e) {
                                 }
 
@@ -196,22 +205,30 @@ public class ThreadSyncDatas extends Thread {
 
                                     OutputStream outputStream = driveContents.getOutputStream();
                                     long totalSize = driveContents.getParcelFileDescriptor().getStatSize();
+                                    File file = App.getContext().getDatabasePath(DaysDatabase.getDatabaseBackupName()).getAbsoluteFile();
+                                    long sizeOfTheFile = file.length();
                                     FileInputStream fileInput = new FileInputStream(App.getContext().getDatabasePath(DaysDatabase.getDatabaseBackupName()).getAbsoluteFile());
-                                    byte[] buffer = new byte[1024];
-                                    int bufferLength;
-                                    try {
-                                        Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO : retrieveDbAndUpdate size of the Database Backup After:" + App.getContext().getDatabasePath(DaysDatabase.getDatabaseBackupName()).getAbsoluteFile().length()));
-                                    } catch (Exception e) {
+                                    InputStream cis = CryptHelper.getCipherInputStream(fileInput);
+                                    if (cis != null) {
+                                        byte[] buffer = new byte[1024];
+                                        int bufferLength;
+                                        try {
+                                            Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO : updateDb size of the Database Backup After:" + App.getContext().getDatabasePath(DaysDatabase.getDatabaseBackupName()).getAbsoluteFile().length()));
+                                        } catch (Exception e) {
+                                        }
+                                        long totalSizeWriten = 0;
+                                        if (sizeOfTheFile != 0) {
+                                            while ((bufferLength = cis.read(buffer)) > 0) {
+                                                totalSizeWriten += bufferLength;
+                                                outputStream.write(buffer, 0, bufferLength);
+                                            }
+                                            cis.close();
+                                        }
+                                        fileInput.close();
+                                        outputStream.close();
                                     }
-                                    long totalSizeWriten = 0;
-                                    while ((bufferLength = fileInput.read(buffer)) > 0) {
-                                        totalSizeWriten += bufferLength;
-                                        outputStream.write(buffer, 0, bufferLength);
-                                    }
-
-                                    fileInput.close();
-                                    outputStream.close();
                                 } catch (Exception e) {
+                                    Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO : updateDb Exception :" + e.getMessage()));
                                 }
 
                                 MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
@@ -219,7 +236,7 @@ public class ThreadSyncDatas extends Thread {
                                 Task<Void> commitTask = mDriveHelper.getDriveResourceClient().commitContents(driveContents, changeSet).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO : retrieveDbAndUpdate commited"));
+                                        Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO : updateDb commited"));
                                         OnFinalSuccess();
                                     }
                                 }).addOnFailureListener(failureListener);
@@ -240,18 +257,28 @@ public class ThreadSyncDatas extends Thread {
                 createContentsTask.addOnSuccessListener(new OnSuccessListener<DriveContents>() {
                     @Override
                     public void onSuccess(DriveContents contents) {
-                        Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO : createContents Success"));
+                        Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO :copyAndUploadDb  createContents Success"));
                         OutputStream outputStream = contents.getOutputStream();
                         try {
-                            FileInputStream fileInput = new FileInputStream(App.getContext().getDatabasePath(databaseName).getAbsoluteFile());
-                            byte[] buffer = new byte[1024];
-                            int bufferLength;
-                            while ((bufferLength = fileInput.read(buffer)) > 0) {
-                                outputStream.write(buffer, 0, bufferLength);
+                            File dbFile = App.getContext().getDatabasePath(databaseName).getAbsoluteFile();
+                            Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO :copyAndUploadDb  origin file size : " + dbFile.length()));
+                            FileInputStream fileInput = new FileInputStream(dbFile);
+                            InputStream cis = CryptHelper.getCipherInputStream(fileInput);
+                            long totalSizeWriten = 0;
+                            if (cis != null) {
+                                byte[] buffer = new byte[1024];
+                                int bufferLength;
+                                while ((bufferLength = cis.read(buffer)) > 0) {
+                                    totalSizeWriten += bufferLength;
+                                    outputStream.write(buffer, 0, bufferLength);
+                                }
+                                Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO :copyAndUploadDb  size written : " + totalSizeWriten));
+                                cis.close();
                             }
                             fileInput.close();
                             outputStream.close();
                         } catch (Exception e) {
+                            Logger.getLogger("ThreadSyncDatas").log(new LogRecord(Level.INFO, "FMORALDO : copyAndUploadDb Exception :" + e.getMessage()));
                         }
 
                         MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
