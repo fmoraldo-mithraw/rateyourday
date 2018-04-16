@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.MenuItem;
@@ -15,11 +17,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mithraw.howwasyourday.App;
+import com.mithraw.howwasyourday.Dialogs.TipsDialog;
 import com.mithraw.howwasyourday.Helpers.RateViewHelper;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
@@ -53,7 +58,20 @@ public class RateADay extends AppCompatActivity {
 
         //Add the back button to the activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        String preferenceName = "tip_rate_showed";
+        //PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean(preferenceName, false).apply(); // TODO to remove outside tests
+        if ((!(PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean(preferenceName, false)))&&
+                (PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("show_tips", true))){
+            ArrayList<Integer> iList = new ArrayList<Integer>();
+            iList.add(R.layout.tips_fragment_rate);
+            Bundle bundl = new Bundle();
+            bundl.putIntegerArrayList("listView", iList);
+            bundl.putString("preference", preferenceName);
+            bundl.putInt("title", R.string.tips_rate_title);
+            DialogFragment newFragment = new TipsDialog();
+            newFragment.setArguments(bundl);
+            newFragment.show(getSupportFragmentManager(), preferenceName);
+        }
         //Retrieve the database
         db = DaysDatabase.getInstance(getApplicationContext());
 

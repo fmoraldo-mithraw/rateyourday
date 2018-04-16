@@ -39,6 +39,7 @@ import android.widget.Toast;
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.BuildConfig;
 import com.mithraw.howwasyourday.Dialogs.FirstUseDialog;
+import com.mithraw.howwasyourday.Dialogs.TipsDialog;
 import com.mithraw.howwasyourday.Helpers.GoogleSignInHelper;
 import com.mithraw.howwasyourday.Helpers.NotificationHelper;
 import com.mithraw.howwasyourday.Helpers.SharingHelper;
@@ -47,6 +48,7 @@ import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -116,9 +118,23 @@ public class MainActivity extends AppCompatActivity
         mCardView = this.findViewById(R.id.cardViewLittle);
 
         //Display the first use Screen
-        if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("first_use_screen_showed", false) == false) {
+        if (!(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("first_use_screen_showed", false))) {
             DialogFragment newFragment = new FirstUseDialog();
             newFragment.show(getSupportFragmentManager(), "first_use_fragment");
+        }
+        String preferenceName = "tip_main_showed";
+        if ((!(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(preferenceName, false)))&&
+                (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("show_tips", true))){
+            ArrayList<Integer> iList = new ArrayList<Integer>();
+            iList.add(R.layout.tips_fragment_main1);
+            iList.add(R.layout.tips_fragment_main2);
+            Bundle bundl = new Bundle();
+            bundl.putIntegerArrayList("listView", iList);
+            bundl.putString("preference", preferenceName);
+            bundl.putInt("title", R.string.tips_main_title);
+            DialogFragment newFragment = new TipsDialog();
+            newFragment.setArguments(bundl);
+            newFragment.show(getSupportFragmentManager(), preferenceName);
         }
         //Connect to GoogleSignIn
         boolean firstTimeScreenShowed = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("first_use_screen_showed", false);

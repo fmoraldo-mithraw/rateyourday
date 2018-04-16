@@ -7,8 +7,10 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mithraw.howwasyourday.App;
+import com.mithraw.howwasyourday.Dialogs.TipsDialog;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Tools.LogsAdapter;
 import com.mithraw.howwasyourday.Tools.SwipeableRecyclerViewTouchListener;
@@ -28,6 +31,7 @@ import com.mithraw.howwasyourday.Tools.UnderlinedCheckTextView;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -117,7 +121,21 @@ public class LogsActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // specify an adapter (see also next example)
+        String preferenceName = "tip_logs_showed";
+        //PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean(preferenceName, false).apply(); // TODO to remove outside tests
+        if ((!(PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean(preferenceName, false)))&&
+                (PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("show_tips", true))){
+            ArrayList<Integer> iList = new ArrayList<Integer>();
+            iList.add(R.layout.tips_fragment_logs_top_screen);
+            iList.add(R.layout.tips_fragment_logs_cards);
+            Bundle bundl = new Bundle();
+            bundl.putIntegerArrayList("listView", iList);
+            bundl.putString("preference", preferenceName);
+            bundl.putInt("title", R.string.tips_logs_title);
+            DialogFragment newFragment = new TipsDialog();
+            newFragment.setArguments(bundl);
+            newFragment.show(getSupportFragmentManager(), preferenceName);
+        }
 
         //Get the DB
         db = DaysDatabase.getInstance(getApplicationContext());

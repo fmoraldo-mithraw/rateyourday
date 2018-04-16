@@ -44,7 +44,6 @@ public class FirstUseDialog extends DialogFragment {
                 .setPositiveButton(R.string.stat_removed_ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        // sign in the user ...
                         if (syncSwitch.isChecked()) {
                             PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putString("sync_frequency", "1440").apply();
                             GoogleSignInHelper.getInstance(getActivity()).doSignIn(new SyncLauncher());
