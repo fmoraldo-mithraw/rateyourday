@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mithraw.howwasyourday.App;
+import com.mithraw.howwasyourday.Dialogs.TipsDialog;
 import com.mithraw.howwasyourday.Helpers.FunnyStatsHelper;
 import com.mithraw.howwasyourday.Helpers.Statistics.DayHelper;
 import com.mithraw.howwasyourday.Helpers.Statistics.MonthHelper;
@@ -23,6 +25,7 @@ import com.mithraw.howwasyourday.Tools.MathTool;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -188,6 +191,19 @@ public class FunnyStatsActivity extends AppCompatActivity {
                 }
             }
         };
+        String preferenceName = "tip_funnystats_showed";
+        if ((PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean(preferenceName, false) == false)&&
+                (PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("show_tips", true) == true)){
+            ArrayList<Integer> iList = new ArrayList<Integer>();
+            iList.add(R.layout.tips_fragment_funnystats_cards);
+            Bundle bundl = new Bundle();
+            bundl.putIntegerArrayList("listView", iList);
+            bundl.putString("preference", preferenceName);
+            bundl.putInt("title", R.string.tips_funstats_title);
+            DialogFragment newFragment = new TipsDialog();
+            newFragment.setArguments(bundl);
+            newFragment.show(getSupportFragmentManager(), preferenceName);
+        }
 
     }
 

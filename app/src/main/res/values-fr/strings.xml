@@ -195,6 +195,11 @@
     <string name="tips_rate">1 - La seule action obligatoire est de noter la journée.\n2 - Si vous le voulez, vous pouvez ajouter un titre et un texte à votre journée.\n3 - Pour sauver la journée et retourner à l\'écran principal, vous pouvez appuyer sur le bouton de retour en haut à gauche ou en bas de votre écran.</string>
     <string name="tips_logs_title">Comment utiliser le journal des entrées</string>
     <string name="tips_logs_top_screen">En haut de l\'écran, vous pouvez selectionner les dates de débuts et de fin de la liste de jour que vous voulez afficher sur cet écran.\nEn cliquant sur l\'un des jours de la semaine, vous supprimerez/rajouterez tous les résultats correspondants au jour de la semaine cliqué</string>
-    <string name="tips_logs_cards">En cliquant sur une carte de jour, vous affichez trois boutons qui vous permettez d\'éditer, de supprimer, et de développer le jour en question à votre guise.</string>
-
+    <string name="tips_logs_cards">En cliquant sur un encadré de jour, vous affichez trois boutons qui vous permettez d\'éditer, de supprimer, et de développer le jour en question à votre guise.</string>
+    <string name="tips_diagrams_title">Comment utiliser l\écran des diagrammes</string>
+    <string name="tips_diagrams_custom">Sur le premier diagramme vous pouvez modifier la date de début et de fin : Il montrera les notes moyennes de chaque jours de la semaine sur la periode séléctionnée.</string>
+    <string name="tips_diagrams_weeks">Les diagrammes hebdomadaires montrent la note moyenne de chaque jour de la semaine sur la periode de temps indiquée(cette année ou depuis toujours).\nVous pouvez tappoter un encadré pour voir les valeurs correspondantes aux barres.\nVous pouvez aussi partager un diagramme avec vos amis en cliquant sur le bouton de partage.</string>
+    <string name="tips_diagrams_months">Les diagrammes mensuels montrent la note moyenne de chaque mois de l\'année sur la periode de temps indiquée(cette année ou depuis toujours).\nVous pouvez tappoter un encadré pour voir les valeurs correspondantes aux barres.\nVous pouvez aussi partager un diagramme avec vos amis en cliquant sur le bouton de partage.</string>
+    <string name="tips_funstats_title">Comment utiliser l\écran des données intéressantes</string>
+    <string name="tips_funstats_cards">Chaque encadré vous donne des statistiques et idées intéressantes que l\'application à compilée a l\'aide des informations que vous avez fournit au fil du temps.\nVous pouvez tappoter un encadré pour faire apparaitre le bouton de partage, ou cliquer sur la croix en haut à gauche pour faire disparaitre l\'encadré jusqu'au mois prochain.</string>
 </resources>

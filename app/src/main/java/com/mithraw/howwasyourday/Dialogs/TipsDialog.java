@@ -122,6 +122,8 @@ public class TipsDialog extends DialogFragment {
                     }
                 });
         mLayout = mView.findViewById(R.id.layout_content);
+        mLastView = mInflater.inflate(mListView.get(currentScreen), null);
+        mLayout.addView(mLastView);
         if (mListView.size() == 1) {
             previousButton.setVisibility(View.GONE);
             mSeekBar.setVisibility(View.GONE);
@@ -130,8 +132,7 @@ public class TipsDialog extends DialogFragment {
             mSeekBar.setMax(mListView.size() - 1);
             mSeekBar.setProgress(0);
         }
-        mLastView = mInflater.inflate(mListView.get(currentScreen), null);
-        mLayout.addView(mLastView);
+
         return mView;
     }
 

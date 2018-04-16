@@ -6,6 +6,8 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.MenuItem;
@@ -15,12 +17,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.mithraw.howwasyourday.App;
+import com.mithraw.howwasyourday.Dialogs.TipsDialog;
 import com.mithraw.howwasyourday.Helpers.MonthViewHelper;
 import com.mithraw.howwasyourday.Helpers.SharingHelper;
 import com.mithraw.howwasyourday.Helpers.WeekViewHelper;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
@@ -377,6 +381,21 @@ public class DiagramActivity extends AppCompatActivity {
                 }
             }
         };
+        String preferenceName = "tip_diagrams_showed";
+        if ((PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean(preferenceName, false) == false)&&
+                (PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("show_tips", true) == true)){
+            ArrayList<Integer> iList = new ArrayList<Integer>();
+            iList.add(R.layout.tips_fragment_diagrams_custom);
+            iList.add(R.layout.tips_fragment_diagrams_weeks);
+            iList.add(R.layout.tips_fragment_diagrams_months);
+            Bundle bundl = new Bundle();
+            bundl.putIntegerArrayList("listView", iList);
+            bundl.putString("preference", preferenceName);
+            bundl.putInt("title", R.string.tips_diagrams_title);
+            DialogFragment newFragment = new TipsDialog();
+            newFragment.setArguments(bundl);
+            newFragment.show(getSupportFragmentManager(), preferenceName);
+        }
     }
 
     @Override

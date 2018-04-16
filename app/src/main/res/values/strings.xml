@@ -202,4 +202,10 @@
     <string name="tips_logs_title">How to use the Entry logs screen</string>
     <string name="tips_logs_top_screen">On the top of the screen, you can select the bound of dates you want to display on the screen.\nBy clicking on a day of the week, you remove/display all the entries from the list that are corresponding the day you clicked</string>
     <string name="tips_logs_cards">By tapping a day card, you display three buttons that allow you to take actions on the day, remove, edit or expand the day as you pleased.</string>
+    <string name="tips_diagrams_title">How to use the Diagram screen</string>
+    <string name="tips_diagrams_custom">In the first diagram, you can select a start date and a end date : It will display the average rating of each day of the week on the time period you selected.</string>
+    <string name="tips_diagrams_weeks">In the week diagrams, you can see the average rating of each day of the week on the time period displayed (this year, or all time).\nYou can tap on a diagram to show the actual value of each bar.\nYou can share the diagram with you friends by tapping on the share button.</string>
+    <string name="tips_diagrams_months">In the month diagrams, you can see the average rating of each month on the time period displayed (this year, or all time).\nYou can tap on a diagram to show the actual value of each bar.\nYou can share the diagram with you friends by tapping on the share button.</string>
+    <string name="tips_funstats_title">How to use the Interesting data screen</string>
+    <string name="tips_funstats_cards">Each card give you interesting statistics and ideas about what the application found out using your data.\nYou can tap on a card to display the share button, or close it to make it disappear for a month.</string>
 </resources>
