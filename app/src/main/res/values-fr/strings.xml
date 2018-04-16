@@ -179,7 +179,7 @@
     <string name="action_about_the_app">Àpropos de l\'application</string>
     <string name="about_the_app_main_text">Cette application est sous licence GPL3 et vous pouvez retrouver son code source ici :</string>
     <string name="about_the_app_main_text2">Vous pouvez retrouver sa politique d\'utilisation ici :</string>
-    <string name="sync_switch_text">Àctiver la syncronisation Google Drive</string>
+    <string name="sync_switch_text">Activer la syncronisation Google Drive</string>
     <string name="notification_switch_text">Me rappeler de noter ma journée</string>
     <string name="first_use__text">Choisissez avec sagesse :</string>
     <string name="first_use_title">Écran de première utilisation</string>
