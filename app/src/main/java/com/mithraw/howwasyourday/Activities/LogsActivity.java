@@ -1,8 +1,10 @@
 package com.mithraw.howwasyourday.Activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -367,7 +369,21 @@ public class LogsActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
         }
-
         return true;
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == 0) {
+            // Make sure the request was successful
+            if (resultCode != 0) {
+                Resources res = getResources();
+                android.support.design.widget.CoordinatorLayout cl = findViewById(R.id.coordinator_log_view);
+                if (resultCode > 2)
+                    Snackbar.make(cl, res.getString(R.string.save_the_day_good), 2000).show();
+                else
+                    Snackbar.make(cl, res.getString(R.string.save_the_day_bad), 2000).show();
+            }
+        }
     }
 }

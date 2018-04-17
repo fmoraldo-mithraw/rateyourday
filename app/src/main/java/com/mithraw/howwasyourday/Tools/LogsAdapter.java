@@ -131,7 +131,7 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
                     rateADayIntent.putExtra(RateADay.EXTRA_DATE_DAY, day.getDay());
                     rateADayIntent.putExtra(RateADay.EXTRA_DATE_MONTH, day.getMonth());
                     rateADayIntent.putExtra(RateADay.EXTRA_DATE_YEAR, day.getYear());
-                    mParent.startActivity(rateADayIntent);
+                    mParent.startActivityForResult(rateADayIntent,0);
 
                 }
             });
