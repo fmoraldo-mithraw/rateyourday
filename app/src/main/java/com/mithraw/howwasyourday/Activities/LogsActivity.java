@@ -121,6 +121,7 @@ public class LogsActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        //Display tips
         String preferenceName = "tip_logs_showed";
         //PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean(preferenceName, false).apply(); // TODO to remove outside tests
         if ((!(PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean(preferenceName, false)))&&

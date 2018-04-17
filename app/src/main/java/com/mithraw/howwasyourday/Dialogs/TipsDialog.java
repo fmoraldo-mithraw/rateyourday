@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -49,6 +50,8 @@ public class TipsDialog extends DialogFragment {
     int currentScreen = 0;
     LayoutInflater mInflater;
     View mLastView;
+    int mTextId;
+    ViewGroup mContainer;
 
     private void updateDialogState() {
         if (mListView.size() == currentScreen) {
@@ -74,17 +77,37 @@ public class TipsDialog extends DialogFragment {
         }
 
     }
-
+    private View getLayout(LayoutInflater inflater, ViewGroup container) {
+        mView = inflater.inflate(R.layout.tips_dialog_container, container, false);
+        return mView;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mContainer = container;
+        if (getShowsDialog()) {
+            // one could return null here, or be nice and call super()
+            return super.onCreateView(inflater, container, savedInstanceState);
+        }
+        return getLayout(inflater, container);
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        super.onCreateDialog(savedInstanceState);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(getLayout(LayoutInflater.from(getContext()), mContainer))
+                // Add action buttons
+                .setCancelable(false);
+        AlertDialog ad = builder.create();
+        ad.setCanceledOnTouchOutside(false);
         //Retrieve arguments
         Bundle bundle = getArguments();
         mListView = bundle.getIntegerArrayList("listView");
         mPreferenceName = bundle.getString("preference");
+        mTextId = bundle.getInt("title");
         TextView title = mView.findViewById(R.id.tips_title);
-        title.setText(bundle.getInt("title"));
+        title.setText(mTextId);
 
-        //View view = inflater.inflate(R.layout.dialog_first_use, container, false);
         previousButton = mView.findViewById(R.id.button_previous);
         previousButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +145,7 @@ public class TipsDialog extends DialogFragment {
                     }
                 });
         mLayout = mView.findViewById(R.id.layout_content);
+        mInflater = getActivity().getLayoutInflater();
         mLastView = mInflater.inflate(mListView.get(currentScreen), null);
         mLayout.addView(mLastView);
         if (mListView.size() == 1) {
@@ -132,22 +156,6 @@ public class TipsDialog extends DialogFragment {
             mSeekBar.setMax(mListView.size() - 1);
             mSeekBar.setProgress(0);
         }
-
-        return mView;
-    }
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Inflate the main dialog
-        mInflater = getActivity().getLayoutInflater();
-        mView = mInflater.inflate(R.layout.tips_dialog_container, null);
-        builder.setView(mView)
-                // Add action buttons
-                .setCancelable(false);
-
-        AlertDialog ad = builder.create();
-        ad.setCanceledOnTouchOutside(false);
         return ad;
     }
 }

@@ -58,8 +58,9 @@ public class RateADay extends AppCompatActivity {
 
         //Add the back button to the activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //Display tips
         String preferenceName = "tip_rate_showed";
-        //PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean(preferenceName, false).apply(); // TODO to remove outside tests
         if ((!(PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean(preferenceName, false)))&&
                 (PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("show_tips", true))){
             ArrayList<Integer> iList = new ArrayList<Integer>();

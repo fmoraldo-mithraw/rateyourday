@@ -20,26 +20,26 @@ public class FirstUseDialog extends DialogFragment {
     Switch syncSwitch;
     Switch notificationSwitch;
     View mView;
+    ViewGroup mContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //View view = inflater.inflate(R.layout.dialog_first_use, container, false);
-        syncSwitch = mView.findViewById(R.id.sync_switch);
-        syncSwitch.setChecked(!PreferenceManager.getDefaultSharedPreferences(getContext()).getString("sync_frequency","1440").equals("0"));
-        notificationSwitch = mView.findViewById(R.id.notifications_switch);
-        notificationSwitch.setChecked(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("use_notifications", true));
+        mContainer = container;
+        if (getShowsDialog()) {
+            // one could return null here, or be nice and call super()
+            return super.onCreateView(inflater, container, savedInstanceState);
+        }
+        return getLayout(inflater, container);
+    }
+    private View getLayout(LayoutInflater inflater, ViewGroup container) {
+        mView = inflater.inflate(R.layout.dialog_first_use, container, false);
         return mView;
     }
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        super.onCreateDialog(savedInstanceState);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Get the layout inflater
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
-        mView = inflater.inflate(R.layout.dialog_first_use, null);
-        builder.setView(mView)
+        builder.setView(getLayout(LayoutInflater.from(getContext()), mContainer))
                 // Add action buttons
                 .setPositiveButton(R.string.stat_removed_ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -60,6 +60,10 @@ public class FirstUseDialog extends DialogFragment {
 
                     }
                 }).setCancelable(false);
+        syncSwitch = mView.findViewById(R.id.sync_switch);
+        syncSwitch.setChecked(!PreferenceManager.getDefaultSharedPreferences(getContext()).getString("sync_frequency","1440").equals("0"));
+        notificationSwitch = mView.findViewById(R.id.notifications_switch);
+        notificationSwitch.setChecked(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("use_notifications", true));
         AlertDialog ad = builder.create();
         ad.setCanceledOnTouchOutside(false);
         return ad;

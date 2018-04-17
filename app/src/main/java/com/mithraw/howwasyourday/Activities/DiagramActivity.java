@@ -381,6 +381,8 @@ public class DiagramActivity extends AppCompatActivity {
                 }
             }
         };
+
+        //Display tips
         String preferenceName = "tip_diagrams_showed";
         if ((PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean(preferenceName, false) == false)&&
                 (PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("show_tips", true) == true)){

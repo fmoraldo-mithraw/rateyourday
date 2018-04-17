@@ -16,6 +16,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -108,6 +110,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
+
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +125,8 @@ public class MainActivity extends AppCompatActivity
             DialogFragment newFragment = new FirstUseDialog();
             newFragment.show(getSupportFragmentManager(), "first_use_fragment");
         }
+
+        //Display tips
         String preferenceName = "tip_main_showed";
         if ((!(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(preferenceName, false)))&&
                 (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("show_tips", true))){
@@ -136,6 +141,7 @@ public class MainActivity extends AppCompatActivity
             newFragment.setArguments(bundl);
             newFragment.show(getSupportFragmentManager(), preferenceName);
         }
+
         //Connect to GoogleSignIn
         boolean firstTimeScreenShowed = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("first_use_screen_showed", false);
         String timeSync = PreferenceManager.getDefaultSharedPreferences(getContext()).getString("sync_frequency","180");
