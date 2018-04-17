@@ -202,4 +202,18 @@
     <string name="tips_diagrams_months">Les diagrammes mensuels montrent la note moyenne de chaque mois de l\'année sur la periode de temps indiquée(cette année ou depuis toujours).\nVous pouvez tappoter un encadré pour voir les valeurs correspondantes aux barres.\nVous pouvez aussi partager un diagramme avec vos amis en cliquant sur le bouton de partage.</string>
     <string name="tips_funstats_title">Comment utiliser l\écran des données intéressantes</string>
     <string name="tips_funstats_cards">Chaque encadré vous donne des statistiques et idées intéressantes que l\'application à compilée a l\'aide des informations que vous avez fournit au fil du temps.\nVous pouvez tappoter un encadré pour faire apparaitre le bouton de partage, ou cliquer sur la croix en haut à gauche pour faire disparaitre l\'encadré jusqu'au mois prochain.</string>
+    <string name="monday_full">lundi</string>
+    <string name="tuesday_full">mardi</string>
+    <string name="wednesday_full">mercredi</string>
+    <string name="thursday_full">jeudi</string>
+    <string name="friday_full">vendredi</string>
+    <string name="saturday_full">samedi</string>
+    <string name="sunday_full">dimanche</string>
+    <string name="bad_avg1">Carpe Diem, vivez chaque jour comme si c\'était votre dernier !(Dans les limites de la loi bien sur !)</string>
+    <string name="extreme_quote1">Vous êtes du genre plutot extrême, essayez peut être de relativiser, tout n\'est pas toujours noir ou blanc.</string>
+    <string name="big_gap1">Il y à un écart énorme entre vos {worst_day} et vos {best_day}, peut être devriez vous essayer de faire plus d\'activités que vous appréciez le {worst_day}, peut être sortir avec vos amis, votre famille, ou prendre du temps pour vous pour faire ce que vous aimez.</string>
+    <string name="number_of_days_rated">Nombre de jours notés :</string>
+    <string name="average_day">Note moyenne :</string>
+    <string name="number_of_days_at_each_rate">Nombre de jours pour chaque note :</string>
+    <string name="average_rate_of_each_days">Note moyenne de chaque jour de la semaine :</string>
 </resources>

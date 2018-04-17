@@ -20,8 +20,19 @@ public interface DayDao {
     @Query("SELECT * FROM day")
     List<Day> getAlIncludingRemoved();
 
+
+
     @Query("SELECT * FROM day WHERE is_removed IS 0 ORDER BY year DESC, month DESC, day_of_the_month DESC")
     List<Day> getAll();
+
+    @Query("SELECT COUNT(*) FROM day WHERE rating IS :rate AND is_removed IS 0")
+    int getNumberOfDayByRate(int rate);
+
+    @Query("SELECT COUNT(*) FROM day WHERE is_removed IS 0")
+    int getNumberOfDays();
+
+    @Query("SELECT AVG(rating) FROM day WHERE is_removed IS 0")
+    float getAverageDay();
 
     @Query("SELECT * FROM day WHERE day_of_the_month IS :dayOfTheMonth AND month IS :month AND year IS :year AND is_removed IS 0 ORDER BY year DESC, month DESC, day_of_the_month DESC")
     List<Day> getAllByDate(int dayOfTheMonth, int month, int year);

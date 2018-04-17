@@ -7,12 +7,22 @@ Used in Funny Stats
  */
 public class Statistics {
 
+
+    StatisticsAdds statisticsAdds = null;
     StatisticsDatas favoriteDay = null;
     StatisticsDatas worstDay = null;
     StatisticsDatas favoriteMonth = null;
     StatisticsDatas worstMonth = null;
     StatisticsDatas favoriteYear = null;
     StatisticsDatas worstYear = null;
+    public StatisticsAdds getStatisticsAdds() {
+        return statisticsAdds;
+    }
+
+    public Statistics setStatisticsAdds(StatisticsAdds statisticsAdds) {
+        this.statisticsAdds = statisticsAdds;
+        return this;
+    }
 
     public StatisticsDatas getFavoriteDay() {
         return favoriteDay;

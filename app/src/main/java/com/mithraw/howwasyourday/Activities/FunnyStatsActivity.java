@@ -18,7 +18,9 @@ import com.mithraw.howwasyourday.Helpers.FunnyStatsHelper;
 import com.mithraw.howwasyourday.Helpers.Statistics.DayHelper;
 import com.mithraw.howwasyourday.Helpers.Statistics.MonthHelper;
 import com.mithraw.howwasyourday.Helpers.Statistics.Statistics;
+import com.mithraw.howwasyourday.Helpers.Statistics.StatisticsAdds;
 import com.mithraw.howwasyourday.Helpers.Statistics.StatisticsDatas;
+import com.mithraw.howwasyourday.Helpers.Statistics.StatisticsHelper;
 import com.mithraw.howwasyourday.Helpers.Statistics.YearHelper;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Tools.MathTool;
@@ -187,6 +189,45 @@ public class FunnyStatsActivity extends AppCompatActivity {
                         favYear.setText(YearHelper.getInstance().format(datas.getFavoriteYear(), 2));
                         TextView worstYear = findViewById(R.id.text_view_all_time_worst_year);
                         worstYear.setText(YearHelper.getInstance().format(datas.getWorstYear(), 2));
+                        if(datas.getStatisticsAdds() != null){
+                            StatisticsAdds adds = datas.getStatisticsAdds();
+                            ((TextView)findViewById(R.id.text_view_all_time_days_rated)).setText(String.valueOf(adds.getNumberOfRatedDays()));
+                            ((TextView)findViewById(R.id.text_view_all_time_average_rate)).setText(StatisticsHelper.floatFormat(adds.getAverageDay(),2));
+                            TextView badAvgQuote = findViewById(R.id.bad_avg_quote);
+                            if(adds.getBadAvgQuote().equals("")){
+                                badAvgQuote.setVisibility(View.GONE);
+                            }else {
+                                badAvgQuote.setVisibility(View.VISIBLE);
+                                badAvgQuote.setText(adds.getBadAvgQuote());
+                            }
+                            ((TextView)findViewById(R.id.number_of_days_rated_1)).setText(String.valueOf(adds.getNumDayRated1()));
+                            ((TextView)findViewById(R.id.number_of_days_rated_2)).setText(String.valueOf(adds.getNumDayRated2()));
+                            ((TextView)findViewById(R.id.number_of_days_rated_3)).setText(String.valueOf(adds.getNumDayRated3()));
+                            ((TextView)findViewById(R.id.number_of_days_rated_4)).setText(String.valueOf(adds.getNumDayRated4()));
+                            ((TextView)findViewById(R.id.number_of_days_rated_5)).setText(String.valueOf(adds.getNumDayRated5()));
+                            TextView extremQuote = findViewById(R.id.extrem_quote);
+                            if(adds.getExtremQuote().equals("")){
+                                extremQuote.setVisibility(View.GONE);
+                            }else {
+                                extremQuote.setVisibility(View.VISIBLE);
+                                extremQuote.setText(adds.getExtremQuote());
+                            }
+                            ((TextView)findViewById(R.id.monday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgMonday(),2));
+                            ((TextView)findViewById(R.id.tuesday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgTuesday(),2));
+                            ((TextView)findViewById(R.id.wednesday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgWednesday(),2));
+                            ((TextView)findViewById(R.id.thursday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgThursday(),2));
+                            ((TextView)findViewById(R.id.friday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgFriday(),2));
+                            ((TextView)findViewById(R.id.saturday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgSaturday(),2));
+                            ((TextView)findViewById(R.id.sunday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgSunday(),2));
+                            TextView bigGapQuote = findViewById(R.id.big_gap_quote);
+                            if(adds.getBigGapQuote().equals("")){
+                                bigGapQuote.setVisibility(View.GONE);
+                            }else {
+                                bigGapQuote.setVisibility(View.VISIBLE);
+                                bigGapQuote.setText(adds.getBigGapQuote());
+                            }
+
+                        }
                     }
                 }
             }
@@ -539,21 +580,38 @@ public class FunnyStatsActivity extends AppCompatActivity {
                     }
                 }
                 //If there is more than one day get the best and the worst
-                if ((dayCount > 1) && (monthCount > 1) && (yearCount > 1)) {
-                    //Set the object to send
-                    Statistics stats = new Statistics();
-                    stats.setFavoriteDay(favoriteStatDay);
-                    stats.setWorstDay(worstStatDay);
-                    stats.setFavoriteMonth(favoriteStatMonth);
-                    stats.setWorstMonth(worstStatMonth);
-                    stats.setFavoriteYear(favoriteStatYear);
-                    stats.setWorstYear(worstStatYear);
-                    //Send the message
-                    Message msg_rating = Message.obtain();
-                    msg_rating.what = MSG_ID.ALL_TIME.ordinal();
-                    msg_rating.obj = stats;
-                    handler.sendMessage(msg_rating);
-                }
+
+                //Set the object to send
+                Statistics stats = new Statistics();
+                StatisticsAdds adds = new StatisticsAdds();
+                adds.setNumDayRated1(db.dayDao().getNumberOfDayByRate(1))
+                        .setNumDayRated2(db.dayDao().getNumberOfDayByRate(2))
+                        .setNumDayRated3(db.dayDao().getNumberOfDayByRate(3))
+                        .setNumDayRated4(db.dayDao().getNumberOfDayByRate(4))
+                        .setNumDayRated5(db.dayDao().getNumberOfDayByRate(5))
+                        .setAverageDay(db.dayDao().getAverageDay())
+                        .setNumberOfRatedDays(db.dayDao().getNumberOfDays())
+                        .setAvgMonday(db.dayDao().getAverageRatingPerDayOfTheWeekAllTime(Calendar.MONDAY))
+                        .setAvgTuesday(db.dayDao().getAverageRatingPerDayOfTheWeekAllTime(Calendar.TUESDAY))
+                        .setAvgWednesday(db.dayDao().getAverageRatingPerDayOfTheWeekAllTime(Calendar.WEDNESDAY))
+                        .setAvgThursday(db.dayDao().getAverageRatingPerDayOfTheWeekAllTime(Calendar.THURSDAY))
+                        .setAvgFriday(db.dayDao().getAverageRatingPerDayOfTheWeekAllTime(Calendar.FRIDAY))
+                        .setAvgSaturday(db.dayDao().getAverageRatingPerDayOfTheWeekAllTime(Calendar.SATURDAY))
+                        .setAvgSunday(db.dayDao().getAverageRatingPerDayOfTheWeekAllTime(Calendar.SUNDAY))
+                        .init();
+                stats.setStatisticsAdds(adds);
+                stats.setFavoriteDay(favoriteStatDay);
+                stats.setWorstDay(worstStatDay);
+                stats.setFavoriteMonth(favoriteStatMonth);
+                stats.setWorstMonth(worstStatMonth);
+                stats.setFavoriteYear(favoriteStatYear);
+                stats.setWorstYear(worstStatYear);
+                //Send the message
+                Message msg_rating = Message.obtain();
+                msg_rating.what = MSG_ID.ALL_TIME.ordinal();
+                msg_rating.obj = stats;
+                handler.sendMessage(msg_rating);
+
             }
         }.
 

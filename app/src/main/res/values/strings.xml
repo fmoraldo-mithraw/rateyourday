@@ -208,4 +208,18 @@
     <string name="tips_diagrams_months">In the month diagrams, you can see the average rating of each month on the time period displayed (this year, or all time).\nYou can tap on a diagram to show the actual value of each bar.\nYou can share the diagram with you friends by tapping on the share button.</string>
     <string name="tips_funstats_title">How to use the Interesting data screen</string>
     <string name="tips_funstats_cards">Each card give you interesting statistics and ideas about what the application found out using your data.\nYou can tap on a card to display the share button, or close it to make it disappear for a month.</string>
+    <string name="monday_full">monday</string>
+    <string name="tuesday_full">tuesday</string>
+    <string name="wednesday_full">wednesday</string>
+    <string name="thursday_full">thursday</string>
+    <string name="friday_full">friday</string>
+    <string name="saturday_full">saturday</string>
+    <string name="sunday_full">sunday</string>
+    <string name="bad_avg1">Carpe Diem, try to live every day like if it was the last ! (in the limit of the law of course !)</string>
+    <string name="extreme_quote1">You are a kind of someone of extreme, maybe you should try to relativize, not everything is black or white.</string>
+    <string name="big_gap1">There is a big gap between your {worst_day}s and your {best_day}s, maybe you should try to do more activities you like on {worst_day}, maybe go out with your friends, your family, or take some time for yourself to enjoy.</string>
+    <string name="number_of_days_rated">Number of days rated :</string>
+    <string name="average_day">Average rate of all days :</string>
+    <string name="number_of_days_at_each_rate">Number of days at each rate :</string>
+    <string name="average_rate_of_each_days">Average rate of each day of the week :</string>
 </resources>
