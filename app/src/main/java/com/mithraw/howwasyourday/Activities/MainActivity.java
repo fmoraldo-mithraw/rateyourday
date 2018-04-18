@@ -26,6 +26,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,11 +44,13 @@ import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.BuildConfig;
 import com.mithraw.howwasyourday.Dialogs.FirstUseDialog;
 import com.mithraw.howwasyourday.Dialogs.TipsDialog;
+import com.mithraw.howwasyourday.Helpers.BitmapHelper;
 import com.mithraw.howwasyourday.Helpers.GoogleSignInHelper;
 import com.mithraw.howwasyourday.Helpers.NotificationHelper;
 import com.mithraw.howwasyourday.Helpers.SharingHelper;
 import com.mithraw.howwasyourday.Helpers.SyncLauncher;
 import com.mithraw.howwasyourday.R;
+import com.mithraw.howwasyourday.Tools.MyInt;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
 
@@ -76,7 +80,7 @@ public class MainActivity extends AppCompatActivity
     private boolean dateChangedByUser = false;
     private Day mDay;
     private static CardView mCardView;
-
+    MyInt[] arrayInt = {new MyInt(0)};
 
     public static Context getContext() {
         return mContext;
@@ -86,7 +90,7 @@ public class MainActivity extends AppCompatActivity
         return mActivity;
     }
 
-    private void setLogText(String value) {
+    private void setLogText(SpannableStringBuilder value) {
         TextView text = findViewById(R.id.logText);
         ScrollView scrollViewMain = findViewById(R.id.scrollViewMain);
         if ((scrollViewMain != null) && (text != null)) {
@@ -192,7 +196,7 @@ public class MainActivity extends AppCompatActivity
                         rab.setRating((Integer) (msg.obj));
                 } else if (msg.what == MSG_ID.MSG_LOG.ordinal()) {
                     if (msg.obj != null)
-                        setLogText((String) (msg.obj));
+                        setLogText(BitmapHelper.parseStringWithBitmaps(m_calendar, (String) (msg.obj), arrayInt));
                 } else if (msg.what == MSG_ID.MSG_TITLE.ordinal()) {
                     if (msg.obj != null)
                         setTitleText((String) (msg.obj));
@@ -204,7 +208,7 @@ public class MainActivity extends AppCompatActivity
                             (nothingLayout != null) &&
                             (rateLayout != null)) {
                         rab.setRating(0);
-                        setLogText("");
+                        setLogText(new SpannableStringBuilder(""));
                         setTitleText("");
                         removeButton.setEnabled(false);
                         nothingLayout.setVisibility(View.VISIBLE);
@@ -309,6 +313,7 @@ public class MainActivity extends AppCompatActivity
     private void expandDay(View v) {
 
         Intent intent = new Intent(this, ExpandedDayActivity.class);
+        intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_DATETIME, m_calendar.getTimeInMillis());
         intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_DATE, (String)((TextView)this.findViewById(R.id.dateTextView)).getText().toString());
         intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_TITLE, (String)((TextView)this.findViewById(R.id.titleText)).getText().toString());
         intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_LOG, (String)((TextView)this.findViewById(R.id.logText)).getText().toString());

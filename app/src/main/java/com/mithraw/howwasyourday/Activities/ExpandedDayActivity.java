@@ -11,8 +11,12 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.ImageButton;
 
+import com.mithraw.howwasyourday.Helpers.BitmapHelper;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Helpers.SharingHelper;
+import com.mithraw.howwasyourday.Tools.MyInt;
+
+import java.util.Calendar;
 
 /*
 Show an expanded view of the Day
@@ -22,21 +26,27 @@ public class ExpandedDayActivity extends AppCompatActivity {
     public final static String EXTRA_PARAM_RATE = "ExpandedDayActivity_Rate";
     public final static String EXTRA_PARAM_TITLE = "ExpandedDayActivity_Title";
     public final static String EXTRA_PARAM_LOG = "ExpandedDayActivity_Log";
+    public final static String EXTRA_PARAM_DATETIME = "ExpandedDayActivity_DATETIME";
+    MyInt[] arrayInt = {new MyInt(0)};
     private SharingHelper mSharingHelper;
     // View name for the transition
     public final static String VIEW_NAME = "cardview";
-
+    Calendar cal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expanded_day);
         //Add the back button to the activity
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         CardView cv = findViewById(R.id.cardViewExpand);
         // Retreive the informations of the date from the main activity and fill the calendar with them
         Intent intent = getIntent();
+        cal = Calendar.getInstance();
+        cal.setTimeInMillis(intent.getLongExtra(EXTRA_PARAM_DATETIME,System.currentTimeMillis()));
         ((TextView)findViewById(R.id.dateTextView)).setText(intent.getStringExtra(EXTRA_PARAM_DATE));
         TextView titleTextView = findViewById(R.id.titleText);
+
         String title = intent.getStringExtra(EXTRA_PARAM_TITLE);
         if (title.equals(""))
             titleTextView.setVisibility(View.GONE);
@@ -47,7 +57,7 @@ public class ExpandedDayActivity extends AppCompatActivity {
         if (log.equals(""))
             logTextView.setVisibility(View.GONE);
         else
-            logTextView.setText(log);
+            logTextView.setText(BitmapHelper.parseStringWithBitmaps(cal, log, arrayInt));
         ((RatingBar)findViewById(R.id.ratingBar)).setRating(intent.getFloatExtra(EXTRA_PARAM_RATE,0));
         ViewCompat.setTransitionName(cv, VIEW_NAME);
         //Init the share helper

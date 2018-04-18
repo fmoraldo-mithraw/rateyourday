@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.mithraw.howwasyourday.Activities.ExpandedDayActivity;
 import com.mithraw.howwasyourday.Activities.RateADay;
 import com.mithraw.howwasyourday.App;
+import com.mithraw.howwasyourday.Helpers.BitmapHelper;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
@@ -170,6 +171,7 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
                 public void onClick(View v) {
                     setBtnLayoutExtented(false);
                     Intent intent = new Intent(mParent, ExpandedDayActivity.class);
+                    intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_DATETIME, day.getDate_time());
                     intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_DATE, (String)((TextView)mView.findViewById(R.id.log_card_date)).getText().toString());
                     intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_TITLE, (String)((TextView)mView.findViewById(R.id.log_card_title)).getText().toString());
                     intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_LOG, (String)((TextView)mView.findViewById(R.id.log_card_text)).getText().toString());
@@ -239,6 +241,7 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
         // with that element
         //TODO Initialize my CARD
         Calendar cal = Calendar.getInstance();
+        MyInt[] arrayInt = {new MyInt(0)};
         cal.set(Calendar.DAY_OF_MONTH, mDataSet.get(position).getDay());
         cal.set(Calendar.MONTH, mDataSet.get(position).getMonth());
         cal.set(Calendar.YEAR, mDataSet.get(position).getYear());
@@ -251,7 +254,7 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
             viewHolder.getLogCardDividerText().setVisibility(View.GONE);
             viewHolder.getLogCardText().setVisibility(View.GONE);
         } else {
-            viewHolder.getLogCardText().setText(logText);
+            viewHolder.getLogCardText().setText(BitmapHelper.parseStringWithBitmaps(cal, logText, arrayInt));
             viewHolder.getLogCardDividerText().setVisibility(View.VISIBLE);
             viewHolder.getLogCardText().setVisibility(View.VISIBLE);
         }
