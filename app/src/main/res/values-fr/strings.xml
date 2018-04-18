@@ -176,7 +176,7 @@
     <string name="reconnect_google_sign_in">Se reconnecter</string>
     <string name="ok_google_sign_in">Vous êtes connecté à votre compte Google</string>
     <string name="expand_button_text">DEVELOPPER</string>
-    <string name="action_about_the_app">Àpropos de l\'application</string>
+    <string name="action_about_the_app">À propos de l\'application</string>
     <string name="about_the_app_main_text">Cette application est sous licence GPL3 et vous pouvez retrouver son code source ici :</string>
     <string name="about_the_app_main_text2">Vous pouvez retrouver sa politique d\'utilisation ici :</string>
     <string name="sync_switch_text">Activer la syncronisation Google Drive</string>
@@ -196,7 +196,7 @@
     <string name="tips_logs_title">Comment utiliser le journal des entrées</string>
     <string name="tips_logs_top_screen">En haut de l\'écran, vous pouvez selectionner les dates de débuts et de fin de la liste de jour que vous voulez afficher sur cet écran.\nEn cliquant sur l\'un des jours de la semaine, vous supprimerez/rajouterez tous les résultats correspondants au jour de la semaine cliqué</string>
     <string name="tips_logs_cards">En cliquant sur un encadré de jour, vous affichez trois boutons qui vous permettez d\'éditer, de supprimer, et de développer le jour en question à votre guise.</string>
-    <string name="tips_diagrams_title">Comment utiliser l\écran des diagrammes</string>
+    <string name="tips_diagrams_title">Comment utiliser l\'écran des diagrammes</string>
     <string name="tips_diagrams_custom">Sur le premier diagramme vous pouvez modifier la date de début et de fin : Il montrera les notes moyennes de chaque jours de la semaine sur la periode séléctionnée.</string>
     <string name="tips_diagrams_weeks">Les diagrammes hebdomadaires montrent la note moyenne de chaque jour de la semaine sur la periode de temps indiquée(cette année ou depuis toujours).\nVous pouvez tappoter un encadré pour voir les valeurs correspondantes aux barres.\nVous pouvez aussi partager un diagramme avec vos amis en cliquant sur le bouton de partage.</string>
     <string name="tips_diagrams_months">Les diagrammes mensuels montrent la note moyenne de chaque mois de l\'année sur la periode de temps indiquée(cette année ou depuis toujours).\nVous pouvez tappoter un encadré pour voir les valeurs correspondantes aux barres.\nVous pouvez aussi partager un diagramme avec vos amis en cliquant sur le bouton de partage.</string>
@@ -216,4 +216,6 @@
     <string name="average_day">Note moyenne :</string>
     <string name="number_of_days_at_each_rate">Nombre de jours pour chaque note :</string>
     <string name="average_rate_of_each_days">Note moyenne de chaque jour de la semaine :</string>
+    <string name="add_an_image">Ajouter une image</string>
+    <string name="add_an_image_from_camera">Prendre une photo</string>
 </resources>
