@@ -1,11 +1,14 @@
 package com.mithraw.howwasyourday.Activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,8 +19,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -26,7 +28,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,7 +48,6 @@ import com.mithraw.howwasyourday.Dialogs.TipsDialog;
 import com.mithraw.howwasyourday.Helpers.BitmapHelper;
 import com.mithraw.howwasyourday.Helpers.GoogleSignInHelper;
 import com.mithraw.howwasyourday.Helpers.NotificationHelper;
-import com.mithraw.howwasyourday.Helpers.SharingHelper;
 import com.mithraw.howwasyourday.Helpers.SyncLauncher;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Tools.MyInt;
@@ -123,7 +123,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         mContext = this;
         mCardView = this.findViewById(R.id.cardViewLittle);
-
         //Display the first use Screen
         if (!(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("first_use_screen_showed", false))) {
             DialogFragment newFragment = new FirstUseDialog();
@@ -263,6 +262,7 @@ public class MainActivity extends AppCompatActivity
                                 DaysDatabase db = DaysDatabase.getInstance(App.getApplication().getApplicationContext());
                                 if (mDay != null)
                                     db.dayDao().remove(mDay.setRemoved(true));
+                                BitmapHelper.removeImageDir(m_calendar);
                                 handler.sendEmptyMessage(MSG_ID.MSG_EMPTY.ordinal());
                             }
                         }.start();

@@ -1,8 +1,10 @@
 package com.mithraw.howwasyourday.Activities;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.media.Ringtone;
@@ -15,12 +17,16 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 
 import com.mithraw.howwasyourday.App;
+import com.mithraw.howwasyourday.Helpers.BitmapHelper;
 import com.mithraw.howwasyourday.Helpers.NotificationHelper;
 import com.mithraw.howwasyourday.Helpers.PreferenceHelper;
 import com.mithraw.howwasyourday.Helpers.ThreadSyncDatas;
@@ -44,6 +50,7 @@ import java.util.List;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
+    static AppCompatPreferenceActivity mActivity;
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -110,10 +117,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         .getString(preference.getKey(), ""));
     }
 
+    public static AppCompatPreferenceActivity getActivity() {
+        return mActivity;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
+        mActivity = this;
+
     }
 
     /**
@@ -166,6 +179,27 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
             setHasOptionsMenu(true);
+            findPreference("save_images_on_external_drive").setEnabled(BitmapHelper.isExternalStorageAvailable());
+            findPreference("save_images_on_external_drive").setOnPreferenceChangeListener(
+                    new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object value) {
+                            boolean val = (boolean) value;
+                            if (val) {
+                                if ((ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                        != PackageManager.PERMISSION_GRANTED) ||
+                                        (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                                                != PackageManager.PERMISSION_GRANTED)) {
+                                    String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+                                    ActivityCompat.requestPermissions(SettingsActivity.getActivity(), permissions, 0);
+                                }
+                            }
+                            if (val != ((SwitchPreference) preference).isChecked()) // for SwitchPreference weird implementation
+                                BitmapHelper.moveImages();
+                            return true;
+                        }
+                    }
+            );
         }
 
         @Override
@@ -228,6 +262,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_notification);
             setHasOptionsMenu(true);
+
             findPreference("notify_time").setSummary(formatLocaleTime(PreferenceManager.getDefaultSharedPreferences(findPreference("notify_time").getContext()).getString("notify_time", "21:00")));
             findPreference("notifications_new_message_ringtone").setSummary(getRingtoneSummary(PreferenceManager.getDefaultSharedPreferences(findPreference("notifications_new_message_ringtone").getContext()).getString("notifications_new_message_ringtone", "None")));
             findPreference("use_notifications").setOnPreferenceChangeListener(

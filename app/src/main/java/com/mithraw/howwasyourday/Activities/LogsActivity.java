@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.Dialogs.TipsDialog;
+import com.mithraw.howwasyourday.Helpers.BitmapHelper;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Tools.LogsAdapter;
 import com.mithraw.howwasyourday.Tools.SwipeableRecyclerViewTouchListener;
@@ -193,13 +194,17 @@ public class LogsActivity extends AppCompatActivity {
                                     new Thread() {
                                         @Override
                                         public void run() {
+                                            Calendar cal = Calendar.getInstance();
+                                            cal.setTimeInMillis(mLastDayRemoved.getDate_time());
+                                            BitmapHelper.removeImageDir(cal);
                                             db.dayDao().delete(mLastDayRemoved);
+
                                         }
                                     }.start();
                                 }
                                 mAdapter.notifyDataSetChanged();
                                 android.support.design.widget.CoordinatorLayout cl = findViewById(R.id.coordinator_log_view);
-                                Snackbar.make(cl, res.getString(R.string.entry_removed), 10000).setAction(R.string.undo, new UndoListener()).show();
+                                Snackbar.make(cl, res.getString(R.string.entry_removed), 10000);
                             }
 
                             @Override

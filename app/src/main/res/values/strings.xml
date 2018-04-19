@@ -20,7 +20,7 @@
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
-    <string name="pref_header_general">Auto Sharing</string>
+    <string name="pref_header_general">General preferences</string>
 
     <string name="pref_title_social_recommendations">Actiate the auto-sharing</string>
     <string name="pref_description_social_recommendations">Recommendations for people to contact
@@ -224,4 +224,7 @@
     <string name="average_rate_of_each_days">Average rate of each day of the week :</string>
     <string name="add_an_image">Add an image</string>
     <string name="add_an_image_from_camera">Take a picture</string>
+    <string name="external_storage_text">Save my images on my SD card</string>
+    <string name="move_storage">Warning, this operation will move all your files, are you sure ?</string>
+    <string name="move_storage_title">Storage change</string>
 </resources>

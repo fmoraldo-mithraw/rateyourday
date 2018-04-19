@@ -2,23 +2,8 @@
 
     <SwitchPreference
         android:defaultValue="false"
-        android:key="activate_autoshare"
-        android:title="@string/pref_title_autoshare_activated" />
-    <SwitchPreference
-        android:defaultValue="false"
-        android:dependency="activate_autoshare"
-        android:key="activate_facebook"
-        android:title="@string/pref_title_autoshare_facebook" />
-    <SwitchPreference
-        android:defaultValue="false"
-        android:dependency="activate_autoshare"
-        android:key="activate_twitter"
-        android:title="@string/pref_title_autoshare_twitter" />
-    <SwitchPreference
-        android:defaultValue="false"
-        android:dependency="activate_autoshare"
-        android:key="activate_googleplus"
-        android:title="@string/pref_title_autoshare_googleplus" />
+        android:key="save_images_on_external_drive"
+        android:title="@string/external_storage_text" />
 
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->

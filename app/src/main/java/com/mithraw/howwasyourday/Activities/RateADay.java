@@ -336,8 +336,7 @@ public class RateADay extends AppCompatActivity {
 
     private void saveAndDisplay(Bitmap bitmap) {
         Bitmap resizeBitmap = Bitmap.createScaledBitmap(bitmap, 1500, bitmap.getHeight() * 1500 / bitmap.getWidth(), true);
-        File imagePath = new File(BitmapHelper.getImageDir(m_calendar));
-        imagePath.mkdirs();
+        File imagePath = new File(BitmapHelper.getDayImageDir(m_calendar));
         arrayInt[0].setValue(arrayInt[0].getValue() + 1);
         File newFile = new File(imagePath, "image" + arrayInt[0].getValue() + ".png");
         try {

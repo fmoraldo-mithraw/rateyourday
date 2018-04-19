@@ -150,6 +150,9 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
                                     DaysDatabase db = DaysDatabase.getInstance(App.getApplication().getApplicationContext());
                                     db.dayDao().remove(day.setRemoved(true));
                                     Message msg_rating = Message.obtain();
+                                    Calendar cal = Calendar.getInstance();
+                                    cal.setTimeInMillis(day.getDate_time());
+                                    BitmapHelper.removeImageDir(cal);
                                     msg_rating.what = MSG_ID.REMOVE_LOG.ordinal();
                                     msg_rating.obj = mPosition;
                                     handler.sendMessage(msg_rating);

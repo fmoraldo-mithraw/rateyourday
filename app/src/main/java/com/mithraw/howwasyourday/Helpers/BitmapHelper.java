@@ -5,8 +5,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 
@@ -16,7 +17,10 @@ import com.mithraw.howwasyourday.Tools.MyInt;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -62,7 +66,7 @@ public class BitmapHelper {
     public static SpannableStringBuilder parseStringWithBitmaps(Calendar cal, String text, MyInt[] maxId) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
         builder.append(text);
-        File imagePath = new File(getImageDir(cal));
+        File imagePath = new File(getDayImageDir(cal));
         int curIndex = 0;
         while (true) {
             curIndex = text.indexOf("[[[", curIndex);
@@ -115,12 +119,39 @@ public class BitmapHelper {
         return listImages;
     }
     public static List<File> listFileInImageDirectories(Calendar cal){
-        String path = getImageDir(cal);
+        String path = getDayImageDir(cal);
         File directory = new File(path);
         return Arrays.asList(directory.listFiles());
     }
-    public static String getImageDir(Calendar cal){
-        return App.getContext().getFilesDir().toString() + "/images-days/" + cal.get(Calendar.YEAR) + cal.get(Calendar.MONTH) + cal.get(Calendar.DAY_OF_MONTH);
+
+    public static String getImagesDir() {
+        if (PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("save_images_on_external_drive", false)) {
+            return getExternalImageDir();
+        } else {
+            return getInternalImageDir();
+        }
+
+    }
+
+    private static String getExternalImageDir() {
+        String dir = Environment.getExternalStorageDirectory().toString() + "/rateyourday/images-days/";
+        File file = new File(dir);
+        boolean bool = file.mkdirs();
+        return dir;
+    }
+
+    private static String getInternalImageDir() {
+        String dir = App.getContext().getFilesDir().toString() + "/images-days/";
+        File file = new File(dir);
+        file.mkdirs();
+        return dir;
+    }
+
+    public static String getDayImageDir(Calendar cal) {
+        String dir = getImagesDir() + cal.get(Calendar.YEAR) + cal.get(Calendar.MONTH) + cal.get(Calendar.DAY_OF_MONTH);
+        File file = new File(dir);
+        file.mkdirs();
+        return dir;
     }
 
     public static void cleanDatas(Calendar cal, String text ) {
@@ -137,6 +168,99 @@ public class BitmapHelper {
             if (!found) {
                 i.delete();
             }
+        }
+    }
+
+    public static boolean isExternalStorageAvailable() {
+        boolean mExternalStorageWriteable;
+        String state = Environment.getExternalStorageState();
+
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            mExternalStorageWriteable = true;
+        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            // We can only read the media
+
+            mExternalStorageWriteable = false;
+        } else {
+            // Something else is wrong. It may be one of many other states, but all we need
+            //  to know is we can neither read nor write
+            mExternalStorageWriteable = false;
+        }
+        return mExternalStorageWriteable;
+    }
+
+    public static void moveImages() {
+        File sourceDir;
+        File destDir;
+        if (PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("save_images_on_external_drive", false)) {
+            destDir = new File(getInternalImageDir());
+            sourceDir = new File(getExternalImageDir());
+        } else {
+            sourceDir = new File(getInternalImageDir());
+            destDir = new File(getExternalImageDir());
+        }
+        try {
+            copyDirectory(sourceDir, destDir);
+            removeDirectory(sourceDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // If targetLocation does not exist, it will be created.
+    public static void copyDirectory(File sourceLocation, File targetLocation)
+            throws IOException {
+
+        if (sourceLocation.isDirectory()) {
+            if (!targetLocation.exists() && !targetLocation.mkdirs()) {
+                throw new IOException("Cannot create dir " + targetLocation.getAbsolutePath());
+            }
+
+            String[] children = sourceLocation.list();
+            for (int i = 0; i < children.length; i++) {
+                copyDirectory(new File(sourceLocation, children[i]),
+                        new File(targetLocation, children[i]));
+            }
+        } else {
+
+            // make sure the directory we plan to store the recording in exists
+            File directory = targetLocation.getParentFile();
+            if (directory != null && !directory.exists() && !directory.mkdirs()) {
+                throw new IOException("Cannot create dir " + directory.getAbsolutePath());
+            }
+
+            InputStream in = new FileInputStream(sourceLocation);
+            OutputStream out = new FileOutputStream(targetLocation);
+
+            // Copy the bits from instream to outstream
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            in.close();
+            out.close();
+        }
+    }
+    public static void removeImageDir(Calendar cal){
+        File file = new File(getDayImageDir(cal));
+        try {
+            removeDirectory(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void removeDirectory(File sourceLocation)
+            throws IOException {
+        if (sourceLocation.isDirectory()) {
+            String[] children = sourceLocation.list();
+            for (int i = 0; i < children.length; i++) {
+                removeDirectory(new File(sourceLocation, children[i]));
+            }
+            sourceLocation.delete();
+        } else {
+            // make sure the directory we plan to store the recording in exists
+            sourceLocation.delete();
         }
     }
 }
