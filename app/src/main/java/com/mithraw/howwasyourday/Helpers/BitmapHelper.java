@@ -252,6 +252,7 @@ public class BitmapHelper {
             targetLocation.setLastModified(sourceLocation.lastModified());
         }
     }
+
     public static void removeImageDir(Calendar cal){
         File file = new File(getDayImageDir(cal));
         try {
@@ -260,6 +261,7 @@ public class BitmapHelper {
             e.printStackTrace();
         }
     }
+
     public static void removeDirectory(File sourceLocation)
             throws IOException {
         if (sourceLocation.isDirectory()) {

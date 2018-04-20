@@ -129,8 +129,10 @@ public class SharingHelper {
             cachePath.mkdirs(); // don't forget to make the directory
             FileOutputStream stream = new FileOutputStream(cachePath + "/image.png"); // overwrites this image every time
             Bitmap image = getBitmapWithShareString();
-            if(image != null)
+            if(image != null) {
                 image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                image.recycle();
+            }
             stream.close();
         } catch (IOException e) {
             e.printStackTrace();
