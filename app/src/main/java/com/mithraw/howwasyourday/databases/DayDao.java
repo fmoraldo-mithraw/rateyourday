@@ -75,10 +75,16 @@ public interface DayDao {
 
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
+    void insertDayArray(List<Day> days);
+
+    @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insertDay(Day... days);
 
-    @Insert (onConflict = OnConflictStrategy.FAIL)
+    @Insert (onConflict = OnConflictStrategy.IGNORE)
     void insertDayNoForce(Day... days);
+
+    @Insert (onConflict = OnConflictStrategy.IGNORE)
+    void insertDayNoForceArray(List<Day> days);
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     void remove(Day day);

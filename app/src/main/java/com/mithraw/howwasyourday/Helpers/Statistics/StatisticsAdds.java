@@ -1,6 +1,5 @@
 package com.mithraw.howwasyourday.Helpers.Statistics;
 
-import android.annotation.SuppressLint;
 import android.content.res.Resources;
 
 import com.mithraw.howwasyourday.App;
@@ -120,16 +119,18 @@ public class StatisticsAdds {
             checkInit();
             Map.Entry<Integer, Float> min = getWorstDay();
             Map.Entry<Integer, Float> max = getBestDay();
-            if ((max.getValue() > (min.getValue() + 1.5))&&(numberOfRatedDays>50)) {
-                if(listBigGapQuote.size()>1) {
-                    Random r = new Random();
-                    bigGapQuote = listBigGapQuote.get(r.nextInt(listBigGapQuote.size()) - 1);
-                }else {
-                    bigGapQuote = listBigGapQuote.get(0);
+            if ((min != null) && (max != null)) {
+                if ((max.getValue() > (min.getValue() + 1.5)) && (numberOfRatedDays > 50)) {
+                    if (listBigGapQuote.size() > 1) {
+                        Random r = new Random();
+                        bigGapQuote = listBigGapQuote.get(r.nextInt(listBigGapQuote.size()) - 1);
+                    } else {
+                        bigGapQuote = listBigGapQuote.get(0);
+                    }
                 }
+                Resources res = App.getContext().getResources();
+                bigGapQuote = bigGapQuote.replace("{worst_day}", res.getString(min.getKey())).replace("{best_day}", res.getString(max.getKey()));
             }
-            Resources res = App.getContext().getResources();
-            bigGapQuote = bigGapQuote.replace("{worst_day}",res.getString(min.getKey())).replace("{best_day}",res.getString(max.getKey()));
         }
         return bigGapQuote;
     }

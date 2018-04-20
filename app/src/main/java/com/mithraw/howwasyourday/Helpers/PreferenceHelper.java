@@ -16,7 +16,6 @@ public class PreferenceHelper {
         String timeSync = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getString("sync_frequency","180");
         int timeInt = 0;
         try {
-            Logger.getLogger("PreferenceHelper").log(new LogRecord(Level.INFO, "FMORALDO : timeSyncStr = " + timeSync + " To int : " + Integer.parseInt(timeSync)));
             timeInt = Integer.parseInt(timeSync);
         }catch(Exception e){
         }
@@ -25,7 +24,6 @@ public class PreferenceHelper {
     public static int toTime(String timeSync){
         int timeInt = 0;
         try {
-            Logger.getLogger("PreferenceHelper").log(new LogRecord(Level.INFO, "FMORALDO : toTime timeSyncStr = " + timeSync + " To int : " + Integer.parseInt(timeSync)));
             timeInt = Integer.parseInt(timeSync);
         }catch(Exception e){
         }

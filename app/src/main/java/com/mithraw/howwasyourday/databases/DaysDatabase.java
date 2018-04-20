@@ -46,26 +46,34 @@ public abstract class DaysDatabase extends RoomDatabase {
     }
     public static void cleanDatabase(DaysDatabase database){
         List<Day> ds = database.dayDao().getAllRemoved();
+        database.beginTransaction();
         for (Day d: ds) {
             database.dayDao().delete(d);
         }
+        database.endTransaction();
     }
     public static void copyBackupToDatabase(Context ctx){
-        List<Day> ds = getBackupNewInstance(ctx).dayDao().getAll();
+        DaysDatabase backup = getBackupNewInstance(ctx);
+        List<Day> ds = backup.dayDao().getAll();
         Logger.getLogger("DaysDatabase").log(new LogRecord(Level.INFO, "FMORALDO : copyBackupToDatabase : count "+ds.size()));
-        for (Day d: ds) {
-            try {
-                getInstance(ctx).dayDao().insertDayNoForce(d);
-            }catch(Exception e){
-
-            }
-        }
+        DaysDatabase db = getInstance(ctx);
+        db.beginTransaction();
+        db.dayDao().insertDayNoForceArray(ds);
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        Logger.getLogger("DaysDatabase").log(new LogRecord(Level.INFO, "FMORALDO : copyBackupToDatabase : End"));
     }
 
     public static void copyDatabaseToBackup(Context ctx){
-        for (Day d: getInstance(ctx).dayDao().getAlIncludingRemoved()) {
-            getBackupNewInstance(ctx).dayDao().insertDay(d);
-        }
+        DaysDatabase backup = getBackupNewInstance(ctx);
+        List<Day> ds = getInstance(ctx).dayDao().getAlIncludingRemoved();
+        Logger.getLogger("DaysDatabase").log(new LogRecord(Level.INFO, "FMORALDO : copyDatabaseToBackup : count " + ds.size()));
+        backup.beginTransaction();
+        Logger.getLogger("DaysDatabase").log(new LogRecord(Level.INFO, "FMORALDO : copyDatabaseToBackup : insert"));
+        backup.dayDao().insertDayArray(getInstance(ctx).dayDao().getAlIncludingRemoved());
+        backup.setTransactionSuccessful();
+        backup.endTransaction();
+        Logger.getLogger("DaysDatabase").log(new LogRecord(Level.INFO, "FMORALDO : copyDatabaseToBackup : end"));
     }
     public static DaysDatabase getBackupInstance(Context ctx) {
         if (backupInstance == null) {
@@ -76,6 +84,8 @@ public abstract class DaysDatabase extends RoomDatabase {
         return backupInstance;
     }
     public static DaysDatabase getBackupNewInstance(Context ctx) {
+        if (backupInstance != null)
+            backupInstance.close();
         backupInstance = Room.databaseBuilder(ctx,
                 DaysDatabase.class, databaseBackupName).addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3).addMigrations(MIGRATION_3_4).build();
         return backupInstance;

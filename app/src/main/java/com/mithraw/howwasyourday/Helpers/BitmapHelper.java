@@ -118,6 +118,15 @@ public class BitmapHelper {
         }
         return listImages;
     }
+
+    public static List<File> listImageDir(){
+        return Arrays.asList(new File(getImagesDir()).listFiles());
+    }
+
+    public static List<File> listFileInImageDirectory(File file){
+        return Arrays.asList(file.listFiles());
+    }
+
     public static List<File> listFileInImageDirectories(Calendar cal){
         String path = getDayImageDir(cal);
         File directory = new File(path);
@@ -240,6 +249,7 @@ public class BitmapHelper {
             }
             in.close();
             out.close();
+            targetLocation.setLastModified(sourceLocation.lastModified());
         }
     }
     public static void removeImageDir(Calendar cal){
