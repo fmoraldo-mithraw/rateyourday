@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.FileObserver;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -49,22 +50,26 @@ public class ThreadSyncDatas extends Thread {
     OnFailureListener failureListener;
 
     public static void reSchedule(int amountOfMinutes) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.add(Calendar.MINUTE, amountOfMinutes);
+        reSchedule(cal.getTimeInMillis(), amountOfMinutes == 0);
+    }
+
+    public static void reSchedule(long timeInMillis, boolean cancel) {
         Resources res = App.getApplication().getResources();
         String syncIntentAction = res.getString(R.string.syncIntentAction);
         Intent intent = new Intent(App.getApplication().getApplicationContext(), TimeAlarm.class);
         intent.setAction(syncIntentAction);
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis());
-        cal.add(Calendar.MINUTE, amountOfMinutes);
         AlarmManager alarmMgr;
         PendingIntent alarmIntent;
         alarmMgr = (AlarmManager) App.getApplication().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         alarmIntent = PendingIntent.getBroadcast(App.getApplication().getApplicationContext(), 0, intent, 0);
         alarmMgr.cancel(alarmIntent);
-        if (amountOfMinutes != 0) {
-            alarmMgr.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), alarmIntent);
+        if (!cancel) {
+            PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putLong("time_next_sync", timeInMillis).apply();
+            alarmMgr.set(AlarmManager.RTC_WAKEUP, timeInMillis, alarmIntent);
         }
-
     }
 
     public void OnFinalSuccess() {

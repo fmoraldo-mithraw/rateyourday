@@ -1,14 +1,11 @@
 package com.mithraw.howwasyourday.Activities;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,7 +16,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -49,6 +45,7 @@ import com.mithraw.howwasyourday.Helpers.BitmapHelper;
 import com.mithraw.howwasyourday.Helpers.GoogleSignInHelper;
 import com.mithraw.howwasyourday.Helpers.NotificationHelper;
 import com.mithraw.howwasyourday.Helpers.SyncLauncher;
+import com.mithraw.howwasyourday.Helpers.ThreadSyncDatas;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Tools.MyInt;
 import com.mithraw.howwasyourday.databases.Day;
@@ -149,7 +146,10 @@ public class MainActivity extends AppCompatActivity
         boolean firstTimeScreenShowed = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("first_use_screen_showed", false);
         String timeSync = PreferenceManager.getDefaultSharedPreferences(getContext()).getString("sync_frequency","180");
         if ((timeSync != "0") && (firstTimeScreenShowed == true)) { // If the first use screen is currently shown we don't do the GoogleSignIn, the first use screen will do it
-            GoogleSignInHelper.getInstance(this).doSignIn(new SyncLauncher());
+            if (System.currentTimeMillis() > PreferenceManager.getDefaultSharedPreferences(App.getContext()).getLong("time_next_sync", 0))
+                GoogleSignInHelper.getInstance(this).doSignIn(new SyncLauncher());
+            else
+                ThreadSyncDatas.reSchedule(PreferenceManager.getDefaultSharedPreferences(App.getContext()).getLong("time_next_sync", 0),false);
         }
 
         // Setup the notifications
