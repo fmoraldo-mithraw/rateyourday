@@ -48,6 +48,7 @@ import com.mithraw.howwasyourday.Helpers.SyncLauncher;
 import com.mithraw.howwasyourday.Helpers.ThreadSyncDatas;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Tools.MyInt;
+import com.mithraw.howwasyourday.Tools._SwipeActivityClass;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
 
@@ -62,7 +63,7 @@ Main Activity, show a calendar view and a card with the day selected (default to
 Manage the menu
  */
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends _SwipeActivityClass
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT, MSG_UPDATE}
@@ -310,6 +311,8 @@ public class MainActivity extends AppCompatActivity
         updateDateText();
     }
 
+
+
     private void expandDay(View v) {
 
         Intent intent = new Intent(this, ExpandedDayActivity.class);
@@ -555,5 +558,32 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }.start();
+    }
+    @Override
+    protected void onSwipeRight() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.openDrawer(GravityCompat.START);
+    }
+
+    @Override
+    protected void onSwipeLeft() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+    }
+
+    @Override
+    protected void onSwipeUp() {
+        m_calendar.setTimeInMillis(System.currentTimeMillis());
+        CalendarView calendarView = findViewById(R.id.calendarView);
+        calendarView.setDate(m_calendar.getTimeInMillis());
+        //Initialize the labels
+        updateLabel();
+        Toast.makeText(getBaseContext(), R.string.main_today, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onSwipeDown() {
+        updateLabel();
+        Toast.makeText(getBaseContext(), R.string.main_refresh, Toast.LENGTH_SHORT).show();
     }
 }

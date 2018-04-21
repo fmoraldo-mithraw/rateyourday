@@ -193,7 +193,7 @@
     <string name="button_next">next</string>
     <string name="checkbox_never_show_tips">Never display any tips again</string>
     <string name="title_tips">Tips</string>
-    <string name="tips_main_how_to_use">1 - Select a date.\n2 - Expand it in order to watch all your log and share it to your friends.\n3 - Remove the day selected.\n4 - Edit the day selected.</string>
+    <string name="tips_main_how_to_use">1 - Select a date.\n2 - Expand it in order to watch all your log and share it to your friends.\n3 - Remove the day selected.\n4 - Edit the day selected.\n\nYou can also swipe up to reset the date to today's date, swipe left and right to display or hide the menu, or swipe down to refresh the content of the day selected.</string>
     <string name="tips_main_menu1">You can click on the menu in order to expand it.</string>
     <string name="tips_main_menu2">Then select an item in order to open the corresponding screen.</string>
     <string name="tips_main_title">How to use the Main screen</string>
@@ -227,4 +227,6 @@
     <string name="external_storage_text">Save my images on my SD card</string>
     <string name="move_storage">Warning, this operation will move all your files, are you sure ?</string>
     <string name="move_storage_title">Storage change</string>
+    <string name="main_refresh">Data refreshed</string>
+    <string name="main_today">You are now back to today</string>
 </resources>
