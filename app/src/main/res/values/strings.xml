@@ -229,4 +229,15 @@
     <string name="move_storage_title">Storage change</string>
     <string name="main_refresh">Data refreshed</string>
     <string name="main_today">You are now back to today</string>
+    <string name="import_export_title">Import/Export your data</string>
+    <string name="export_title">Export</string>
+    <string name="export_data">You can retrieve all the data you entered in the application in different file formats :</string>
+    <string name="export_data2">You can retrieve your photos :</string>
+    <string name="CSV">.csv</string>
+    <string name="database">.db</string>
+    <string name="photo_archive">Photo archive</string>
+    <string name="import_title">Import</string>
+    <string name="import_data">You can import datas in two formats :\n - CSV : datetime in millisec;rate;title;text\n - Sqlite3 Database : same database that you did export on this screen.\nIn your texts, if you want any photo to be inside, you must insert [[[photoname.png]]]</string>
+    <string name="import_data2">You can send your photos they must be in a zip archive with direcotries named by the date they fit in YYYYMMDD:</string>
+
 </resources>

@@ -420,7 +420,10 @@ public class MainActivity extends _SwipeActivityClass
         Intent aboutTheAppIntent = new Intent(getApplicationContext(), AboutTheAppActivity.class);
         startActivity(aboutTheAppIntent);
     }
-
+    private void launchActivityImportExport() {
+        Intent importExportIntent = new Intent(getApplicationContext(), ImportExportActivity.class);
+        startActivity(importExportIntent);
+    }
     public class ReconnectListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -501,6 +504,9 @@ public class MainActivity extends _SwipeActivityClass
         }
         if(id == R.id.nav_about_the_app) {
             launchActivityAboutTheApp();
+        }
+        if(id == R.id.nav_import_export) {
+            launchActivityImportExport();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

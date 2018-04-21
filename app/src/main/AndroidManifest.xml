@@ -43,10 +43,8 @@
             android:name=".Activities.FunnyStatsActivity"
             android:label="@string/action_funny_stats" />
         <activity android:name=".Activities.ExpandedDayActivity" />
-
         <activity android:name=".Activities.AboutTheAuthorActivity" />
-
-        <activity android:name=".Activities.AboutTheAppActivity"/>
+        <activity android:name=".Activities.AboutTheAppActivity" />
 
         <receiver android:name=".Tools.TimeAlarm">
             <intent-filter>
@@ -69,6 +67,8 @@
                 android:name="com.commonsware.cwac.provider.STREAM_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
+
+        <activity android:name=".Activities.ImportExportActivity"></activity>
     </application>
 
 </manifest>

@@ -22,6 +22,10 @@
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/action_settings" />
+        <item
+            android:id="@+id/nav_import_export"
+            android:icon="@drawable/ic_import_export"
+            android:title="@string/import_export_title" />
     </group>
     <group android:id="@+id/groupAutor" android:checkableBehavior="single">
         <item
