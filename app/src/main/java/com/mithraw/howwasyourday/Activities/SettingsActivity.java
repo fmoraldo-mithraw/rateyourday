@@ -251,6 +251,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aaa");
             summaryStringValue = simpleDateFormat.format(new java.util.Date(cal.getTimeInMillis()));
+        } else {
+            Hour hour = new Hour(stringValue);
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, hour.getIntHour());
+            cal.set(Calendar.MINUTE, hour.getIntMinute());
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+            summaryStringValue = simpleDateFormat.format(new java.util.Date(cal.getTimeInMillis()));
         }
         return summaryStringValue;
     }
