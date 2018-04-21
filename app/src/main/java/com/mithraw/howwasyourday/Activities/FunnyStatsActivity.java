@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mithraw.howwasyourday.App;
@@ -50,10 +51,11 @@ public class FunnyStatsActivity extends AppCompatActivity {
             "stats_show_last_month",
             "stats_show_current_year",
             "stats_show_last_year",
+            "stats_trophy",
             "stats_show_all_time"
     };
 
-    private enum MSG_ID {LAST_WEEK, CURRENT_MONTH, LAST_MONTH, CURRENT_YEAR, LAST_YEAR, ALL_TIME}
+    private enum MSG_ID {LAST_WEEK, CURRENT_MONTH, LAST_MONTH, CURRENT_YEAR, LAST_YEAR, ALL_TIME, TROPHY}
 
 
     @SuppressLint("HandlerLeak")
@@ -77,6 +79,32 @@ public class FunnyStatsActivity extends AppCompatActivity {
             @Override
             public void handleMessage(Message msg) {
                 CardView cv_nothing_interesting = findViewById(R.id.card_view_nothing_interesting);
+                if (msg.what == MSG_ID.TROPHY.ordinal()) {
+                    boolean showCard = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("stats_trophy", true);
+                    int days = (int) msg.obj;
+                    if (showCard) {
+                        CardView cvTrophy = findViewById(R.id.card_view_trophy);
+                        TextView tvTrophy = findViewById(R.id.text_view_trophy);
+                        ImageView ivTrophy = findViewById(R.id.imageViewTrophy);
+                        if (days > 30) {
+                            cv_nothing_interesting.setVisibility(View.GONE);
+                            cvTrophy.setVisibility(View.VISIBLE);
+                            if (days > 180) {
+                                if (days > 360) {
+                                    tvTrophy.setText(R.string.gold_text);
+                                    ivTrophy.setImageResource(R.drawable.ic_badge_gold);
+                                } else {
+                                    tvTrophy.setText(R.string.silver_text);
+                                    ivTrophy.setImageResource(R.drawable.ic_badge_silver);
+                                }
+                            } else {
+                                tvTrophy.setText(R.string.bronze_text);
+                                ivTrophy.setImageResource(R.drawable.ic_badge_bronze);
+                            }
+                        }
+
+                    }
+                }
                 if (msg.what == MSG_ID.LAST_WEEK.ordinal()) {
                     boolean showCard = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("stats_show_last_week", true);
                     Statistics datas = (Statistics) msg.obj;
@@ -286,6 +314,8 @@ public class FunnyStatsActivity extends AppCompatActivity {
         cvLastYear.setVisibility(View.GONE);
         CardView cvAllTime = findViewById(R.id.card_view_all_time);
         cvAllTime.setVisibility(View.GONE);
+        CardView cvTrophy = findViewById(R.id.card_view_trophy);
+        cvTrophy.setVisibility(View.GONE);
         new Thread() {
             @Override
             public void run() {
@@ -582,6 +612,13 @@ public class FunnyStatsActivity extends AppCompatActivity {
                 //If there is more than one day get the best and the worst
 
                 //Set the object to send
+                int nbDays = db.dayDao().getNumberOfDays();
+                if(nbDays > 30){
+                    Message msg_rating = Message.obtain();
+                    msg_rating.what = MSG_ID.TROPHY.ordinal();
+                    msg_rating.obj = nbDays;
+                    handler.sendMessage(msg_rating);
+                }
                 Statistics stats = new Statistics();
                 StatisticsAdds adds = new StatisticsAdds();
                 adds.setNumDayRated1(db.dayDao().getNumberOfDayByRate(1))
@@ -590,7 +627,7 @@ public class FunnyStatsActivity extends AppCompatActivity {
                         .setNumDayRated4(db.dayDao().getNumberOfDayByRate(4))
                         .setNumDayRated5(db.dayDao().getNumberOfDayByRate(5))
                         .setAverageDay(db.dayDao().getAverageDay())
-                        .setNumberOfRatedDays(db.dayDao().getNumberOfDays())
+                        .setNumberOfRatedDays(nbDays)
                         .setAvgMonday(db.dayDao().getAverageRatingPerDayOfTheWeekAllTime(Calendar.MONDAY))
                         .setAvgTuesday(db.dayDao().getAverageRatingPerDayOfTheWeekAllTime(Calendar.TUESDAY))
                         .setAvgWednesday(db.dayDao().getAverageRatingPerDayOfTheWeekAllTime(Calendar.WEDNESDAY))

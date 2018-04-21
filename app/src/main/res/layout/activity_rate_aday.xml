@@ -117,7 +117,7 @@
             android:contentDescription="@string/add_an_image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView5"
+            app:layout_constraintStart_toEndOf="@+id/imageViewTrophy"
             app:layout_constraintTop_toBottomOf="@+id/scrollView2"
             app:srcCompat="@drawable/ic_imagebutton_addimage" />
 
