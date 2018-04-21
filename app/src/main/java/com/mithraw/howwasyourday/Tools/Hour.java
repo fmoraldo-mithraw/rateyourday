@@ -48,7 +48,7 @@ public class Hour {
                 (timeParts[0].length() < 3) &&
                 (timeParts[1].length() < 3) &&
                 (timeParts[0].length() > 0) &&
-                (timeParts[1].length() > 1) &&
+                (timeParts[1].length() > 0) &&
                 (Tools.isNumber(timeParts[0])) &&
                 (Tools.isNumber(timeParts[0]))) {
             return true;
