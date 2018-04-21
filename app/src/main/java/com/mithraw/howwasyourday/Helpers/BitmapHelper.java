@@ -94,7 +94,7 @@ public class BitmapHelper {
             Bitmap bitmap = BitmapHelper.getBitmapFromFile(newFile);
             if (bitmap != null) {
                 BitmapDrawable d = new BitmapDrawable(bitmap);
-                d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+                d.setBounds(0, 0, d.getIntrinsicWidth()*3, d.getIntrinsicHeight()*3);
                 ImageSpan span = new ImageSpan(d,text.substring(curIndex,curIndex + imageName.length() + 6) ,ImageSpan.ALIGN_BASELINE);
                 builder.setSpan(span, curIndex, curIndex + imageName.length() + 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
