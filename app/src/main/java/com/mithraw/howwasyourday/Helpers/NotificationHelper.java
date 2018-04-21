@@ -139,7 +139,7 @@ public class NotificationHelper {
                 PendingIntent pendingIntent = PendingIntent.getActivity(App.getApplication().getApplicationContext(), 0, intent, 0);
 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(App.getApplication().getApplicationContext(), CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_stars_24dp)
+                        .setSmallIcon(R.drawable.ic_notification_icon)
                         .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)

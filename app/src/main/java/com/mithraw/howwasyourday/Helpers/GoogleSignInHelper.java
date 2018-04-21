@@ -72,13 +72,16 @@ public class GoogleSignInHelper {
         return mInstance;
     }
 
-
     public GoogleSignInAccount getGoogleSignInAccount() {
         if(mGoogleSignInAccount == null) {
+            if (mGoogleSignInClient == null) {
+                mGoogleSignInClient = buildGoogleSignInClient();
+            }
             Task<GoogleSignInAccount> task = mGoogleSignInClient.silentSignIn();
-            if (task.isSuccessful()){
+            if (task.isSuccessful()) {
                 mGoogleSignInAccount = task.getResult();
             }
+
         }
         return mGoogleSignInAccount;
     }
@@ -102,6 +105,8 @@ public class GoogleSignInHelper {
                         .requestScopes(Drive.SCOPE_FILE)
                         .requestScopes(Drive.SCOPE_APPFOLDER)
                         .build();
+        if(mActivity == null)
+            mActivity = MainActivity.getmActivity();
         mGoogleSignInClient = GoogleSignIn.getClient(mActivity, signInOptions);
         return mGoogleSignInClient;
     }
