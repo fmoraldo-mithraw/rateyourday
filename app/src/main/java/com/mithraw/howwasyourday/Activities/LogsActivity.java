@@ -188,7 +188,7 @@ public class LogsActivity extends AppCompatActivity {
                                 }
                                 mAdapter.notifyDataSetChanged();
                                 android.support.design.widget.CoordinatorLayout cl = findViewById(R.id.coordinator_log_view);
-                                Snackbar.make(cl, res.getString(R.string.entry_removed), 10000);
+                                Snackbar.make(cl, res.getString(R.string.entry_removed), Snackbar.LENGTH_SHORT).show();
                             }
 
                             @Override
