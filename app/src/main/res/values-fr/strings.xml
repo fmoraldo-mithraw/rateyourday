@@ -201,7 +201,7 @@
     <string name="tips_diagrams_weeks">Les diagrammes hebdomadaires montrent la note moyenne de chaque jour de la semaine sur la periode de temps indiquée(cette année ou depuis toujours).\nVous pouvez tappoter un encadré pour voir les valeurs correspondantes aux barres.\nVous pouvez aussi partager un diagramme avec vos amis en cliquant sur le bouton de partage.</string>
     <string name="tips_diagrams_months">Les diagrammes mensuels montrent la note moyenne de chaque mois de l\'année sur la periode de temps indiquée(cette année ou depuis toujours).\nVous pouvez tappoter un encadré pour voir les valeurs correspondantes aux barres.\nVous pouvez aussi partager un diagramme avec vos amis en cliquant sur le bouton de partage.</string>
     <string name="tips_funstats_title">Comment utiliser l\écran des données intéressantes</string>
-    <string name="tips_funstats_cards">Chaque encadré vous donne des statistiques et idées intéressantes que l\'application à compilée a l\'aide des informations que vous avez fournit au fil du temps.\nVous pouvez tappoter un encadré pour faire apparaitre le bouton de partage, ou cliquer sur la croix en haut à gauche pour faire disparaitre l\'encadré jusqu'au mois prochain.</string>
+    <string name="tips_funstats_cards">Chaque encadré vous donne des statistiques et idées intéressantes que l\'application à compilée a l\'aide des informations que vous avez fournit au fil du temps.\nVous pouvez tappoter un encadré pour faire apparaitre le bouton de partage, ou cliquer sur la croix en haut à gauche pour faire disparaitre l\'encadré jusqu\'au mois prochain.</string>
     <string name="monday_full">lundi</string>
     <string name="tuesday_full">mardi</string>
     <string name="wednesday_full">mercredi</string>
