@@ -231,11 +231,13 @@
     <string name="database">.db</string>
     <string name="photo_archive">Archive photo</string>
     <string name="import_title">Importer</string>
-    <string name="import_data">Vous pouvez importer des données sous deux formats:\n - CSV : date en millisecondes;note;titre;texte\n - Base de donnée sqlite3 : Le même type de base de donnée que vous pouvez récupérer ici doit être utilisé.\nDans les textes, si vous voulez que des photos soient insérées, vous devez insérer[[[nomdelaphoto.png]]]</string>
+    <string name="import_data">Vous pouvez importer des données sous deux formats:\n - CSV : \"date en millisecondes\";\"note\";\"titre\";\"texte\"\n - Base de donnée sqlite3 : Le même type de base de donnée que vous pouvez récupérer ici doit être utilisé.\nDans les textes, si vous voulez que des photos soient insérées, vous devez insérer[[[nomdelaphoto.png]]]</string>
     <string name="import_data2">Vous pouvez rajouter vos photos dans une archive au format zip dans lequel vous mettrez vos photo dans des dossiers nommé suivant la date du jour auquel ils correspondent au format AAAAMMJJ :</string>
     <string name="congrats">Félicitations !</string>
     <string name="bronze_text">Vous avez remporté le trophée de bronze ! Continuez de noter vos journées, et vous remporterez bientôt le suivant !</string>
     <string name="silver_text">Vous avez remporté le trophée d\'argent ! Continuez de noter vos journées, et vous remporterez bientôt le suivant !</string>
     <string name="gold_text">Vous avez remporté le trophée d\'or ! Vous êtes le meilleur !</string>
-
+    <string name="csv_imported">Le fichier csv a été importé, %1$d parmis %2$d lignes ont été insérées avec succès</string>
+    <string name="db_imported">La base de donnée a été importée, %1$d parmis %2$d entrées ont insérées avec succès</string>
+    <string name="photo_archive_imported">L\'archive de photo a été importée</string>
 </resources>

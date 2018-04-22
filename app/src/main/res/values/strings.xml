@@ -237,11 +237,13 @@
     <string name="database">.db</string>
     <string name="photo_archive">Photo archive</string>
     <string name="import_title">Import</string>
-    <string name="import_data">You can import data in two formats :\n - CSV : datetime in millisec;rate;title;text\n - Sqlite3 Database : same database that you did export on this screen.\nIn your texts, if you want any photo to be inside, you must insert [[[photoname.png]]]</string>
+    <string name="import_data">You can import data in two formats :\n - CSV : \"datetime in millisec\";\"rate\";\"title\";\"text\"\n - Sqlite3 Database : same database that you did export on this screen.\nIn your texts, if you want any photo to be inside, you must insert [[[photoname.png]]]</string>
     <string name="import_data2">You can send your photos they must be in a zip archive with direcotries named by the date they fit in YYYYMMDD:</string>
     <string name="congrats">Congrats !</string>
     <string name="bronze_text">You earned the bronze trophy ! Continue to rate your days and you will soon win the next one !</string>
     <string name="silver_text">You earned the silver trophy ! Continue to rate your days and you will soon win the next one !</string>
     <string name="gold_text">You earned the gold trophy ! You are the best !</string>
-
+    <string name="csv_imported">The csv file have been imported, %1$d out of %2$d lines imported</string>
+    <string name="db_imported">The db file have been imported %1$d out of %2$d entries imported</string>
+    <string name="photo_archive_imported">The photo archive have been imported</string>
 </resources>

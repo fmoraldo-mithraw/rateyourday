@@ -6,13 +6,20 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
+import android.os.FileObserver;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 
+import com.mithraw.howwasyourday.Activities.ImportExportActivity;
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.Tools.MyInt;
+import com.mithraw.howwasyourday.Tools.ZipTool;
+import com.mithraw.howwasyourday.databases.DaysDatabase;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -102,6 +109,7 @@ public class BitmapHelper {
         }
         return builder;
     }
+
     public static List<String> getImagesInADay(String text) {
         List<String> listImages = new ArrayList<>();
         int curIndex = 0;
@@ -275,4 +283,80 @@ public class BitmapHelper {
             sourceLocation.delete();
         }
     }
+
+    public static void getPhotoArchive(final File newFile, final Handler handler) {
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    ZipTool.zipFileAtPath(getImagesDir(), newFile.getAbsolutePath());
+                } catch (FileNotFoundException e) {
+                    Message msg = Message.obtain();
+                    msg.what = ImportExportActivity.MSG_ID.FILENOTFOUNDEXCEPTION.ordinal();
+                    msg.obj = e;
+                    handler.sendMessage(msg);
+
+                } catch (IOException e) {
+                    Message msg = Message.obtain();
+                    msg.what = ImportExportActivity.MSG_ID.IOEXCEPTION.ordinal();
+                    msg.obj = e;
+                    handler.sendMessage(msg);
+                }
+            }
+        }.start();
+    }
+    public static void importPhotos(final InputStream inputStream, final Handler handler){
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    File imagePath = new File(App.getContext().getCacheDir(), "files");
+                    imagePath.mkdirs();
+                    final File newFile = new File(imagePath, "photos.zip");
+                    newFile.delete();
+                    newFile.createNewFile();
+                    FileObserver fo = new FileObserver(newFile.getAbsolutePath()) {
+                        @Override
+                        public void onEvent(int event, @Nullable String path) {
+                            if ((event == CLOSE_WRITE) || (event == CLOSE_NOWRITE)) {
+                                this.stopWatching();
+                                try {
+                                    ZipTool.unzip(newFile, new File(getImagesDir()));
+                                    handler.sendEmptyMessage(ImportExportActivity.MSG_ID.PHOTO_ARCHIVE_IMPORTED.ordinal());
+                                } catch (IOException e) {
+                                    Message msg = Message.obtain();
+                                    msg.what = ImportExportActivity.MSG_ID.IOEXCEPTION.ordinal();
+                                    msg.obj = e;
+                                    handler.sendMessage(msg);
+                                }
+                            }
+                        }
+                    };
+                    fo.startWatching();
+                    FileOutputStream fos = new FileOutputStream(newFile);
+                    byte[] buffer = new byte[1024];
+                    int bufferLength;
+                    while ((bufferLength = inputStream.read(buffer)) > 0) {
+                        fos.write(buffer, 0, bufferLength);
+                    }
+                    fos.flush();
+                    fos.close();
+                    inputStream.close();
+
+                } catch (FileNotFoundException e) {
+                    Message msg = Message.obtain();
+                    msg.what = ImportExportActivity.MSG_ID.FILENOTFOUNDEXCEPTION.ordinal();
+                    msg.obj = e;
+                    handler.sendMessage(msg);
+
+                } catch (IOException e) {
+                    Message msg = Message.obtain();
+                    msg.what = ImportExportActivity.MSG_ID.IOEXCEPTION.ordinal();
+                    msg.obj = e;
+                    handler.sendMessage(msg);
+                }
+            }
+        }.start();
+    }
 }
+

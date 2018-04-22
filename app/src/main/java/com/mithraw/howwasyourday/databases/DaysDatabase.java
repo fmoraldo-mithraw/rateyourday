@@ -25,13 +25,23 @@ public abstract class DaysDatabase extends RoomDatabase {
 
     private static DaysDatabase ourInstance = null;
     private static DaysDatabase backupInstance = null;
+    private static DaysDatabase importInstance = null;
     private static final String databaseName = "database-name";
+
+
+
     private static final String databaseBackupName = "database-backup";
+    private static final String databaseImportName = "database-import";
     private static Context mCtx;
 
     public static String getDatabaseBackupName() {
         return databaseBackupName;
     }
+
+    public static String getDatabaseImportName() {
+        return databaseImportName;
+    }
+
     public static String getDatabaseName() {
         return databaseName;
     }
@@ -63,6 +73,18 @@ public abstract class DaysDatabase extends RoomDatabase {
         db.endTransaction();
         Logger.getLogger("DaysDatabase").log(new LogRecord(Level.INFO, "FMORALDO : copyBackupToDatabase : End"));
     }
+    public static int copyImportToDatabase(Context ctx){
+        DaysDatabase backup = getImportInstance(ctx);
+        List<Day> ds = backup.dayDao().getAll();
+        Logger.getLogger("DaysDatabase").log(new LogRecord(Level.INFO, "FMORALDO : copyBackupToDatabase : count "+ds.size()));
+        DaysDatabase db = getInstance(ctx);
+        db.beginTransaction();
+        db.dayDao().insertDayNoForceArray(ds);
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        Logger.getLogger("DaysDatabase").log(new LogRecord(Level.INFO, "FMORALDO : copyBackupToDatabase : End"));
+        return ds.size();
+    }
 
     public static void copyDatabaseToBackup(Context ctx){
         DaysDatabase backup = getBackupNewInstance(ctx);
@@ -82,6 +104,14 @@ public abstract class DaysDatabase extends RoomDatabase {
                     DaysDatabase.class, databaseBackupName).addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3).addMigrations(MIGRATION_3_4).build();
         }
         return backupInstance;
+    }
+    public static DaysDatabase getImportInstance(Context ctx) {
+        if (importInstance == null) {
+            mCtx = ctx;
+            importInstance = Room.databaseBuilder(ctx,
+                    DaysDatabase.class, databaseImportName).addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3).addMigrations(MIGRATION_3_4).build();
+        }
+        return importInstance;
     }
     public static DaysDatabase getBackupNewInstance(Context ctx) {
         if (backupInstance != null)
