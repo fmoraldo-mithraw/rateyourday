@@ -230,7 +230,7 @@ public class ImportExportActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
         try {
-            if(data.getData() != null) {
+            if((data != null)&& (data.getData() != null)) {
                 InputStream stream = getContentResolver().openInputStream(data.getData());
                 if ((requestCode == ACTIVITY_RESULTS.CSV_IMPORT.ordinal())
                         && (resultCode == Activity.RESULT_OK)) {
