@@ -1,7 +1,6 @@
 package com.mithraw.howwasyourday.Activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -94,20 +93,6 @@ public class LogsActivity extends AppCompatActivity {
         return endDatePickerDialog;
     }
 
-    public void onClickStartDate(View v) {
-        DatePickerDialog datePickerDialog = getStartDatePickerDialog();
-        if (datePickerDialog != null) {
-            datePickerDialog.show();
-        }
-    }
-
-    public void onClickEndDate(View v) {
-        DatePickerDialog datePickerDialog = getEndDatePickerDialog();
-        if (datePickerDialog != null) {
-            datePickerDialog.show();
-        }
-    }
-
 
     @SuppressLint("HandlerLeak")
     @Override
@@ -116,7 +101,6 @@ public class LogsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_log);
         final Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-
         // Init inner variables
         mContext = this;
         mActivity = this;
@@ -289,6 +273,26 @@ public class LogsActivity extends AppCompatActivity {
         ((UnderlinedCheckTextView)findViewById(R.id.checked_text_view_friday)).setOnClickListener(_wrappedOnClickListener);
         ((UnderlinedCheckTextView)findViewById(R.id.checked_text_view_saturday)).setOnClickListener(_wrappedOnClickListener);
         ((UnderlinedCheckTextView)findViewById(R.id.checked_text_view_sunday)).setOnClickListener(_wrappedOnClickListener);
+        LinearLayout start = findViewById(R.id.startDateLayout);
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = getStartDatePickerDialog();
+                if (datePickerDialog != null) {
+                    datePickerDialog.show();
+                }
+            }
+        });
+        LinearLayout end = findViewById(R.id.endDateLayout);
+        end.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = getEndDatePickerDialog();
+                if (datePickerDialog != null) {
+                    datePickerDialog.show();
+                }
+            }
+        });
     }
 
     private void updateDataSet() {
@@ -376,6 +380,7 @@ public class LogsActivity extends AppCompatActivity {
         }
         return true;
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to

@@ -67,7 +67,7 @@
                             android:layout_height="match_parent"
                             android:layout_marginRight="20dp"
                             android:layout_weight="1"
-                            android:onClick="onClickStartDate"
+                            android:id="@+id/startDateLayout"
                             android:orientation="vertical">
 
                             <TextView
@@ -95,7 +95,7 @@
                             android:layout_height="match_parent"
                             android:layout_marginLeft="20dp"
                             android:layout_weight="1"
-                            android:onClick="onClickEndDate"
+                            android:id="@+id/endDateLayout"
                             android:orientation="vertical">
 
                             <TextView
