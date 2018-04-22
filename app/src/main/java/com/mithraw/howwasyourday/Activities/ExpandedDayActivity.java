@@ -48,16 +48,22 @@ public class ExpandedDayActivity extends AppCompatActivity {
         TextView titleTextView = findViewById(R.id.titleText);
 
         String title = intent.getStringExtra(EXTRA_PARAM_TITLE);
-        if (title.equals(""))
+        if (title.equals("")) {
             titleTextView.setVisibility(View.GONE);
-        else
+            titleTextView.setText("");
+        }else {
+            titleTextView.setVisibility(View.VISIBLE);
             titleTextView.setText(title);
+        }
         TextView logTextView = findViewById(R.id.logText);
         String log = intent.getStringExtra(EXTRA_PARAM_LOG);
-        if (log.equals(""))
+        if (log.equals("")) {
             logTextView.setVisibility(View.GONE);
-        else
+            logTextView.setText("");
+        }else {
+            logTextView.setVisibility(View.VISIBLE);
             logTextView.setText(BitmapHelper.parseStringWithBitmaps(cal, log, arrayInt));
+        }
         ((RatingBar)findViewById(R.id.ratingBar)).setRating(intent.getFloatExtra(EXTRA_PARAM_RATE,0));
         ViewCompat.setTransitionName(cv, VIEW_NAME);
         //Init the share helper

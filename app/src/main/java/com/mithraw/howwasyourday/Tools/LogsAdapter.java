@@ -256,6 +256,7 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
         if ("".equals(logText)) {
             viewHolder.getLogCardDividerText().setVisibility(View.GONE);
             viewHolder.getLogCardText().setVisibility(View.GONE);
+            viewHolder.getLogCardText().setText("");
         } else {
             viewHolder.getLogCardText().setText(BitmapHelper.parseStringWithBitmaps(cal, logText, arrayInt));
             viewHolder.getLogCardDividerText().setVisibility(View.VISIBLE);
