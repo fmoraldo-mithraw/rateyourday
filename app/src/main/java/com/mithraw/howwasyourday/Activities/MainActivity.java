@@ -93,6 +93,7 @@ public class MainActivity extends _SwipeActivityClass
         ScrollView scrollViewMain = findViewById(R.id.scrollViewMain);
         if ((scrollViewMain != null) && (text != null)) {
             if (value.equals("")) {
+                text.setText("");
                 scrollViewMain.setVisibility(View.GONE);
             } else {
                 scrollViewMain.setVisibility(View.VISIBLE);
@@ -100,11 +101,20 @@ public class MainActivity extends _SwipeActivityClass
             }
         }
     }
-
+    private void clearLogText() {
+        TextView text = findViewById(R.id.logText);
+        text.setText("");
+        ScrollView scrollViewMain = findViewById(R.id.scrollViewMain);
+    }
+    private void clearTitleText() {
+        TextView text = (TextView) findViewById(R.id.titleText);
+        text.setText("");
+    }
     private void setTitleText(String value) {
         TextView text = (TextView) findViewById(R.id.titleText);
         if (text != null) {
             if (value.equals("")) {
+                text.setText("");
                 text.setVisibility(View.GONE);
             } else {
                 text.setVisibility(View.VISIBLE);
@@ -146,7 +156,7 @@ public class MainActivity extends _SwipeActivityClass
         //Connect to GoogleSignIn
         boolean firstTimeScreenShowed = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("first_use_screen_showed", false);
         String timeSync = PreferenceManager.getDefaultSharedPreferences(getContext()).getString("sync_frequency","180");
-        if ((timeSync != "0") && (firstTimeScreenShowed == true)) { // If the first use screen is currently shown we don't do the GoogleSignIn, the first use screen will do it
+        if ((!timeSync.equals("0")) && (firstTimeScreenShowed == true)) { // If the first use screen is currently shown we don't do the GoogleSignIn, the first use screen will do it
             if (System.currentTimeMillis() > PreferenceManager.getDefaultSharedPreferences(App.getContext()).getLong("time_next_sync", 0))
                 GoogleSignInHelper.getInstance(this).doSignIn(new SyncLauncher());
             else
@@ -197,9 +207,13 @@ public class MainActivity extends _SwipeActivityClass
                 } else if (msg.what == MSG_ID.MSG_LOG.ordinal()) {
                     if (msg.obj != null)
                         setLogText(BitmapHelper.parseStringWithBitmaps(m_calendar, (String) (msg.obj), arrayInt));
+                    else
+                        clearLogText();
                 } else if (msg.what == MSG_ID.MSG_TITLE.ordinal()) {
                     if (msg.obj != null)
                         setTitleText((String) (msg.obj));
+                    else
+                        clearTitleText();
                 }
                 if (msg.what == MSG_ID.MSG_EMPTY.ordinal()) {
                     if ((rab != null) &&

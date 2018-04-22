@@ -94,7 +94,8 @@ public interface DayDao {
 
     @Update
     void update(Day day);
-    @Query("SELECT * FROM day WHERE day_of_the_month IS :dayOfTheMonth AND month IS :month AND year IS :year LIMIT 1")
+
+    @Query("SELECT * FROM day WHERE day_of_the_month IS :dayOfTheMonth AND month IS :month AND year IS :year AND is_removed IS 0 LIMIT 1")
     List<Day> getDay(int dayOfTheMonth, int month, int year);
 
 }
