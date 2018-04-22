@@ -222,7 +222,7 @@
     <string name="move_storage">Attention, cette opération va déplacer tous vos fichiers, êtes-vous sûr ?</string>
     <string name="move_storage_title">Changement de stockage</string>
     <string name="main_refresh">Données rafraichis</string>
-    <string name="main_today">Vous êtes de retour à la date d\'aujourd'hui</string>
+    <string name="main_today">Vous êtes de retour à la date d\'aujourd\'hui</string>
     <string name="import_export_title">Importer/Exporter</string>
     <string name="export_title">Exporter</string>
     <string name="export_data">Vous pouvez récupérer les données que vous avez introduit dans l\'application sous différents format de fichier :</string>

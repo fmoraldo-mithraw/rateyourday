@@ -249,11 +249,6 @@ public class ImportExportActivity extends AppCompatActivity {
             msg.obj = e;
             mHandler.sendMessage(msg);
 
-        } catch (IOException e) {
-            Message msg = Message.obtain();
-            msg.what = ImportExportActivity.MSG_ID.IOEXCEPTION.ordinal();
-            msg.obj = e;
-            mHandler.sendMessage(msg);
         }
     }
 }

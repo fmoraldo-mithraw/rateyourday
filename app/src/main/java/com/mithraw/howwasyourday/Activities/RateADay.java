@@ -298,6 +298,12 @@ public class RateADay extends AppCompatActivity {
     }
 
     @Override
+    public void onPause(){
+        saveDay();
+        super.onPause();
+    }
+
+    @Override
     public void onBackPressed() {
         endActivity();
         return;
