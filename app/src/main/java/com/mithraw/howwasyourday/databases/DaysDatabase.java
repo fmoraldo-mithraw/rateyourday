@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 Manage the db
 Two handlers, the backup db to save the db safely and the regular one
  */
-@Database(entities = Day.class, version = 4, exportSchema = false)
+@Database(entities = Day.class, version = 5, exportSchema = false)
 public abstract class DaysDatabase extends RoomDatabase {
     public abstract DayDao dayDao();
 
@@ -50,7 +50,7 @@ public abstract class DaysDatabase extends RoomDatabase {
         if (ourInstance == null) {
             mCtx = ctx;
             ourInstance = Room.databaseBuilder(ctx,
-                    DaysDatabase.class, databaseName).addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3).addMigrations(MIGRATION_3_4).build();
+                    DaysDatabase.class, databaseName).addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3).addMigrations(MIGRATION_3_4).addMigrations(MIGRATION_4_5).build();
         }
         return ourInstance;
     }
@@ -101,7 +101,7 @@ public abstract class DaysDatabase extends RoomDatabase {
         if (backupInstance == null) {
             mCtx = ctx;
             backupInstance = Room.databaseBuilder(ctx,
-                    DaysDatabase.class, databaseBackupName).addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3).addMigrations(MIGRATION_3_4).build();
+                    DaysDatabase.class, databaseBackupName).addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3).addMigrations(MIGRATION_3_4).addMigrations(MIGRATION_4_5).build();
         }
         return backupInstance;
     }
@@ -109,7 +109,7 @@ public abstract class DaysDatabase extends RoomDatabase {
         if (importInstance == null) {
             mCtx = ctx;
             importInstance = Room.databaseBuilder(ctx,
-                    DaysDatabase.class, databaseImportName).addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3).addMigrations(MIGRATION_3_4).build();
+                    DaysDatabase.class, databaseImportName).addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3).addMigrations(MIGRATION_3_4).addMigrations(MIGRATION_4_5).build();
         }
         return importInstance;
     }
@@ -117,7 +117,7 @@ public abstract class DaysDatabase extends RoomDatabase {
         if (backupInstance != null)
             backupInstance.close();
         backupInstance = Room.databaseBuilder(ctx,
-                DaysDatabase.class, databaseBackupName).addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3).addMigrations(MIGRATION_3_4).build();
+                DaysDatabase.class, databaseBackupName).addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3).addMigrations(MIGRATION_3_4).addMigrations(MIGRATION_4_5).build();
         return backupInstance;
     }
 
@@ -158,6 +158,14 @@ public abstract class DaysDatabase extends RoomDatabase {
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE day ADD is_removed INTEGER DEFAULT 0 NOT NULL;");
             database.execSQL("CREATE INDEX index_Day_is_removed on day (is_removed);");
+        }
+    };
+    static final Migration MIGRATION_4_5 = new Migration(4,5) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE day ADD longitude BIGINT  DEFAULT 0 NOT NULL;");
+            database.execSQL("ALTER TABLE day ADD latitude BIGINT  DEFAULT 0 NOT NULL;");
+            database.execSQL("CREATE INDEX index_Day_latitude_longitude on day (latitude,longitude);");
         }
     };
 

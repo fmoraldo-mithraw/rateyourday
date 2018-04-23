@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,6 +32,7 @@ import com.mithraw.howwasyourday.Helpers.BitmapHelper;
 import com.mithraw.howwasyourday.Helpers.RateViewHelper;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Tools.MyInt;
+import com.mithraw.howwasyourday.Tools.MyLocationManager;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
 
@@ -71,7 +73,7 @@ public class RateADay extends AppCompatActivity {
     MyInt[] arrayInt = {new MyInt(0)};
     LinearLayout mButtonsLinearLayout;
     int mHeight;
-
+    MyLocationManager mLocManager;
     private TextWatcher watcher = new TextWatcher() {
         private int spanLength = -1;
 
@@ -112,6 +114,8 @@ public class RateADay extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rate_aday);
         // Retreive the informations of the date from the main activity and fill the calendar with them
+        // Acquire a reference to the system Location Manager
+
         Intent intent = getIntent();
         m_calendar.set(java.util.Calendar.DAY_OF_MONTH, intent.getIntExtra(EXTRA_DATE_DAY, 0));
         m_calendar.set(java.util.Calendar.MONTH, intent.getIntExtra(EXTRA_DATE_MONTH, 0));
@@ -119,10 +123,12 @@ public class RateADay extends AppCompatActivity {
         //Add the back button to the activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mLocManager = new MyLocationManager(this);
+
         //Display tips
         String preferenceName = "tip_rate_showed";
-        if ((!(PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean(preferenceName, false)))&&
-                (PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("show_tips", true))){
+        if ((!(PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean(preferenceName, false))) &&
+                (PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("show_tips", true))) {
             ArrayList<Integer> iList = new ArrayList<Integer>();
             iList.add(R.layout.tips_fragment_rate);
             Bundle bundl = new Bundle();
@@ -137,9 +143,9 @@ public class RateADay extends AppCompatActivity {
         db = DaysDatabase.getInstance(getApplicationContext());
         mImageAdder = findViewById(R.id.image_adder);
         mCameraAdder = findViewById(R.id.camera_adder);
-        mTitleText =  findViewById(R.id.titleTextRate);
+        mTitleText = findViewById(R.id.titleTextRate);
         mFlagsTitle = mTitleText.getInputType();
-        mLogText =  findViewById(R.id.logTextRate);
+        mLogText = findViewById(R.id.logTextRate);
         mLogText.addTextChangedListener(watcher);
         mFlagsLog = mLogText.getInputType();
 
@@ -173,7 +179,7 @@ public class RateADay extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (mRateView.getRating() == 0) {
-                    ((EditText)v).setText("");
+                    ((EditText) v).setText("");
                     Toast.makeText(getBaseContext(), R.string.cant_click, Toast.LENGTH_LONG).show();
                 } else {
                     allowFocusOnTexts(true);
@@ -187,7 +193,7 @@ public class RateADay extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (mRateView.getRating() == 0) {
-                    ((EditText)v).setText("");
+                    ((EditText) v).setText("");
                     Toast.makeText(getBaseContext(), R.string.cant_click, Toast.LENGTH_LONG).show();
                 } else {
                     allowFocusOnTexts(true);
@@ -236,7 +242,7 @@ public class RateADay extends AppCompatActivity {
                 new KeyboardVisibilityEventListener() {
                     @Override
                     public void onVisibilityChanged(boolean isOpen) {
-                        if(mHeight<=1280) {
+                        if (mHeight <= 1280) {
                             if (isOpen) {
                                 mButtonsLinearLayout.setVisibility(View.GONE);
                             } else {
@@ -296,6 +302,15 @@ public class RateADay extends AppCompatActivity {
             public void run() {
                 if (mRateView.getRating() == 0)
                     return;
+                double latitude = 0;
+                double longitude = 0;
+                Location objLocation = mLocManager.getLocation();
+                if (objLocation != null) {
+                    if (objLocation.getAccuracy() != 0) {
+                        latitude = mLocManager.getLocation().getLatitude();
+                        longitude = mLocManager.getLocation().getLongitude();
+                    }
+                }
                 Day d = new Day(m_calendar.get(Calendar.DAY_OF_WEEK),
                         m_calendar.get(Calendar.DAY_OF_MONTH),
                         m_calendar.get(Calendar.MONTH),
@@ -305,6 +320,8 @@ public class RateADay extends AppCompatActivity {
                         (int) (mRateView.getRating()),
                         mTitleText.getText().toString(),
                         mLogText.getText().toString(),
+                        latitude,
+                        longitude,
                         false);
                 db.dayDao().insertDay(d);
             }
@@ -327,6 +344,7 @@ public class RateADay extends AppCompatActivity {
     @Override
     public void onPause(){
         saveDay();
+        mLocManager.clean();
         super.onPause();
     }
 
@@ -384,5 +402,10 @@ public class RateADay extends AppCompatActivity {
         }
         String newString = BitmapHelper.addImageToString("image" + (arrayInt[0].getValue()) + ".png", mLogText.getText().toString(), mLogText.getSelectionStart());
         mLogText.setText(BitmapHelper.parseStringWithBitmaps(m_calendar, newString, arrayInt));
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        mLocManager.init();
     }
 }

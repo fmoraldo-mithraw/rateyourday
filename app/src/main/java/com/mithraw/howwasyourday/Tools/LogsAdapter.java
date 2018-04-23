@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -61,7 +62,12 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
         LinearLayout btnLayout;
         boolean isExtented = false;
         View logCardDividerText;
+        ImageView placeView;
 
+
+        public ImageView getPlaceView() {
+            return placeView;
+        }
 
         public ViewHolder(View v, Activity parent) {
             super(v);
@@ -82,6 +88,7 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
             logCardText = (TextView) v.findViewById(R.id.log_card_text);
             btnLayout = (LinearLayout) v.findViewById(R.id.button_layout);
             logCardDividerText = (View) v.findViewById(R.id.log_card_divider_text);
+            placeView = v.findViewById(R.id.place_view);
 
             btnEdit = (Button) v.findViewById(R.id.log_card_button_edit);
             btnRemove = (Button) v.findViewById(R.id.log_card_button_remove);
@@ -179,6 +186,8 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
                     intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_TITLE, (String)((TextView)mView.findViewById(R.id.log_card_title)).getText().toString());
                     intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_LOG, (String)((TextView)mView.findViewById(R.id.log_card_text)).getText().toString());
                     intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_RATE, (float) ((RatingBar)mView.findViewById(R.id.log_card_rating)).getRating());
+                    intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_LONGITUDE, mDay.getLongitude());
+                    intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_LATITUDE, mDay.getLatitude());
                     Pair<View, String> p = new Pair<View, String>(mView, ExpandedDayActivity.VIEW_NAME);
                     ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
                             mParent, p);
@@ -261,6 +270,13 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
             viewHolder.getLogCardText().setText(BitmapHelper.parseStringWithBitmaps(cal, logText, arrayInt));
             viewHolder.getLogCardDividerText().setVisibility(View.VISIBLE);
             viewHolder.getLogCardText().setVisibility(View.VISIBLE);
+        }
+        double latitude = mDataSet.get(position).getLatitude();
+        double longitude = mDataSet.get(position).getLongitude();
+        if ((latitude != 0) && (longitude != 0)) {
+            viewHolder.getPlaceView().setVisibility(View.VISIBLE);
+        }else{
+            viewHolder.getPlaceView().setVisibility(View.GONE);
         }
         viewHolder.getLogCardTitle().setText(mDataSet.get(position).getTitleText());
         viewHolder.setBtnLayoutExtented(false);

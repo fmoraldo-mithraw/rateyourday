@@ -59,13 +59,24 @@
         android:id="@+id/external_drive"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:checked="false"
+        android:enabled="true"
+        android:text="@string/external_storage_text"
+        tools:checked="false" />
+
+    <Switch
+        android:id="@+id/location_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:checked="true"
+        android:checked="false"
         android:enabled="true"
-        android:text="@string/external_storage_text"
-        tools:checked="true" />
+        android:text="@string/location_switch_text"
+        tools:checked="false" />
 
     <View
         android:id="@+id/divider6"

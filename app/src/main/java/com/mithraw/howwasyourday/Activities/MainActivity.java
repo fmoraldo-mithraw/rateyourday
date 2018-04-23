@@ -21,7 +21,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
@@ -31,6 +30,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
@@ -47,6 +47,7 @@ import com.mithraw.howwasyourday.Helpers.NotificationHelper;
 import com.mithraw.howwasyourday.Helpers.SyncLauncher;
 import com.mithraw.howwasyourday.Helpers.ThreadSyncDatas;
 import com.mithraw.howwasyourday.R;
+import com.mithraw.howwasyourday.Tools.Coordinate;
 import com.mithraw.howwasyourday.Tools.MyInt;
 import com.mithraw.howwasyourday.Tools._SwipeActivityClass;
 import com.mithraw.howwasyourday.databases.Day;
@@ -66,7 +67,7 @@ Manage the menu
 public class MainActivity extends _SwipeActivityClass
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT, MSG_UPDATE}
+    private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT, MSG_UPDATE, MSG_LOCATION}
 
     public enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS, ACTIVITY_LOGS, ACTIVITY_STATS}
 
@@ -78,6 +79,7 @@ public class MainActivity extends _SwipeActivityClass
     private boolean dateChangedByUser = false;
     private Day mDay;
     private static CardView mCardView;
+    Coordinate mLastCoordinate = new Coordinate();
     MyInt[] arrayInt = {new MyInt(0)};
 
     public static Context getContext() {
@@ -196,6 +198,7 @@ public class MainActivity extends _SwipeActivityClass
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
+                ImageView loc = findViewById(R.id.location_view);
                 RatingBar rab = findViewById(R.id.ratingBar);
                 Button removeButton = findViewById(R.id.main_button_remove);
                 Button editButton = findViewById(R.id.main_button_edit);
@@ -214,13 +217,23 @@ public class MainActivity extends _SwipeActivityClass
                         setTitleText((String) (msg.obj));
                     else
                         clearTitleText();
+                } else if (msg.what == MSG_ID.MSG_LOCATION.ordinal()) {
+                    if ((msg.obj == null) || (((Coordinate) msg.obj).getLatitude() == 0) && (((Coordinate) msg.obj).getLongitude() == 0)) {
+                        mLastCoordinate = new Coordinate();
+                        loc.setVisibility(View.GONE);
+                    }else{
+                        mLastCoordinate = (Coordinate) msg.obj;
+                        loc.setVisibility(View.VISIBLE);
+                    }
                 }
                 if (msg.what == MSG_ID.MSG_EMPTY.ordinal()) {
                     if ((rab != null) &&
                             (removeButton != null) &&
                             (editButton != null) &&
                             (nothingLayout != null) &&
-                            (rateLayout != null)) {
+                            (rateLayout != null) &&
+                            (loc != null)) {
+                        loc.setVisibility(View.GONE);
                         rab.setRating(0);
                         setLogText(new SpannableStringBuilder(""));
                         setTitleText("");
@@ -334,6 +347,8 @@ public class MainActivity extends _SwipeActivityClass
         intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_DATE, (String)((TextView)this.findViewById(R.id.dateTextView)).getText().toString());
         intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_TITLE, (String)((TextView)this.findViewById(R.id.titleText)).getText().toString());
         intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_LOG, (String)((TextView)this.findViewById(R.id.logText)).getText().toString());
+        intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_LONGITUDE, mLastCoordinate.getLongitude());
+        intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_LATITUDE, mLastCoordinate.getLatitude());
         intent.putExtra(ExpandedDayActivity.EXTRA_PARAM_RATE, (float) ((RatingBar)this.findViewById(R.id.ratingBar)).getRating());
         CardView cv = this.findViewById(R.id.cardViewLittle);
         Pair<View, String> p = new Pair<View, String>(cv, ExpandedDayActivity.VIEW_NAME);
@@ -365,7 +380,7 @@ public class MainActivity extends _SwipeActivityClass
                     c.set(Calendar.DAY_OF_YEAR, c.get(Calendar.DAY_OF_YEAR) + 1);
                     Random r = new Random();
                     int rate = r.nextInt(4) + 1;
-                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), c.getTimeInMillis(), rate, "Balbalalala", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",false);
+                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), c.getTimeInMillis(), rate, "Balbalalala", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat", 0,0, false);
                     db.dayDao().insertDay(d);
                 }
                 //Current Year
@@ -376,7 +391,7 @@ public class MainActivity extends _SwipeActivityClass
                     c.set(Calendar.DAY_OF_YEAR, c.get(Calendar.DAY_OF_YEAR) + 1);
                     Random r = new Random();
                     int rate = r.nextInt(5 - 1) + 1;
-                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), c.getTimeInMillis(), rate, "Balbalalala", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",false);
+                    Day d = new Day(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), c.getTimeInMillis(), rate, "Balbalalala", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat", 0,0, false);
                     db.dayDao().insertDay(d);
                 }
             }
@@ -571,6 +586,14 @@ public class MainActivity extends _SwipeActivityClass
                     msg_title.what = MSG_ID.MSG_TITLE.ordinal();
                     msg_title.obj = days.get(0).getTitleText();
                     handler.sendMessage(msg_title);
+
+                    Coordinate coordinate = new Coordinate();
+                    coordinate.setLatitude(days.get(0).getLatitude());
+                    coordinate.setLongitude(days.get(0).getLongitude());
+                    Message msg_location = Message.obtain();
+                    msg_location.what = MSG_ID.MSG_LOCATION.ordinal();
+                    msg_location.obj = coordinate;
+                    handler.sendMessage(msg_location);
 
                     Message msg_log = Message.obtain();
                     msg_log.what = MSG_ID.MSG_LOG.ordinal();

@@ -200,6 +200,22 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         }
                     }
             );
+            findPreference("location_activated").setOnPreferenceChangeListener(
+                    new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object value) {
+                            boolean val = (boolean) value;
+                            if (val) {
+                                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                                        != PackageManager.PERMISSION_GRANTED) {
+                                    String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
+                                    ActivityCompat.requestPermissions(SettingsActivity.getActivity(), permissions, 0);
+                                }
+                            }
+                            return true;
+                        }
+                    }
+            );
         }
 
         @Override

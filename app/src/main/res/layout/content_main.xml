@@ -96,25 +96,39 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="5dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:clickable="false"
-                    android:isIndicator="true"
-                    android:longClickable="false"
-                    android:maxLength="10"
-                    android:numStars="5"
-                    android:rating="0"
-                    android:stepSize="1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
+                    android:orientation="horizontal">
+
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        style="@style/Widget.AppCompat.RatingBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="0"
+                        android:clickable="false"
+                        android:isIndicator="true"
+                        android:longClickable="false"
+                        android:maxLength="10"
+                        android:numStars="5"
+                        android:rating="0"
+                        android:stepSize="1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
+
+                    <ImageView
+                        android:id="@+id/location_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        app:srcCompat="@drawable/ic_place" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/titleText"

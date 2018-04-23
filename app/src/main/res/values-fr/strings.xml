@@ -240,4 +240,6 @@
     <string name="csv_imported">Le fichier csv a été importé, %1$d parmis %2$d lignes ont été insérées avec succès</string>
     <string name="db_imported">La base de donnée a été importée, %1$d parmis %2$d entrées ont insérées avec succès</string>
     <string name="photo_archive_imported">L\'archive de photo a été importée</string>
+    <string name="location_switch_text">Ajouter ma localisation quand je note ma journée (GPS + Wifi)</string>
+    <string name="maps_marker">"J'etais là !"</string>
 </resources>

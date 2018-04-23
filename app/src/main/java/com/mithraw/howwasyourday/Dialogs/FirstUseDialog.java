@@ -24,6 +24,7 @@ public class FirstUseDialog extends DialogFragment {
     Switch syncSwitch;
     Switch notificationSwitch;
     Switch externalStorageSwitch;
+    Switch locationSwitch;
     View mView;
     ViewGroup mContainer;
     boolean externalStorageState;
@@ -79,6 +80,18 @@ public class FirstUseDialog extends DialogFragment {
                                 BitmapHelper.moveImages();
                             PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean("save_images_on_external_drive", false).apply();
                         }
+                        if (locationSwitch.isChecked()) {
+                            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                                    != PackageManager.PERMISSION_GRANTED) {
+                                String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
+                                requestPermissions(permissions, 0);
+                            }
+                            PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean("location_activated", true).apply();
+                        } else {
+                            PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean("location_activated", false).apply();
+                        }
+
+                        //Set first use panel shown = true
                         PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean("first_use_screen_showed", true).apply();
 
                     }
@@ -88,7 +101,8 @@ public class FirstUseDialog extends DialogFragment {
         notificationSwitch = mView.findViewById(R.id.notifications_switch);
         notificationSwitch.setChecked(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("use_notifications", true));
         externalStorageSwitch = mView.findViewById(R.id.external_drive);
-        externalStorageState = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("save_images_on_external_drive", false);
+        externalStorageState = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("location_activated", false);
+        locationSwitch = mView.findViewById(R.id.location_switch);
         if (!BitmapHelper.isExternalStorageAvailable()) {
             externalStorageSwitch.setChecked(false);
             externalStorageSwitch.setEnabled(false);

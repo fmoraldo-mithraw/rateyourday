@@ -4,6 +4,13 @@
         android:defaultValue="false"
         android:key="save_images_on_external_drive"
         android:title="@string/external_storage_text" />
+    <SwitchPreference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="false"
+        android:key="location_activated"
+        android:layout="@layout/preference_multiline"
+        android:title="@string/location_switch_text" />
 
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->

@@ -11,6 +11,7 @@ Item Day class for database use
         indices = {@Index(value = {"day_of_the_week"}, unique = false),
                 @Index(value = {"week", "year"}, unique = false),
                 @Index(value = {"date_time"}, unique = false),
+                @Index(value = {"latitude", "longitude"}, unique = false),
                 @Index(value = {"is_removed"}, unique = false)})
 public class Day {
 
@@ -27,6 +28,11 @@ public class Day {
     private long date_time;
     private int week;
 
+
+    private double latitude;
+    private double longitude;
+
+
     public boolean isIs_removed() {
         return is_removed;
     }
@@ -37,7 +43,23 @@ public class Day {
 
     private boolean is_removed;
 
-    public Day(int dayOfTheWeek, int day, int month, int year, int week, long date_time, int rating, String titleText, String log, boolean is_removed) {
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Day(int dayOfTheWeek, int day, int month, int year, int week, long date_time, int rating, String titleText, String log, double latitude, double longitude, boolean is_removed) {
         this.dayOfTheWeek = dayOfTheWeek;
         this.day = day;
         this.month = month;
@@ -47,6 +69,8 @@ public class Day {
         this.log = log;
         this.week = week;
         this.date_time = date_time;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.is_removed = is_removed;
     }
 

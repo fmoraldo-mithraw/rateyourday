@@ -4,12 +4,14 @@ import android.app.IntentService;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.location.Location;
 import android.os.Looper;
 import android.widget.Toast;
 
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.Helpers.NotificationHelper;
 import com.mithraw.howwasyourday.R;
+import com.mithraw.howwasyourday.Tools.MyLocationManager;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
 
@@ -37,8 +39,19 @@ public class NotificationIntentService extends IntentService {
         }
 
         public void run() {
+            MyLocationManager mLocManager = new MyLocationManager();
+            mLocManager.init();
             DaysDatabase db = DaysDatabase.getInstance(App.getApplication().getApplicationContext());
             Calendar calendar = Calendar.getInstance();
+            double latitude = 0;
+            double longitude = 0;
+            Location objLocation = mLocManager.getLocation();
+            if (objLocation != null) {
+                if (objLocation.getAccuracy() != 0) {
+                    latitude = mLocManager.getLocation().getLatitude();
+                    longitude = mLocManager.getLocation().getLongitude();
+                }
+            }
             Day d = new Day(calendar.get(Calendar.DAY_OF_WEEK),
                     calendar.get(Calendar.DAY_OF_MONTH),
                     calendar.get(Calendar.MONTH),
@@ -48,8 +61,11 @@ public class NotificationIntentService extends IntentService {
                     rate,
                     "",
                     "",
+                    latitude,
+                    longitude,
                     false);
             db.dayDao().insertDay(d);
+            mLocManager.clean();
             Looper.prepare();
             Toast.makeText(getBaseContext(), toastString, Toast.LENGTH_LONG).show();
             Looper.loop();

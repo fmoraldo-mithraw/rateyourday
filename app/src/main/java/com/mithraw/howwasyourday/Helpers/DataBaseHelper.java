@@ -115,6 +115,8 @@ public class DataBaseHelper {
                                     Integer.decode(parts[1].replace("\"","")),
                                     parts[2].replace("\"",""),
                                     parts[3].replace("{{{CRLF}}}", "\n").replace("\"",""),
+                                    0,
+                                    0,
                                     false);
                             try {
                                 DaysDatabase.getInstance(App.getContext()).dayDao().insertDay(d);

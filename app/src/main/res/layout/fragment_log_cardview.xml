@@ -40,6 +40,13 @@
                 android:rating="3"
                 android:stepSize="1" />
 
+            <ImageView
+                android:id="@+id/place_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_place" />
+
         </LinearLayout>
 
         <TextView
