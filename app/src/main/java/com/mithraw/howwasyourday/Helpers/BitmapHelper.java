@@ -19,7 +19,6 @@ import com.mithraw.howwasyourday.Activities.ImportExportActivity;
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.Tools.MyInt;
 import com.mithraw.howwasyourday.Tools.ZipTool;
-import com.mithraw.howwasyourday.databases.DaysDatabase;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -138,7 +137,11 @@ public class BitmapHelper {
     public static List<File> listFileInImageDirectories(Calendar cal){
         String path = getDayImageDir(cal);
         File directory = new File(path);
-        return Arrays.asList(directory.listFiles());
+        File[] fileArray = directory.listFiles();
+        if (fileArray != null)
+            return Arrays.asList(directory.listFiles());
+        else
+            return new ArrayList<File>();
     }
 
     public static String getImagesDir() {
