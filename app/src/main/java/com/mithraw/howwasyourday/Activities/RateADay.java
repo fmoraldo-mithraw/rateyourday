@@ -15,11 +15,13 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +33,9 @@ import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Tools.MyInt;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
+
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -64,6 +69,9 @@ public class RateADay extends AppCompatActivity {
     int mFlagsLog;
     Bitmap mBitmap;
     MyInt[] arrayInt = {new MyInt(0)};
+    LinearLayout mButtonsLinearLayout;
+    int mHeight;
+
     private TextWatcher watcher = new TextWatcher() {
         private int spanLength = -1;
 
@@ -218,6 +226,25 @@ public class RateADay extends AppCompatActivity {
 
             }
         });
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        mHeight = displayMetrics.heightPixels;
+
+        mButtonsLinearLayout = findViewById(R.id.linearLayout);
+        KeyboardVisibilityEvent.setEventListener(
+                this,
+                new KeyboardVisibilityEventListener() {
+                    @Override
+                    public void onVisibilityChanged(boolean isOpen) {
+                        if(mHeight<=1280) {
+                            if (isOpen) {
+                                mButtonsLinearLayout.setVisibility(View.GONE);
+                            } else {
+                                mButtonsLinearLayout.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                });
         //Fill the controls with the correct informations
         fillTheInformations();
         java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
