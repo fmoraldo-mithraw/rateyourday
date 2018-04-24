@@ -163,8 +163,8 @@ public abstract class DaysDatabase extends RoomDatabase {
     static final Migration MIGRATION_4_5 = new Migration(4,5) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE day ADD longitude BIGINT  DEFAULT 0 NOT NULL;");
-            database.execSQL("ALTER TABLE day ADD latitude BIGINT  DEFAULT 0 NOT NULL;");
+            database.execSQL("ALTER TABLE day ADD longitude REAL  DEFAULT 0 NOT NULL;");
+            database.execSQL("ALTER TABLE day ADD latitude REAL  DEFAULT 0 NOT NULL;");
             database.execSQL("CREATE INDEX index_Day_latitude_longitude on day (latitude,longitude);");
         }
     };

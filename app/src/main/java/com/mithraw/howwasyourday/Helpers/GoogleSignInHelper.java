@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.mithraw.howwasyourday.Activities.MainActivity;
+import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Tools.OnGoogleSignInSuccessListener;
 
@@ -107,7 +108,7 @@ public class GoogleSignInHelper {
                         .build();
         if(mActivity == null)
             mActivity = MainActivity.getmActivity();
-        mGoogleSignInClient = GoogleSignIn.getClient(mActivity, signInOptions);
+        mGoogleSignInClient = GoogleSignIn.getClient(App.getContext(), signInOptions);
         return mGoogleSignInClient;
     }
 
@@ -129,7 +130,8 @@ public class GoogleSignInHelper {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Intent in = getGoogleSignInClient().getSignInIntent();
-                                mActivity.startActivityForResult(in, GOOGLE_SIGNIN_ACTIVITY_ID);
+                                if (mActivity != null)
+                                    mActivity.startActivityForResult(in, GOOGLE_SIGNIN_ACTIVITY_ID);
                             }
                         });
     }
