@@ -210,7 +210,8 @@
                 android:clickable="true"
                 android:isIndicator="true"
                 android:numStars="5"
-                android:rating="1" />
+                android:rating="1"
+                android:background="@drawable/ic_item_background_rating_1"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/ratingLayout2"
@@ -228,7 +229,8 @@
                 android:clickable="true"
                 android:isIndicator="true"
                 android:numStars="5"
-                android:rating="2" />
+                android:rating="2"
+                android:background="@drawable/ic_item_background_rating_2"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/ratingLayout3"
@@ -245,7 +247,8 @@
                 android:clickable="true"
                 android:isIndicator="true"
                 android:numStars="5"
-                android:rating="3" />
+                android:rating="3"
+                android:background="@drawable/ic_item_background_rating_3"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -271,7 +274,8 @@
                 android:clickable="true"
                 android:isIndicator="true"
                 android:numStars="5"
-                android:rating="4" />
+                android:rating="4"
+                android:background="@drawable/ic_item_background_rating_4"/>
         </LinearLayout>
             <LinearLayout
                 android:id="@+id/ratingLayout5"
@@ -288,7 +292,8 @@
                 android:clickable="true"
                 android:isIndicator="true"
                 android:numStars="5"
-                android:rating="5" />
+                android:rating="5"
+                android:background="@drawable/ic_item_background_rating_5"/>
     </LinearLayout>
         </LinearLayout>
 

@@ -15,18 +15,17 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.ClusterManager;
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.R;
+import com.mithraw.howwasyourday.Tools.Map.OwnIconRenderer;
+import com.mithraw.howwasyourday.Tools.Map.RateClusterItem;
 import com.mithraw.howwasyourday.Tools.UnderlinedCheckTextView;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -42,11 +41,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     LinearLayout endDateLayout;
     DaysDatabase db;
     GoogleMap map;
-    BitmapDescriptor icon1;
-    BitmapDescriptor icon2;
-    BitmapDescriptor icon3;
-    BitmapDescriptor icon4;
-    BitmapDescriptor icon5;
+    List<ClusterManager<RateClusterItem>> mClusterManagerList;
+
     private static Handler handler;
 
     public enum MSG_ID {
@@ -118,6 +114,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     private enum TYPE_DATE {START_DATE, END_DATE}
 
+    public GoogleMap getMap() {
+        return map;
+    }
+
     @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,11 +141,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         mMapView.getMapAsync(this);
 
-        icon1 = BitmapDescriptorFactory.fromResource(R.drawable.ic_place_black);
-        icon2 = BitmapDescriptorFactory.fromResource(R.drawable.ic_place_orange);
-        icon3 = BitmapDescriptorFactory.fromResource(R.drawable.ic_place_yellow);
-        icon4 = BitmapDescriptorFactory.fromResource(R.drawable.ic_place_light_green);
-        icon5 = BitmapDescriptorFactory.fromResource(R.drawable.ic_place_solid_green);
+
         //Setup the date listener
         //StarDate
         startDate = new Date(118, 0, 1);
@@ -207,28 +203,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void handleMessage(Message msg) {
                 if (msg.what == MSG_ID.QUERY_END.ordinal()) {
                     List<Day> days = (List<Day>) msg.obj;
-                    map.clear();
+                    for(ClusterManager cm :mClusterManagerList) cm.clearItems();
                     for (Day d : days) {
-                        BitmapDescriptor bm;
-                        switch (d.getRating()) {
-                            case 1:
-                                bm = icon1;
-                                break;
-                            case 2:
-                                bm = icon2;
-                                break;
-                            case 3:
-                                bm = icon3;
-                                break;
-                            case 4:
-                                bm = icon4;
-                                break;
-                            default:
-                                bm = icon5;
-                                break;
-                        }
-                        map.addMarker(new MarkerOptions().position(new LatLng(d.getLatitude(), d.getLongitude())).title(d.getTitleText() + " " + d.getRating() + "/5").icon(bm));
+                        mClusterManagerList.get(d.getRating()-1).addItem(new RateClusterItem(d.getLatitude(), d.getLongitude(), d.getTitleText(), d.getRating()));
                     }
+                    for(ClusterManager cm :mClusterManagerList) cm.cluster();
                 }
             }
         };
@@ -309,6 +288,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         mapReady(true);
+        mClusterManagerList = new ArrayList<>();
+        for(int i = 0;i<5;i++) {
+            ClusterManager<RateClusterItem> clusterManager = new ClusterManager<RateClusterItem>(this, getMap());
+            clusterManager.setRenderer(new OwnIconRenderer(this.getApplicationContext(), getMap(), clusterManager,i+1));
+            mClusterManagerList.add(clusterManager);
+        }
+        getMap().setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                for (ClusterManager<RateClusterItem> cm:mClusterManagerList)
+                {
+                    cm.cluster();
+                }
+            }
+        });
         updateDataSet();
     }
 
