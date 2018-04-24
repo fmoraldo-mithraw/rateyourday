@@ -243,4 +243,7 @@
     <string name="location_switch_text">Ajouter ma localisation quand je note ma journée (GPS + Wifi)</string>
     <string name="maps_marker">"J'etais là !"</string>
     <string name="action_map">Carte de vos notes</string>
+    <string name="force_place">Ajouter manuellement l\'endroit où vous étiez</string>
+    <string name="info_map_pick">Pour marquer un emplacement, appuyez longuement à l\'emplacement voulu sur la carte.</string>
+    <string name="new_coordinate_saved">Coordonnées enregistrées.</string>
 </resources>

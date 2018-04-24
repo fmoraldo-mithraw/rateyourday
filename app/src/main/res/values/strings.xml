@@ -250,4 +250,8 @@
     <string name="location_switch_text">Attach my location when i rate my day (GPS + Wifi)</string>
     <string name="maps_key">AIzaSyDdUcrEUUrh7m5xEf0ImTETnPT5CD4wGmk</string>
     <string name="maps_marker">I was there !</string>
+    <string name="force_place">Manually add a place you where</string>
+    <string name="info_map_pick">In order to mark your location, long press a location on the map.</string>
+    <string name="new_coordinate_saved">Coordinates saved.</string>
+
 </resources>

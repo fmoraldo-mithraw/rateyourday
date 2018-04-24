@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -24,6 +26,7 @@ import com.mithraw.howwasyourday.Tools.Map.RateClusterItem;
 import com.mithraw.howwasyourday.Tools.UnderlinedCheckTextView;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,6 +40,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Date startDate;
     private Date endDate;
     private MapView mMapView;
+    boolean firstTime = true;
     LinearLayout startDateLayout;
     LinearLayout endDateLayout;
     DaysDatabase db;
@@ -204,6 +208,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if (msg.what == MSG_ID.QUERY_END.ordinal()) {
                     List<Day> days = (List<Day>) msg.obj;
                     for(ClusterManager cm :mClusterManagerList) cm.clearItems();
+                    if ((days.size() > 0) && (firstTime)){
+                        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new com.google.android.gms.maps.model.LatLng(days.get(0).getLatitude(), days.get(0).getLongitude()), 10);
+                        map.animateCamera(cameraUpdate);
+                        firstTime = false;
+                    }
                     for (Day d : days) {
                         mClusterManagerList.get(d.getRating()-1).addItem(new RateClusterItem(d.getLatitude(), d.getLongitude(), d.getTitleText(), d.getRating()));
                     }

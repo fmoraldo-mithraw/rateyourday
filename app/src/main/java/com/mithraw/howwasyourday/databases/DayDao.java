@@ -20,8 +20,6 @@ public interface DayDao {
     @Query("SELECT * FROM day")
     List<Day> getAlIncludingRemoved();
 
-
-
     @Query("SELECT * FROM day WHERE is_removed IS 0 ORDER BY year DESC, month DESC, day_of_the_month DESC")
     List<Day> getAll();
 
@@ -98,6 +96,6 @@ public interface DayDao {
     @Query("SELECT * FROM day WHERE day_of_the_month IS :dayOfTheMonth AND month IS :month AND year IS :year AND is_removed IS 0 LIMIT 1")
     List<Day> getDay(int dayOfTheMonth, int month, int year);
 
-    @Query("SELECT * FROM day WHERE date_time > :startDateInt AND date_time < :endDateInt AND day_of_the_week IN (:idsDays) AND rating IN (:idsRate) AND latitude IS NOT 0 AND longitude IS NOT 0 AND is_removed IS 0")
+    @Query("SELECT * FROM day WHERE date_time > :startDateInt AND date_time < :endDateInt AND day_of_the_week IN (:idsDays) AND rating IN (:idsRate) AND latitude IS NOT 0 AND longitude IS NOT 0 AND is_removed IS 0 ORDER BY year DESC, month DESC, day_of_the_month DESC")
     List<Day> getByBoundsAndDaysAndRatingNoBadLocations(long startDateInt, long endDateInt, int[] idsDays, int[] idsRate);
 }

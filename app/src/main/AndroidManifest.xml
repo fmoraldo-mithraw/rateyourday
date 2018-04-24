@@ -78,7 +78,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDdUcrEUUrh7m5xEf0ImTETnPT5CD4wGmk" />
 
-        <activity android:name=".Activities.MapActivity"></activity>
+        <activity android:name=".Activities.MapActivity" />
+        <activity android:name=".Activities.MapPickActivity"></activity>
     </application>
 
 </manifest>

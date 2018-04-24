@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,7 +57,7 @@ Saved on a ratingView click or when returned
 public class RateADay extends AppCompatActivity {
     private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_LOCATION}
 
-    private enum ACTIVITY_RESULTS {GALLERY_ID, CAMERA_ID}
+    private enum ACTIVITY_RESULTS {GALLERY_ID, CAMERA_ID, PLACE_ID}
     protected final java.util.Calendar m_calendar = java.util.Calendar.getInstance();
     protected DaysDatabase db;
     protected static Handler handler;
@@ -67,6 +68,7 @@ public class RateADay extends AppCompatActivity {
     EditText mLogText;
     ImageButton mImageAdder;
     ImageButton mCameraAdder;
+    ImageButton mPlaceAdder;
     RateViewHelper mRateView;
     int mFlagsTitle;
     int mFlagsLog;
@@ -75,7 +77,7 @@ public class RateADay extends AppCompatActivity {
     LinearLayout mButtonsLinearLayout;
     int mHeight;
     MyLocationManager mLocManager;
-    Coordinate mLastCoordinate;
+    Coordinate mLastCoordinate = new Coordinate();
     private TextWatcher watcher = new TextWatcher() {
         private int spanLength = -1;
 
@@ -145,6 +147,7 @@ public class RateADay extends AppCompatActivity {
         db = DaysDatabase.getInstance(getApplicationContext());
         mImageAdder = findViewById(R.id.image_adder);
         mCameraAdder = findViewById(R.id.camera_adder);
+        mPlaceAdder = findViewById(R.id.place_adder);
         mTitleText = findViewById(R.id.titleTextRate);
         mFlagsTitle = mTitleText.getInputType();
         mLogText = findViewById(R.id.logTextRate);
@@ -238,6 +241,18 @@ public class RateADay extends AppCompatActivity {
             public void onClick(View v) {
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, ACTIVITY_RESULTS.CAMERA_ID.ordinal());
+
+            }
+        });
+        mPlaceAdder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent placeIntent = new Intent(getApplicationContext(),MapPickActivity.class);
+                placeIntent.putExtra(MapPickActivity.EXTRA_PARAM_TITLE, mTitleText.getText().toString());
+                placeIntent.putExtra(MapPickActivity.EXTRA_PARAM_LONGITUDE, mLastCoordinate.getLongitude());
+                placeIntent.putExtra(MapPickActivity.EXTRA_PARAM_LATITUDE, mLastCoordinate.getLatitude());
+                placeIntent.putExtra(MapPickActivity.EXTRA_PARAM_RATE, mRateView.getRating());
+                startActivityForResult(placeIntent, ACTIVITY_RESULTS.PLACE_ID.ordinal());
 
             }
         });
@@ -404,6 +419,15 @@ public class RateADay extends AppCompatActivity {
                 saveAndDisplay(mBitmap);
             }
             super.onActivityResult(requestCode, resultCode, data);
+        }else if ((requestCode == ACTIVITY_RESULTS.PLACE_ID.ordinal()) && (resultCode == RESULT_OK)){
+            double latitude = data.getDoubleExtra(MapPickActivity.EXTRA_PARAM_LATITUDE,0);
+            double longitude = data.getDoubleExtra(MapPickActivity.EXTRA_PARAM_LONGITUDE,0);
+            if((latitude != 0) && (longitude != 0)){
+                mLastCoordinate = new Coordinate();
+                mLastCoordinate.setLatitude(latitude);
+                mLastCoordinate.setLongitude(longitude);
+                Toast.makeText(getBaseContext(), R.string.new_coordinate_saved, Toast.LENGTH_LONG).show();
+            }
         }
     }
 

@@ -24,24 +24,32 @@ public class MyLocationManager {
     }
 
     public MyLocationManager(Activity act) {
+        this(act, (LocationListener) null);
+    }
+
+    public MyLocationManager(Activity act, LocationListener locationListener) {
         mActivity = act;
 
         mLocationManager = (LocationManager) App.getContext().getSystemService(Context.LOCATION_SERVICE);
 
-        // Define a listener that responds to location updates
-        mLocationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-            }
+        if (locationListener == null) {
+            // Define a listener that responds to location updates
+            mLocationListener = new LocationListener() {
+                public void onLocationChanged(Location location) {
+                }
 
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-            }
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+                }
 
-            public void onProviderEnabled(String provider) {
-            }
+                public void onProviderEnabled(String provider) {
+                }
 
-            public void onProviderDisabled(String provider) {
-            }
-        };
+                public void onProviderDisabled(String provider) {
+                }
+            };
+        }else {
+            mLocationListener = locationListener;
+        }
     }
 
     public void init() {

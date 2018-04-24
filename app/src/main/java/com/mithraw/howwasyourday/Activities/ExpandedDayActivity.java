@@ -150,7 +150,7 @@ public class ExpandedDayActivity extends AppCompatActivity implements OnMapReady
         Resources res = getResources();
         LatLng latLng = new LatLng(latitude, longitude);
         map.addMarker(new MarkerOptions().position(latLng).title(res.getString(R.string.maps_marker)));
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
         map.animateCamera(cameraUpdate);
     }
 
