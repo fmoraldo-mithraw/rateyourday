@@ -109,6 +109,7 @@
     <string name="notification_five_star">You did rate your day 5 stars ! Congrats !</string>
     <string name="action_entry_logs">Entry log</string>
     <string name="action_stats_diagrams">Diagrams</string>
+    <string name="action_map">Map of your ratings</string>
     <string name="action_funny_stats">Interesting datas</string>
     <string name="action_donate">Make a gift to the author</string>
     <string name="action_about_the_author">About the author</string>

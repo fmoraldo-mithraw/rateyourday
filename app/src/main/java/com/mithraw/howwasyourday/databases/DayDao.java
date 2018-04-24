@@ -98,4 +98,6 @@ public interface DayDao {
     @Query("SELECT * FROM day WHERE day_of_the_month IS :dayOfTheMonth AND month IS :month AND year IS :year AND is_removed IS 0 LIMIT 1")
     List<Day> getDay(int dayOfTheMonth, int month, int year);
 
+    @Query("SELECT * FROM day WHERE date_time > :startDateInt AND date_time < :endDateInt AND day_of_the_week IN (:idsDays) AND rating IN (:idsRate) AND latitude IS NOT 0 AND longitude IS NOT 0 AND is_removed IS 0")
+    List<Day> getByBoundsAndDaysAndRatingNoBadLocations(long startDateInt, long endDateInt, int[] idsDays, int[] idsRate);
 }

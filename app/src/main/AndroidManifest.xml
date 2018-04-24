@@ -72,10 +72,13 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
-        <activity android:name=".Activities.ImportExportActivity"></activity>
+        <activity android:name=".Activities.ImportExportActivity" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDdUcrEUUrh7m5xEf0ImTETnPT5CD4wGmk"/>
+            android:value="AIzaSyDdUcrEUUrh7m5xEf0ImTETnPT5CD4wGmk" />
+
+        <activity android:name=".Activities.MapActivity"></activity>
     </application>
 
 </manifest>

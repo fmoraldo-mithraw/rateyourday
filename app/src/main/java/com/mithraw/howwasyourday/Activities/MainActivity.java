@@ -455,6 +455,12 @@ public class MainActivity extends _SwipeActivityClass
         startActivity(importExportIntent);
     }
 
+    private void launchActivityMap() {
+        Intent mapIntent = new Intent(getApplicationContext(), MapActivity.class);
+        startActivity(mapIntent);
+    }
+
+
     public class ReconnectListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -539,6 +545,10 @@ public class MainActivity extends _SwipeActivityClass
         if(id == R.id.nav_import_export) {
             launchActivityImportExport();
         }
+        if(id == R.id.nav_map) {
+            launchActivityMap();
+        }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
