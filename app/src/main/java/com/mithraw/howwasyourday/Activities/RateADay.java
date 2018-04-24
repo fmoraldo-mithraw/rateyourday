@@ -31,6 +31,7 @@ import com.mithraw.howwasyourday.Dialogs.TipsDialog;
 import com.mithraw.howwasyourday.Helpers.BitmapHelper;
 import com.mithraw.howwasyourday.Helpers.RateViewHelper;
 import com.mithraw.howwasyourday.R;
+import com.mithraw.howwasyourday.Tools.Coordinate;
 import com.mithraw.howwasyourday.Tools.MyInt;
 import com.mithraw.howwasyourday.Tools.MyLocationManager;
 import com.mithraw.howwasyourday.databases.Day;
@@ -53,7 +54,7 @@ RateADay Activity shows a screen that permit you to save informations on the day
 Saved on a ratingView click or when returned
  */
 public class RateADay extends AppCompatActivity {
-    private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY}
+    private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_LOCATION}
 
     private enum ACTIVITY_RESULTS {GALLERY_ID, CAMERA_ID}
     protected final java.util.Calendar m_calendar = java.util.Calendar.getInstance();
@@ -74,6 +75,7 @@ public class RateADay extends AppCompatActivity {
     LinearLayout mButtonsLinearLayout;
     int mHeight;
     MyLocationManager mLocManager;
+    Coordinate mLastCoordinate;
     private TextWatcher watcher = new TextWatcher() {
         private int spanLength = -1;
 
@@ -162,11 +164,18 @@ public class RateADay extends AppCompatActivity {
                 } else if (msg.what == MSG_ID.MSG_TITLE.ordinal()) {
                     mTitleText.setText((String) (msg.obj));
                     allowFocusOnTexts(true);
+                } else if (msg.what == MSG_ID.MSG_LOCATION.ordinal()) {
+                    if ((msg.obj == null) || (((Coordinate) msg.obj).getLatitude() == 0) && (((Coordinate) msg.obj).getLongitude() == 0)) {
+                        mLastCoordinate = new Coordinate();
+                    } else {
+                        mLastCoordinate = (Coordinate) msg.obj;
+                    }
                 }
                 if (msg.what == MSG_ID.MSG_EMPTY.ordinal()) {
                     mTitleText.setText("");
                     mLogText.setText("");
                     mRateView.setRating(0);
+                    mLastCoordinate = new Coordinate();
                     allowFocusOnTexts(false);
                 }
             }
@@ -291,6 +300,14 @@ public class RateADay extends AppCompatActivity {
                     msg_log.what = MSG_ID.MSG_LOG.ordinal();
                     msg_log.obj = days.get(0).getLog();
                     handler.sendMessage(msg_log);
+
+                    Coordinate coordinate = new Coordinate();
+                    coordinate.setLatitude(days.get(0).getLatitude());
+                    coordinate.setLongitude(days.get(0).getLongitude());
+                    Message msg_location = Message.obtain();
+                    msg_location.what = MSG_ID.MSG_LOCATION.ordinal();
+                    msg_location.obj = coordinate;
+                    handler.sendMessage(msg_location);
                 }
             }
         }.start();
@@ -304,12 +321,17 @@ public class RateADay extends AppCompatActivity {
                     return;
                 double latitude = 0;
                 double longitude = 0;
-                Location objLocation = mLocManager.getLocation();
-                if (objLocation != null) {
-                    if (objLocation.getAccuracy() != 0) {
-                        latitude = mLocManager.getLocation().getLatitude();
-                        longitude = mLocManager.getLocation().getLongitude();
+                if ((mLastCoordinate == null) || ((mLastCoordinate.getLongitude() == 0) && (mLastCoordinate.getLatitude() == 0))) {
+                    Location objLocation = mLocManager.getLocation();
+                    if (objLocation != null) {
+                        if (objLocation.getAccuracy() != 0) {
+                            latitude = mLocManager.getLocation().getLatitude();
+                            longitude = mLocManager.getLocation().getLongitude();
+                        }
                     }
+                } else {
+                    latitude = mLastCoordinate.getLatitude();
+                    longitude = mLastCoordinate.getLongitude();
                 }
                 Day d = new Day(m_calendar.get(Calendar.DAY_OF_WEEK),
                         m_calendar.get(Calendar.DAY_OF_MONTH),
