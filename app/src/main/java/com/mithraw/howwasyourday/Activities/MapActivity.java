@@ -53,7 +53,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         QUERY_START,
         QUERY_END
     }
-
+    LinearLayout ratingLayout1, ratingLayout2, ratingLayout3, ratingLayout4, ratingLayout5;
     RatingBar ratingBar1, ratingBar2, ratingBar3, ratingBar4, ratingBar5;
     UnderlinedCheckTextView mCheckTextViewMonday, mCheckTextViewTuesday, mCheckTextViewWednesday, mCheckTextViewThursday, mCheckTextViewFriday, mCheckTextViewSaturday, mCheckTextViewSunday;
     View.OnClickListener _wrappedOnClickListener = new View.OnClickListener() {
@@ -62,10 +62,38 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             updateDataSet();
         }
     };
-    View.OnClickListener _wrappedOnClickListenerRatingBar = new View.OnClickListener() {
+    View.OnClickListener _wrappedOnClickListenerRatingBar1 = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            v.setEnabled(!v.isEnabled());
+            ratingBar1.setEnabled(!ratingBar1.isEnabled());
+            updateDataSet();
+        }
+    };
+    View.OnClickListener _wrappedOnClickListenerRatingBar2 = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ratingBar2.setEnabled(!ratingBar2.isEnabled());
+            updateDataSet();
+        }
+    };
+    View.OnClickListener _wrappedOnClickListenerRatingBar3 = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ratingBar3.setEnabled(!ratingBar3.isEnabled());
+            updateDataSet();
+        }
+    };
+    View.OnClickListener _wrappedOnClickListenerRatingBar4 = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ratingBar4.setEnabled(!ratingBar4.isEnabled());
+            updateDataSet();
+        }
+    };
+    View.OnClickListener _wrappedOnClickListenerRatingBar5 = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ratingBar5.setEnabled(!ratingBar5.isEnabled());
             updateDataSet();
         }
     };
@@ -169,6 +197,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         ratingBar3 = findViewById(R.id.ratingBar3);
         ratingBar4 = findViewById(R.id.ratingBar4);
         ratingBar5 = findViewById(R.id.ratingBar5);
+        ratingLayout1 = findViewById(R.id.ratingLayout1);
+        ratingLayout2 = findViewById(R.id.ratingLayout2);
+        ratingLayout3 = findViewById(R.id.ratingLayout3);
+        ratingLayout4 = findViewById(R.id.ratingLayout4);
+        ratingLayout5 = findViewById(R.id.ratingLayout5);
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -205,11 +238,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void mapReady(boolean isReady) {
         startDateLayout.setOnClickListener(isReady ? startClickListener : null);
         endDateLayout.setOnClickListener(isReady ? endClickListener : null);
-        ratingBar1.setOnClickListener(isReady ? _wrappedOnClickListenerRatingBar : null);
-        ratingBar2.setOnClickListener(isReady ? _wrappedOnClickListenerRatingBar : null);
-        ratingBar3.setOnClickListener(isReady ? _wrappedOnClickListenerRatingBar : null);
-        ratingBar4.setOnClickListener(isReady ? _wrappedOnClickListenerRatingBar : null);
-        ratingBar5.setOnClickListener(isReady ? _wrappedOnClickListenerRatingBar : null);
+        ratingLayout1.setOnClickListener(isReady ? _wrappedOnClickListenerRatingBar1 : null);
+        ratingLayout2.setOnClickListener(isReady ? _wrappedOnClickListenerRatingBar2 : null);
+        ratingLayout3.setOnClickListener(isReady ? _wrappedOnClickListenerRatingBar3 : null);
+        ratingLayout4.setOnClickListener(isReady ? _wrappedOnClickListenerRatingBar4 : null);
+        ratingLayout5.setOnClickListener(isReady ? _wrappedOnClickListenerRatingBar5 : null);
         mCheckTextViewMonday.setEnabled(isReady);
         mCheckTextViewTuesday.setEnabled(isReady);
         mCheckTextViewWednesday.setEnabled(isReady);
@@ -253,7 +286,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 boolean rate2 = ratingBar2.isEnabled();
                 boolean rate3 = ratingBar3.isEnabled();
                 boolean rate4 = ratingBar4.isEnabled();
-                boolean rate5 = ratingBar4.isEnabled();
+                boolean rate5 = ratingBar5.isEnabled();
                 size = (rate1 ? 1 : 0) + (rate2 ? 1 : 0) + (rate3 ? 1 : 0) + (rate4 ? 1 : 0) + (rate5 ? 1 : 0);
                 int[] idsRate = new int[size];
                 count = 0;

@@ -194,7 +194,12 @@
             android:orientation="horizontal"
             android:paddingBottom="10dp"
             android:paddingTop="15dp">
-
+            <LinearLayout
+                android:id="@+id/ratingLayout1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center"
+                android:orientation="horizontal">
             <RatingBar
                 android:id="@+id/ratingBar1"
                 style="@style/Widget.AppCompat.RatingBar.Small"
@@ -206,7 +211,13 @@
                 android:isIndicator="true"
                 android:numStars="5"
                 android:rating="1" />
-
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ratingLayout2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center"
+                android:orientation="horizontal">
             <RatingBar
                 android:id="@+id/ratingBar2"
                 style="@style/Widget.AppCompat.RatingBar.Small"
@@ -218,7 +229,13 @@
                 android:isIndicator="true"
                 android:numStars="5"
                 android:rating="2" />
-
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ratingLayout3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center"
+                android:orientation="horizontal">
             <RatingBar
                 android:id="@+id/ratingBar3"
                 style="@style/Widget.AppCompat.RatingBar.Small"
@@ -229,7 +246,7 @@
                 android:isIndicator="true"
                 android:numStars="5"
                 android:rating="3" />
-
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -238,7 +255,12 @@
             android:layout_marginTop="5dp"
             android:gravity="center_horizontal|center"
             android:orientation="horizontal">
-
+            <LinearLayout
+                android:id="@+id/ratingLayout4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center"
+                android:orientation="horizontal">
             <RatingBar
                 android:id="@+id/ratingBar4"
                 style="@style/Widget.AppCompat.RatingBar.Small"
@@ -250,7 +272,13 @@
                 android:isIndicator="true"
                 android:numStars="5"
                 android:rating="4" />
-
+        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ratingLayout5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center"
+                android:orientation="horizontal">
             <RatingBar
                 android:id="@+id/ratingBar5"
                 style="@style/Widget.AppCompat.RatingBar.Small"
@@ -261,7 +289,7 @@
                 android:isIndicator="true"
                 android:numStars="5"
                 android:rating="5" />
-
+    </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
