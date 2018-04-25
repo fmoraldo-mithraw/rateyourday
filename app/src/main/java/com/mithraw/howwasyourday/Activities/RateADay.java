@@ -284,6 +284,7 @@ public class RateADay extends AppCompatActivity {
     private void allowFocusOnTexts(boolean allow) {
         mImageAdder.setEnabled(allow);
         mCameraAdder.setEnabled(allow);
+        mPlaceAdder.setEnabled(allow);
         if (allow) {
             mTitleText.setInputType(mFlagsTitle);
             mLogText.setInputType(mFlagsLog);
