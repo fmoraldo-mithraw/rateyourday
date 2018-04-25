@@ -25,6 +25,7 @@ public class OwnIconRenderer extends DefaultClusterRenderer<RateClusterItem> {
                            ClusterManager<RateClusterItem> clusterManager, int rate) {
         super(context, map, clusterManager);
         mRate = rate;
+        setMinClusterSize(2);
     }
 
     @Override
