@@ -22,7 +22,7 @@
     <!-- Example General settings -->
     <string name="pref_header_general">General preferences</string>
 
-    <string name="pref_title_social_recommendations">Actiate the auto-sharing</string>
+    <string name="pref_title_social_recommendations">Activate the auto-sharing</string>
     <string name="pref_description_social_recommendations">Recommendations for people to contact
         based on your message history
     </string>
@@ -110,7 +110,7 @@
     <string name="action_entry_logs">Entry log</string>
     <string name="action_stats_diagrams">Diagrams</string>
     <string name="action_map">Map of your ratings</string>
-    <string name="action_funny_stats">Interesting datas</string>
+    <string name="action_funny_stats">Interesting data</string>
     <string name="action_donate">Make a gift to the author</string>
     <string name="action_about_the_author">About the author</string>
     <string name="action_about_the_app">About the application</string>
@@ -176,7 +176,7 @@
     <string name="donate_link">https://paypal.me/pools/c/83t6e5qfy7</string>
     <string name="about_the_autho_text">Hi ! My name is Fabien \'Mithraw\' Moraldo, i\'m born in the 1985, and i like doing things, yeah, just like you ! We are so much the same !\nNo kidding, i\'m just a regular dude, who will be happy if you enjoyed his work.\nBut must of all, i would be nobody without my friends, so a big thanks to the friends who supported me, and helped me testing the app :</string>
     <string name="about_the_autho_friends">- HowlBurn\n- Gio\n- Arita\n- Loki\n- Clifford1313</string>
-    <string name="issue_google_sign_in">An error occured during the connection to your google account</string>
+    <string name="issue_google_sign_in">An error occurred during the connection to your google account</string>
     <string name="reconnect_google_sign_in">Reconnect</string>
     <string name="ok_google_sign_in">You are successfully connected to your google account</string>
     <string name="notificationIntentAction">com.mithraw.howwasyourday.notification</string>
@@ -239,7 +239,7 @@
     <string name="photo_archive">Photo archive</string>
     <string name="import_title">Import</string>
     <string name="import_data">You can import data in two formats :\n - CSV : \"datetime in millisec\";\"rate\";\"title\";\"text\"\n - Sqlite3 Database : same database that you did export on this screen.\nIn your texts, if you want any photo to be inside, you must insert [[[photoname.png]]]</string>
-    <string name="import_data2">You can send your photos they must be in a zip archive with direcotries named by the date they fit in YYYYMMDD:</string>
+    <string name="import_data2">You can send your photos they must be in a zip archive with directories named by the date they fit in YYYYMMDD:</string>
     <string name="congrats">Congrats !</string>
     <string name="bronze_text">You earned the bronze trophy ! Continue to rate your days and you will soon win the next one !</string>
     <string name="silver_text">You earned the silver trophy ! Continue to rate your days and you will soon win the next one !</string>
@@ -258,6 +258,4 @@
     <string name="advice_title_big_gap">Some of your days are way better than others...</string>
     <string name="interesting_things">Some interesting stats are available for you !</string>
     <string name="interesting_things_button">Check it out !</string>
-
-
 </resources>
