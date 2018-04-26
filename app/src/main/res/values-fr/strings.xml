@@ -249,4 +249,6 @@
     <string name="advice_title_bad_avg">La moyenne de vos notes est plutôt basse...</string>
     <string name="advice_title_extrem">Vos notes sont assez extrêmes...</string>
     <string name="advice_title_big_gap">Une journée de votre semaine est bien moins bien que les autres...</string>
+    <string name="interesting_things">"Des informations intéressantes sont disponibles !"</string>
+    <string name="interesting_things_button">Allons voir !</string>
 </resources>

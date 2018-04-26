@@ -256,5 +256,8 @@
     <string name="advice_title_bad_avg">Your average rate is pretty low...</string>
     <string name="advice_title_extrem">Your rates are very extreme...</string>
     <string name="advice_title_big_gap">Some of your days are way better than others...</string>
+    <string name="interesting_things">Some interesting stats are available for you !</string>
+    <string name="interesting_things_button">Check it out !</string>
+
 
 </resources>

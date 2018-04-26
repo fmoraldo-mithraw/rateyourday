@@ -44,6 +44,7 @@ import com.mithraw.howwasyourday.Dialogs.TipsDialog;
 import com.mithraw.howwasyourday.Helpers.BitmapHelper;
 import com.mithraw.howwasyourday.Helpers.GoogleSignInHelper;
 import com.mithraw.howwasyourday.Helpers.NotificationHelper;
+import com.mithraw.howwasyourday.Helpers.Statistics.StatisticsAdds;
 import com.mithraw.howwasyourday.Helpers.SyncLauncher;
 import com.mithraw.howwasyourday.Helpers.ThreadSyncDatas;
 import com.mithraw.howwasyourday.R;
@@ -64,10 +65,11 @@ Main Activity, show a calendar view and a card with the day selected (default to
 Manage the menu
  */
 
+
 public class MainActivity extends _SwipeActivityClass
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT, MSG_UPDATE, MSG_LOCATION}
+    private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT, MSG_UPDATE, MSG_LOCATION, MSG_INTERRESTING}
 
     public enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS, ACTIVITY_LOGS, ACTIVITY_STATS}
 
@@ -81,7 +83,6 @@ public class MainActivity extends _SwipeActivityClass
     private static CardView mCardView;
     Coordinate mLastCoordinate = new Coordinate();
     MyInt[] arrayInt = {new MyInt(0)};
-
     public static Context getContext() {
         return mContext;
     }
@@ -226,6 +227,25 @@ public class MainActivity extends _SwipeActivityClass
                         loc.setVisibility(View.VISIBLE);
                     }
                 }
+                if(msg.what == MSG_ID.MSG_INTERRESTING.ordinal()){
+                    String preferenceName = "tips_snack_showed";
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTimeInMillis(System.currentTimeMillis());
+                    int curMonth = cal.get(Calendar.MONTH);
+                    int curYear = cal.get(Calendar.YEAR);
+                    PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putBoolean(preferenceName, false).apply();
+                    PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putInt(preferenceName + "_month", curMonth).apply();
+                    PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putInt(preferenceName + "_year", curYear).apply();
+                    Snackbar snackbar = Snackbar.make(getCurrentFocus(), R.string.interesting_things, 5000);
+                    snackbar.setAction(R.string.interesting_things_button, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            launchActivityFunnyStats();
+                        }
+                    });
+                    snackbar.show();
+
+                }
                 if (msg.what == MSG_ID.MSG_EMPTY.ordinal()) {
                     if ((rab != null) &&
                             (removeButton != null) &&
@@ -336,9 +356,74 @@ public class MainActivity extends _SwipeActivityClass
         });
         calendarView.setDate(m_calendar.getTimeInMillis());
         updateDateText();
+        checkIfSomeThingInterresting();
     }
 
+    private void checkIfSomeThingInterresting() {
+        String preferenceName = "tips_snack_show";
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        int curMonth = cal.get(Calendar.MONTH);
+        int curYear = cal.get(Calendar.YEAR);
+        boolean showSnack = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean(preferenceName, true);
+        int showCardMonth = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getInt(preferenceName + "_month", 0);
+        int showCardYear = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getInt(preferenceName + "_year", 0);
+        if ((showSnack == false) && (((curMonth > showCardMonth) && (curYear >= showCardYear)) || (curYear > showCardYear))) {
+            showSnack = true;
+            PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putBoolean(preferenceName, showSnack).apply();
 
+        }
+        if(showSnack) {
+
+            new Thread() {
+                @Override
+                public void run() {
+                    Calendar calendar = Calendar.getInstance();
+                    StatisticsAdds addsCurMonth = new StatisticsAdds();
+                    addsCurMonth.setNumDayRated1(db.dayDao().getNumberOfDayByRateByMonthAndYear(1, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumDayRated2(db.dayDao().getNumberOfDayByRateByMonthAndYear(2, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumDayRated3(db.dayDao().getNumberOfDayByRateByMonthAndYear(3, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumDayRated4(db.dayDao().getNumberOfDayByRateByMonthAndYear(4, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumDayRated5(db.dayDao().getNumberOfDayByRateByMonthAndYear(5, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAverageDay(db.dayDao().getAverageDayByMonthAndYear(calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumberOfRatedDays(db.dayDao().getNumberOfDaysByMonthAndYear(calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgMonday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.MONDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgTuesday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.TUESDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgWednesday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.WEDNESDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgThursday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.THURSDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgFriday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.FRIDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgSaturday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.SATURDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgSunday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.SUNDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .init();
+                    calendar.add(Calendar.MONTH,-1);
+                    StatisticsAdds addsLastMonth = new StatisticsAdds();
+                    addsLastMonth.setNumDayRated1(db.dayDao().getNumberOfDayByRateByMonthAndYear(1, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumDayRated2(db.dayDao().getNumberOfDayByRateByMonthAndYear(2, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumDayRated3(db.dayDao().getNumberOfDayByRateByMonthAndYear(3, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumDayRated4(db.dayDao().getNumberOfDayByRateByMonthAndYear(4, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumDayRated5(db.dayDao().getNumberOfDayByRateByMonthAndYear(5, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAverageDay(db.dayDao().getAverageDayByMonthAndYear(calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumberOfRatedDays(db.dayDao().getNumberOfDaysByMonthAndYear(calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgMonday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.MONDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgTuesday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.TUESDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgWednesday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.WEDNESDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgThursday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.THURSDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgFriday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.FRIDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgSaturday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.SATURDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgSunday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.SUNDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .init();
+                    if ((!addsCurMonth.getBadAvgQuote().equals("")) ||
+                            (!addsCurMonth.getExtremQuote().equals("")) ||
+                            (!addsCurMonth.getBigGapQuote().equals("")) ||
+                            (!addsLastMonth.getBadAvgQuote().equals("")) ||
+                            (!addsLastMonth.getExtremQuote().equals("")) ||
+                            (!addsLastMonth.getBigGapQuote().equals(""))){
+                        handler.sendEmptyMessage(MSG_ID.MSG_INTERRESTING.ordinal());
+                    }
+                }
+            }.start();
+        }
+    }
 
     private void expandDay(View v) {
 
