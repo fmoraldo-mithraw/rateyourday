@@ -45,6 +45,9 @@ public class FunnyStatsActivity extends AppCompatActivity {
     FunnyStatsHelper mStatHelperCurrentYear;
     FunnyStatsHelper mStatHelperLastYear;
     FunnyStatsHelper mStatHelperAllTime;
+    FunnyStatsHelper mStatHelperBadAvg;
+    FunnyStatsHelper mStatHelperExtrem;
+    FunnyStatsHelper mStatHelperBigGap;
     private String[] listProperties = {"stats_show_nothing_interresting",
             "stats_show_last_week",
             "stats_show_current_month",
@@ -52,6 +55,9 @@ public class FunnyStatsActivity extends AppCompatActivity {
             "stats_show_current_year",
             "stats_show_last_year",
             "stats_trophy",
+            "stats_extreme",
+            "stats_big_gap",
+            "stats_bad_avg",
             "stats_show_all_time"
     };
 
@@ -68,17 +74,20 @@ public class FunnyStatsActivity extends AppCompatActivity {
 
         //Add the back button to the actionbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mStatHelperNothing = new FunnyStatsHelper((CardView)findViewById(R.id.card_view_nothing_interesting),this,"stats_show_nothing_interresting");
+        mStatHelperNothing = new FunnyStatsHelper((CardView) findViewById(R.id.card_view_nothing_interesting), this, "stats_show_nothing_interresting", true);
         mStatHelperLastWeek = new FunnyStatsHelper((CardView)findViewById(R.id.card_view_last_week),this,"stats_show_last_week");
         mStatHelperCurrentMonth = new FunnyStatsHelper((CardView)findViewById(R.id.card_view_current_month),this,"stats_show_current_month");
         mStatHelperLastMonth = new FunnyStatsHelper((CardView)findViewById(R.id.card_view_last_month),this,"stats_show_last_month");
         mStatHelperCurrentYear = new FunnyStatsHelper((CardView)findViewById(R.id.card_view_current_year),this,"stats_show_current_year");
         mStatHelperLastYear = new FunnyStatsHelper((CardView)findViewById(R.id.card_view_last_year),this,"stats_show_last_year");
         mStatHelperAllTime = new FunnyStatsHelper((CardView)findViewById(R.id.card_view_all_time),this,"stats_show_all_time");
+        mStatHelperBadAvg = new FunnyStatsHelper((CardView) findViewById(R.id.card_view_bad_avg), this, "stats_show_bad_avg");
+        mStatHelperBigGap = new FunnyStatsHelper((CardView) findViewById(R.id.card_view_big_gap), this, "stats_show_big_gap");
+        mStatHelperExtrem = new FunnyStatsHelper((CardView) findViewById(R.id.card_view_extreme), this, "stats_show_extreme");
+
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                CardView cv_nothing_interesting = findViewById(R.id.card_view_nothing_interesting);
                 if (msg.what == MSG_ID.TROPHY.ordinal()) {
                     boolean showCard = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("stats_trophy", true);
                     int days = (int) msg.obj;
@@ -87,10 +96,10 @@ public class FunnyStatsActivity extends AppCompatActivity {
                         TextView tvTrophy = findViewById(R.id.text_view_trophy);
                         ImageView ivTrophy = findViewById(R.id.imageViewTrophy);
                         if (days > 30) {
-                            cv_nothing_interesting.setVisibility(View.GONE);
+                            mStatHelperNothing.forceHide();
                             cvTrophy.setVisibility(View.VISIBLE);
-                            if (days > 180) {
-                                if (days > 360) {
+                            if (days > 90) {
+                                if (days > 180) {
                                     tvTrophy.setText(R.string.gold_text);
                                     ivTrophy.setImageResource(R.drawable.ic_badge_gold);
                                 } else {
@@ -106,12 +115,10 @@ public class FunnyStatsActivity extends AppCompatActivity {
                     }
                 }
                 if (msg.what == MSG_ID.LAST_WEEK.ordinal()) {
-                    boolean showCard = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("stats_show_last_week", true);
                     Statistics datas = (Statistics) msg.obj;
-                    if ((showCard) && (datas != null) && (datas.getFavoriteDay() != null) && (datas.getWorstDay() != null)) {
-                        cv_nothing_interesting.setVisibility(View.GONE);
-                        CardView cvLastWeek = findViewById(R.id.card_view_last_week);
-                        cvLastWeek.setVisibility(View.VISIBLE);
+                    if ((datas != null) && (datas.getFavoriteDay() != null) && (datas.getWorstDay() != null)) {
+                        mStatHelperNothing.forceHide();
+                        mStatHelperLastWeek.show();
                         TextView favDay = findViewById(R.id.text_view_last_week_favorite_day);
                         favDay.setText(DayHelper.getInstance().format(datas.getFavoriteDay(), 0));
                         TextView worstDay = findViewById(R.id.text_view_last_week_worst_day);
@@ -119,44 +126,97 @@ public class FunnyStatsActivity extends AppCompatActivity {
                     }
                 }
                 if (msg.what == MSG_ID.CURRENT_MONTH.ordinal()) {
-                    boolean showCard = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("stats_show_current_month", true);
                     Statistics datas = (Statistics) msg.obj;
-                    if ((showCard) && (datas != null) && (datas.getFavoriteDay() != null) && (datas.getWorstDay() != null)) {
-                        cv_nothing_interesting.setVisibility(View.GONE);
-                        CardView cvLastWeek = findViewById(R.id.card_view_current_month);
-                        cvLastWeek.setVisibility(View.VISIBLE);
+                    if ((datas != null) && (datas.getFavoriteDay() != null) && (datas.getWorstDay() != null)) {
+                        mStatHelperNothing.forceHide();
+                        mStatHelperCurrentMonth.show();
                         TextView favDay = findViewById(R.id.text_view_current_month_favorite_day);
                         favDay.setText(DayHelper.getInstance().format(datas.getFavoriteDay(), 1));
                         TextView worstDay = findViewById(R.id.text_view_current_month_worst_day);
                         worstDay.setText(DayHelper.getInstance().format(datas.getWorstDay(), 1));
+                        if (datas.getStatisticsAdds() != null) {
+                            CardView cv = findViewById(R.id.card_view_current_month);
+                            StatisticsAdds adds = datas.getStatisticsAdds();
+                            ((TextView) cv.findViewById(R.id.text_view_all_time_days_rated)).setText(String.valueOf(adds.getNumberOfRatedDays()));
+                            ((TextView) cv.findViewById(R.id.text_view_all_time_average_rate)).setText(StatisticsHelper.floatFormat(adds.getAverageDay(), 2));
+                            if (!adds.getBadAvgQuote().equals("")) {
+                                mStatHelperBadAvg.show();
+                                mStatHelperBadAvg.setQuote(adds.getBadAvgQuote());
+                            }
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_1)).setText(String.valueOf(adds.getNumDayRated1()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_2)).setText(String.valueOf(adds.getNumDayRated2()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_3)).setText(String.valueOf(adds.getNumDayRated3()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_4)).setText(String.valueOf(adds.getNumDayRated4()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_5)).setText(String.valueOf(adds.getNumDayRated5()));
+                            if (!adds.getExtremQuote().equals("")) {
+                                mStatHelperExtrem.show();
+                                mStatHelperExtrem.setQuote(adds.getExtremQuote());
+                            }
+                            ((TextView) cv.findViewById(R.id.monday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgMonday(), 2));
+                            ((TextView) cv.findViewById(R.id.tuesday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgTuesday(), 2));
+                            ((TextView) cv.findViewById(R.id.wednesday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgWednesday(), 2));
+                            ((TextView) cv.findViewById(R.id.thursday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgThursday(), 2));
+                            ((TextView) cv.findViewById(R.id.friday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgFriday(), 2));
+                            ((TextView) cv.findViewById(R.id.saturday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgSaturday(), 2));
+                            ((TextView) cv.findViewById(R.id.sunday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgSunday(), 2));
+                            if (!adds.getBigGapQuote().equals("")) {
+                                mStatHelperBigGap.show();
+                                mStatHelperBigGap.setQuote(adds.getBigGapQuote());
+                            }
+                        }
                     }
                 }
                 if (msg.what == MSG_ID.LAST_MONTH.ordinal()) {
-                    boolean showCard = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("stats_show_last_month", true);
                     Statistics datas = (Statistics) msg.obj;
-                    if ((showCard) && (datas != null) && (datas.getFavoriteDay() != null) && (datas.getWorstDay() != null)) {
-                        cv_nothing_interesting.setVisibility(View.GONE);
-                        CardView cvLastWeek = findViewById(R.id.card_view_last_month);
-                        cvLastWeek.setVisibility(View.VISIBLE);
+                    if ((datas != null) && (datas.getFavoriteDay() != null) && (datas.getWorstDay() != null)) {
+                        mStatHelperNothing.forceHide();
+                        mStatHelperLastMonth.show();
                         TextView favDay = findViewById(R.id.text_view_last_month_favorite_day);
                         favDay.setText(DayHelper.getInstance().format(datas.getFavoriteDay(), 1));
                         TextView worstDay = findViewById(R.id.text_view_last_month_worst_day);
                         worstDay.setText(DayHelper.getInstance().format(datas.getWorstDay(), 1));
+                        if (datas.getStatisticsAdds() != null) {
+                            CardView cv = findViewById(R.id.card_view_last_month);
+                            StatisticsAdds adds = datas.getStatisticsAdds();
+                            ((TextView) cv.findViewById(R.id.text_view_all_time_days_rated)).setText(String.valueOf(adds.getNumberOfRatedDays()));
+                            ((TextView) cv.findViewById(R.id.text_view_all_time_average_rate)).setText(StatisticsHelper.floatFormat(adds.getAverageDay(), 2));
+                            if (!adds.getBadAvgQuote().equals("")) {
+                                mStatHelperBadAvg.show();
+                                mStatHelperBadAvg.setQuote(adds.getBadAvgQuote());
+                            }
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_1)).setText(String.valueOf(adds.getNumDayRated1()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_2)).setText(String.valueOf(adds.getNumDayRated2()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_3)).setText(String.valueOf(adds.getNumDayRated3()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_4)).setText(String.valueOf(adds.getNumDayRated4()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_5)).setText(String.valueOf(adds.getNumDayRated5()));
+                            if (!adds.getExtremQuote().equals("")) {
+                                mStatHelperExtrem.show();
+                                mStatHelperExtrem.setQuote(adds.getExtremQuote());
+                            }
+                            ((TextView) cv.findViewById(R.id.monday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgMonday(), 2));
+                            ((TextView) cv.findViewById(R.id.tuesday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgTuesday(), 2));
+                            ((TextView) cv.findViewById(R.id.wednesday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgWednesday(), 2));
+                            ((TextView) cv.findViewById(R.id.thursday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgThursday(), 2));
+                            ((TextView) cv.findViewById(R.id.friday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgFriday(), 2));
+                            ((TextView) cv.findViewById(R.id.saturday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgSaturday(), 2));
+                            ((TextView) cv.findViewById(R.id.sunday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgSunday(), 2));
+                            if (!adds.getBigGapQuote().equals("")) {
+                                mStatHelperBigGap.show();
+                                mStatHelperBigGap.setQuote(adds.getBigGapQuote());
+                            }
+                        }
+
                     }
                 }
                 if (msg.what == MSG_ID.CURRENT_YEAR.ordinal()) {
-                    boolean showCard = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("stats_show_current_year", true);
                     Statistics datas = (Statistics) msg.obj;
-                    if ((showCard) &&
-                            (datas != null) &&
+                    if ((datas != null) &&
                             (datas.getFavoriteDay() != null) &&
                             (datas.getWorstDay() != null) &&
                             (datas.getFavoriteMonth() != null) &&
                             (datas.getWorstMonth() != null)) {
-
-                        cv_nothing_interesting.setVisibility(View.GONE);
-                        CardView cvLastWeek = findViewById(R.id.card_view_current_year);
-                        cvLastWeek.setVisibility(View.VISIBLE);
+                        mStatHelperNothing.forceHide();
+                        mStatHelperCurrentYear.show();
                         TextView favDay = findViewById(R.id.text_view_current_year_favorite_day);
                         favDay.setText(DayHelper.getInstance().format(datas.getFavoriteDay(), 2));
                         TextView worstDay = findViewById(R.id.text_view_current_year_worst_day);
@@ -165,21 +225,35 @@ public class FunnyStatsActivity extends AppCompatActivity {
                         favMonth.setText(MonthHelper.getInstance().format(datas.getFavoriteMonth(), 2));
                         TextView worstMonth = findViewById(R.id.text_view_current_year_worst_month);
                         worstMonth.setText(MonthHelper.getInstance().format(datas.getWorstMonth(), 2));
+                        if (datas.getStatisticsAdds() != null) {
+                            CardView cv = findViewById(R.id.card_view_current_year);
+                            StatisticsAdds adds = datas.getStatisticsAdds();
+                            ((TextView) cv.findViewById(R.id.text_view_all_time_days_rated)).setText(String.valueOf(adds.getNumberOfRatedDays()));
+                            ((TextView) cv.findViewById(R.id.text_view_all_time_average_rate)).setText(StatisticsHelper.floatFormat(adds.getAverageDay(), 2));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_1)).setText(String.valueOf(adds.getNumDayRated1()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_2)).setText(String.valueOf(adds.getNumDayRated2()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_3)).setText(String.valueOf(adds.getNumDayRated3()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_4)).setText(String.valueOf(adds.getNumDayRated4()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_5)).setText(String.valueOf(adds.getNumDayRated5()));
+                            ((TextView) cv.findViewById(R.id.monday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgMonday(), 2));
+                            ((TextView) cv.findViewById(R.id.tuesday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgTuesday(), 2));
+                            ((TextView) cv.findViewById(R.id.wednesday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgWednesday(), 2));
+                            ((TextView) cv.findViewById(R.id.thursday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgThursday(), 2));
+                            ((TextView) cv.findViewById(R.id.friday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgFriday(), 2));
+                            ((TextView) cv.findViewById(R.id.saturday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgSaturday(), 2));
+                            ((TextView) cv.findViewById(R.id.sunday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgSunday(), 2));
+                        }
                     }
                 }
                 if (msg.what == MSG_ID.LAST_YEAR.ordinal()) {
-                    boolean showCard = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("stats_show_last_year", true);
                     Statistics datas = (Statistics) msg.obj;
-                    if ((showCard) &&
-                            (datas != null) &&
+                    if ((datas != null) &&
                             (datas.getFavoriteDay() != null) &&
                             (datas.getWorstDay() != null) &&
                             (datas.getFavoriteMonth() != null) &&
                             (datas.getWorstMonth() != null)) {
-
-                        cv_nothing_interesting.setVisibility(View.GONE);
-                        CardView cvLastWeek = findViewById(R.id.card_view_last_year);
-                        cvLastWeek.setVisibility(View.VISIBLE);
+                        mStatHelperNothing.forceHide();
+                        mStatHelperLastYear.show();
                         TextView favDay = findViewById(R.id.text_view_last_year_favorite_day);
                         favDay.setText(DayHelper.getInstance().format(datas.getFavoriteDay(), 2));
                         TextView worstDay = findViewById(R.id.text_view_last_year_worst_day);
@@ -188,13 +262,29 @@ public class FunnyStatsActivity extends AppCompatActivity {
                         favMonth.setText(MonthHelper.getInstance().format(datas.getFavoriteMonth(), 2));
                         TextView worstMonth = findViewById(R.id.text_view_last_year_worst_month);
                         worstMonth.setText(MonthHelper.getInstance().format(datas.getWorstMonth(), 2));
+                        if (datas.getStatisticsAdds() != null) {
+                            CardView cv = findViewById(R.id.card_view_last_year);
+                            StatisticsAdds adds = datas.getStatisticsAdds();
+                            ((TextView) cv.findViewById(R.id.text_view_all_time_days_rated)).setText(String.valueOf(adds.getNumberOfRatedDays()));
+                            ((TextView) cv.findViewById(R.id.text_view_all_time_average_rate)).setText(StatisticsHelper.floatFormat(adds.getAverageDay(), 2));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_1)).setText(String.valueOf(adds.getNumDayRated1()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_2)).setText(String.valueOf(adds.getNumDayRated2()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_3)).setText(String.valueOf(adds.getNumDayRated3()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_4)).setText(String.valueOf(adds.getNumDayRated4()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_5)).setText(String.valueOf(adds.getNumDayRated5()));
+                            ((TextView) cv.findViewById(R.id.monday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgMonday(), 2));
+                            ((TextView) cv.findViewById(R.id.tuesday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgTuesday(), 2));
+                            ((TextView) cv.findViewById(R.id.wednesday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgWednesday(), 2));
+                            ((TextView) cv.findViewById(R.id.thursday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgThursday(), 2));
+                            ((TextView) cv.findViewById(R.id.friday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgFriday(), 2));
+                            ((TextView) cv.findViewById(R.id.saturday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgSaturday(), 2));
+                            ((TextView) cv.findViewById(R.id.sunday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgSunday(), 2));
+                        }
                     }
                 }
                 if (msg.what == MSG_ID.ALL_TIME.ordinal()) {
-                    boolean showCard = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("stats_show_all_time", true);
                     Statistics datas = (Statistics) msg.obj;
-                    if ((showCard) &&
-                            (datas != null) &&
+                    if ((datas != null) &&
                             (datas.getFavoriteDay() != null) &&
                             (datas.getWorstDay() != null) &&
                             (datas.getFavoriteMonth() != null) &&
@@ -202,9 +292,8 @@ public class FunnyStatsActivity extends AppCompatActivity {
                             (datas.getFavoriteYear() != null) &&
                             (datas.getWorstYear() != null)) {
 
-                        cv_nothing_interesting.setVisibility(View.GONE);
-                        CardView cvLastWeek = findViewById(R.id.card_view_all_time);
-                        cvLastWeek.setVisibility(View.VISIBLE);
+                        mStatHelperNothing.forceHide();
+                        mStatHelperAllTime.show();
                         TextView favDay = findViewById(R.id.text_view_all_time_favorite_day);
                         favDay.setText(DayHelper.getInstance().format(datas.getFavoriteDay(), 2));
                         TextView worstDay = findViewById(R.id.text_view_all_time_worst_day);
@@ -217,44 +306,23 @@ public class FunnyStatsActivity extends AppCompatActivity {
                         favYear.setText(YearHelper.getInstance().format(datas.getFavoriteYear(), 2));
                         TextView worstYear = findViewById(R.id.text_view_all_time_worst_year);
                         worstYear.setText(YearHelper.getInstance().format(datas.getWorstYear(), 2));
+                        CardView cv = findViewById(R.id.card_view_all_time);
                         if(datas.getStatisticsAdds() != null){
                             StatisticsAdds adds = datas.getStatisticsAdds();
-                            ((TextView)findViewById(R.id.text_view_all_time_days_rated)).setText(String.valueOf(adds.getNumberOfRatedDays()));
-                            ((TextView)findViewById(R.id.text_view_all_time_average_rate)).setText(StatisticsHelper.floatFormat(adds.getAverageDay(),2));
-                            TextView badAvgQuote = findViewById(R.id.bad_avg_quote);
-                            if(adds.getBadAvgQuote().equals("")){
-                                badAvgQuote.setVisibility(View.GONE);
-                            }else {
-                                badAvgQuote.setVisibility(View.VISIBLE);
-                                badAvgQuote.setText(adds.getBadAvgQuote());
-                            }
-                            ((TextView)findViewById(R.id.number_of_days_rated_1)).setText(String.valueOf(adds.getNumDayRated1()));
-                            ((TextView)findViewById(R.id.number_of_days_rated_2)).setText(String.valueOf(adds.getNumDayRated2()));
-                            ((TextView)findViewById(R.id.number_of_days_rated_3)).setText(String.valueOf(adds.getNumDayRated3()));
-                            ((TextView)findViewById(R.id.number_of_days_rated_4)).setText(String.valueOf(adds.getNumDayRated4()));
-                            ((TextView)findViewById(R.id.number_of_days_rated_5)).setText(String.valueOf(adds.getNumDayRated5()));
-                            TextView extremQuote = findViewById(R.id.extrem_quote);
-                            if(adds.getExtremQuote().equals("")){
-                                extremQuote.setVisibility(View.GONE);
-                            }else {
-                                extremQuote.setVisibility(View.VISIBLE);
-                                extremQuote.setText(adds.getExtremQuote());
-                            }
-                            ((TextView)findViewById(R.id.monday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgMonday(),2));
-                            ((TextView)findViewById(R.id.tuesday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgTuesday(),2));
-                            ((TextView)findViewById(R.id.wednesday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgWednesday(),2));
-                            ((TextView)findViewById(R.id.thursday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgThursday(),2));
-                            ((TextView)findViewById(R.id.friday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgFriday(),2));
-                            ((TextView)findViewById(R.id.saturday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgSaturday(),2));
-                            ((TextView)findViewById(R.id.sunday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgSunday(),2));
-                            TextView bigGapQuote = findViewById(R.id.big_gap_quote);
-                            if(adds.getBigGapQuote().equals("")){
-                                bigGapQuote.setVisibility(View.GONE);
-                            }else {
-                                bigGapQuote.setVisibility(View.VISIBLE);
-                                bigGapQuote.setText(adds.getBigGapQuote());
-                            }
-
+                            ((TextView) cv.findViewById(R.id.text_view_all_time_days_rated)).setText(String.valueOf(adds.getNumberOfRatedDays()));
+                            ((TextView) cv.findViewById(R.id.text_view_all_time_average_rate)).setText(StatisticsHelper.floatFormat(adds.getAverageDay(), 2));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_1)).setText(String.valueOf(adds.getNumDayRated1()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_2)).setText(String.valueOf(adds.getNumDayRated2()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_3)).setText(String.valueOf(adds.getNumDayRated3()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_4)).setText(String.valueOf(adds.getNumDayRated4()));
+                            ((TextView) cv.findViewById(R.id.number_of_days_rated_5)).setText(String.valueOf(adds.getNumDayRated5()));
+                            ((TextView) cv.findViewById(R.id.monday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgMonday(), 2));
+                            ((TextView) cv.findViewById(R.id.tuesday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgTuesday(), 2));
+                            ((TextView) cv.findViewById(R.id.wednesday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgWednesday(), 2));
+                            ((TextView) cv.findViewById(R.id.thursday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgThursday(), 2));
+                            ((TextView) cv.findViewById(R.id.friday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgFriday(), 2));
+                            ((TextView) cv.findViewById(R.id.saturday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgSaturday(), 2));
+                            ((TextView) cv.findViewById(R.id.sunday_rate)).setText(StatisticsHelper.floatFormat(adds.getAvgSunday(), 2));
                         }
                     }
                 }
@@ -278,44 +346,9 @@ public class FunnyStatsActivity extends AppCompatActivity {
 
     }
 
-    private void CheckHidingStatuses() {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis());
-        int curMonth = cal.get(Calendar.MONTH);
-        int curYear = cal.get(Calendar.YEAR);
-        for (String propertyKey : listProperties) {
-            boolean showCard = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean(propertyKey, true);
-            int showCardMonth = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getInt(propertyKey + "_month", 0);
-            int showCardYear = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getInt(propertyKey + "_year", 0);
-            if ((showCard == false) && (((curMonth > showCardMonth) && (curYear >= showCardYear)) || (curYear > showCardYear))) {
-                PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putBoolean(propertyKey, true).apply();
-            }
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
-        CardView cv = findViewById(R.id.card_view_nothing_interesting);
-        CheckHidingStatuses();
-        boolean showCard = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("stats_show_nothing_interresting", true);
-        //Default we show the nothing interesting card -> will be removed if other are there
-        if (showCard)
-            cv.setVisibility(View.VISIBLE);
-        CardView cvLastWeek = findViewById(R.id.card_view_last_week);
-        cvLastWeek.setVisibility(View.GONE);
-        CardView cvCurMonth = findViewById(R.id.card_view_current_month);
-        cvCurMonth.setVisibility(View.GONE);
-        CardView cvLastMonth = findViewById(R.id.card_view_last_month);
-        cvLastMonth.setVisibility(View.GONE);
-        CardView cvCurYear = findViewById(R.id.card_view_current_year);
-        cvCurYear.setVisibility(View.GONE);
-        CardView cvLastYear = findViewById(R.id.card_view_last_year);
-        cvLastYear.setVisibility(View.GONE);
-        CardView cvAllTime = findViewById(R.id.card_view_all_time);
-        cvAllTime.setVisibility(View.GONE);
-        CardView cvTrophy = findViewById(R.id.card_view_trophy);
-        cvTrophy.setVisibility(View.GONE);
         new Thread() {
             @Override
             public void run() {
@@ -391,6 +424,23 @@ public class FunnyStatsActivity extends AppCompatActivity {
                 if (dayCount > 1) {
                     //Set the object to send
                     Statistics stats = new Statistics();
+                    StatisticsAdds adds = new StatisticsAdds();
+                    adds.setNumDayRated1(db.dayDao().getNumberOfDayByRateByMonthAndYear(1, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumDayRated2(db.dayDao().getNumberOfDayByRateByMonthAndYear(2, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumDayRated3(db.dayDao().getNumberOfDayByRateByMonthAndYear(3, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumDayRated4(db.dayDao().getNumberOfDayByRateByMonthAndYear(4, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumDayRated5(db.dayDao().getNumberOfDayByRateByMonthAndYear(5, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAverageDay(db.dayDao().getAverageDayByMonthAndYear(calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumberOfRatedDays(db.dayDao().getNumberOfDaysByMonthAndYear(calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgMonday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.MONDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgTuesday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.TUESDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgWednesday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.WEDNESDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgThursday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.THURSDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgFriday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.FRIDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgSaturday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.SATURDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgSunday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.SUNDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .init();
+                    stats.setStatisticsAdds(adds);
                     stats.setFavoriteDay(favoriteStatDay);
                     stats.setWorstDay(worstStatDay);
                     //Send the message
@@ -427,6 +477,23 @@ public class FunnyStatsActivity extends AppCompatActivity {
                 if (dayCount > 1) {
                     //Set the object to send
                     Statistics stats = new Statistics();
+                    StatisticsAdds adds = new StatisticsAdds();
+                    adds.setNumDayRated1(db.dayDao().getNumberOfDayByRateByMonthAndYear(1, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumDayRated2(db.dayDao().getNumberOfDayByRateByMonthAndYear(2, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumDayRated3(db.dayDao().getNumberOfDayByRateByMonthAndYear(3, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumDayRated4(db.dayDao().getNumberOfDayByRateByMonthAndYear(4, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumDayRated5(db.dayDao().getNumberOfDayByRateByMonthAndYear(5, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAverageDay(db.dayDao().getAverageDayByMonthAndYear(calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setNumberOfRatedDays(db.dayDao().getNumberOfDaysByMonthAndYear(calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgMonday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.MONDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgTuesday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.TUESDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgWednesday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.WEDNESDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgThursday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.THURSDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgFriday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.FRIDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgSaturday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.SATURDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .setAvgSunday(db.dayDao().getAverageRatingPerDayOfTheWeekByMonthAndYear(Calendar.SUNDAY, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)))
+                            .init();
+                    stats.setStatisticsAdds(adds);
                     stats.setFavoriteDay(favoriteStatDay);
                     stats.setWorstDay(worstStatDay);
                     //Send the message
@@ -482,6 +549,23 @@ public class FunnyStatsActivity extends AppCompatActivity {
                 if ((dayCount > 1) && (monthCount > 1)) {
                     //Set the object to send
                     Statistics stats = new Statistics();
+                    StatisticsAdds adds = new StatisticsAdds();
+                    adds.setNumDayRated1(db.dayDao().getNumberOfDayByRateByYear(1, calendar.get(Calendar.YEAR)))
+                            .setNumDayRated2(db.dayDao().getNumberOfDayByRateByYear(2, calendar.get(Calendar.YEAR)))
+                            .setNumDayRated3(db.dayDao().getNumberOfDayByRateByYear(3, calendar.get(Calendar.YEAR)))
+                            .setNumDayRated4(db.dayDao().getNumberOfDayByRateByYear(4, calendar.get(Calendar.YEAR)))
+                            .setNumDayRated5(db.dayDao().getNumberOfDayByRateByYear(5, calendar.get(Calendar.YEAR)))
+                            .setAverageDay(db.dayDao().getAverageDayByYear(calendar.get(Calendar.YEAR)))
+                            .setNumberOfRatedDays(db.dayDao().getNumberOfDaysByYear(calendar.get(Calendar.YEAR)))
+                            .setAvgMonday(db.dayDao().getAverageRatingPerDayOfTheWeekAndYear(Calendar.MONDAY, calendar.get(Calendar.YEAR)))
+                            .setAvgTuesday(db.dayDao().getAverageRatingPerDayOfTheWeekAndYear(Calendar.TUESDAY, calendar.get(Calendar.YEAR)))
+                            .setAvgWednesday(db.dayDao().getAverageRatingPerDayOfTheWeekAndYear(Calendar.WEDNESDAY, calendar.get(Calendar.YEAR)))
+                            .setAvgThursday(db.dayDao().getAverageRatingPerDayOfTheWeekAndYear(Calendar.THURSDAY, calendar.get(Calendar.YEAR)))
+                            .setAvgFriday(db.dayDao().getAverageRatingPerDayOfTheWeekAndYear(Calendar.FRIDAY, calendar.get(Calendar.YEAR)))
+                            .setAvgSaturday(db.dayDao().getAverageRatingPerDayOfTheWeekAndYear(Calendar.SATURDAY, calendar.get(Calendar.YEAR)))
+                            .setAvgSunday(db.dayDao().getAverageRatingPerDayOfTheWeekAndYear(Calendar.SUNDAY, calendar.get(Calendar.YEAR)))
+                            .init();
+                    stats.setStatisticsAdds(adds);
                     stats.setFavoriteDay(favoriteStatDay);
                     stats.setWorstDay(worstStatDay);
                     stats.setFavoriteMonth(favoriteStatMonth);
@@ -538,6 +622,23 @@ public class FunnyStatsActivity extends AppCompatActivity {
                 if ((dayCount > 1) && (monthCount > 1)) {
                     //Set the object to send
                     Statistics stats = new Statistics();
+                    StatisticsAdds adds = new StatisticsAdds();
+                    adds.setNumDayRated1(db.dayDao().getNumberOfDayByRateByYear(1, calendar.get(Calendar.YEAR)-1))
+                            .setNumDayRated2(db.dayDao().getNumberOfDayByRateByYear(2, calendar.get(Calendar.YEAR)-1))
+                            .setNumDayRated3(db.dayDao().getNumberOfDayByRateByYear(3, calendar.get(Calendar.YEAR)-1))
+                            .setNumDayRated4(db.dayDao().getNumberOfDayByRateByYear(4, calendar.get(Calendar.YEAR)-1))
+                            .setNumDayRated5(db.dayDao().getNumberOfDayByRateByYear(5, calendar.get(Calendar.YEAR)-1))
+                            .setAverageDay(db.dayDao().getAverageDayByYear(calendar.get(Calendar.YEAR)-1))
+                            .setNumberOfRatedDays(db.dayDao().getNumberOfDaysByYear(calendar.get(Calendar.YEAR)-1))
+                            .setAvgMonday(db.dayDao().getAverageRatingPerDayOfTheWeekAndYear(Calendar.MONDAY, calendar.get(Calendar.YEAR)-1))
+                            .setAvgTuesday(db.dayDao().getAverageRatingPerDayOfTheWeekAndYear(Calendar.TUESDAY, calendar.get(Calendar.YEAR)-1))
+                            .setAvgWednesday(db.dayDao().getAverageRatingPerDayOfTheWeekAndYear(Calendar.WEDNESDAY, calendar.get(Calendar.YEAR)-1))
+                            .setAvgThursday(db.dayDao().getAverageRatingPerDayOfTheWeekAndYear(Calendar.THURSDAY, calendar.get(Calendar.YEAR)-1))
+                            .setAvgFriday(db.dayDao().getAverageRatingPerDayOfTheWeekAndYear(Calendar.FRIDAY, calendar.get(Calendar.YEAR)-1))
+                            .setAvgSaturday(db.dayDao().getAverageRatingPerDayOfTheWeekAndYear(Calendar.SATURDAY, calendar.get(Calendar.YEAR)-1))
+                            .setAvgSunday(db.dayDao().getAverageRatingPerDayOfTheWeekAndYear(Calendar.SUNDAY, calendar.get(Calendar.YEAR)-1))
+                            .init();
+                    stats.setStatisticsAdds(adds);
                     stats.setFavoriteDay(favoriteStatDay);
                     stats.setWorstDay(worstStatDay);
                     stats.setFavoriteMonth(favoriteStatMonth);

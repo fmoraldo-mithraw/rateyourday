@@ -209,7 +209,7 @@
     <string name="friday_full">vendredi</string>
     <string name="saturday_full">samedi</string>
     <string name="sunday_full">dimanche</string>
-    <string name="bad_avg1">Carpe Diem, vivez chaque jour comme si c\'était votre dernier !(Dans les limites de la loi bien sur !)</string>
+    <string name="bad_avg1">Carpe Diem, vivez chaque jour comme si c\'était votre dernier ! (Dans les limites de la loi bien sur !)</string>
     <string name="extreme_quote1">Vous êtes du genre plutot extrême, essayez peut être de relativiser, tout n\'est pas toujours noir ou blanc.</string>
     <string name="big_gap1">Il y à un écart énorme entre vos {worst_day} et vos {best_day}, peut être devriez vous essayer de faire plus d\'activités que vous appréciez le {worst_day}, peut être sortir avec vos amis, votre famille, ou prendre du temps pour vous pour faire ce que vous aimez.</string>
     <string name="number_of_days_rated">Nombre de jours notés :</string>
@@ -246,4 +246,7 @@
     <string name="force_place">Ajouter manuellement l\'endroit où vous étiez</string>
     <string name="info_map_pick">Pour marquer un emplacement, appuyez longuement à l\'emplacement voulu sur la carte.</string>
     <string name="new_coordinate_saved">Coordonnées enregistrées.</string>
+    <string name="advice_title_bad_avg">La moyenne de vos notes est plutôt basse...</string>
+    <string name="advice_title_extrem">Vos notes sont assez extrêmes...</string>
+    <string name="advice_title_big_gap">Une journée de votre semaine est bien moins bien que les autres...</string>
 </resources>

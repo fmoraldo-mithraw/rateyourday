@@ -25,18 +25,37 @@ public interface DayDao {
 
     @Query("SELECT COUNT(*) FROM day WHERE rating IS :rate AND is_removed IS 0")
     int getNumberOfDayByRate(int rate);
+    @Query("SELECT COUNT(*) FROM day WHERE rating IS :rate AND month IS :month AND year is :year AND is_removed IS 0")
+    int getNumberOfDayByRateByMonthAndYear(int rate, int month, int year);
+    @Query("SELECT COUNT(*) FROM day WHERE rating IS :rate AND year is :year AND is_removed IS 0")
+    int getNumberOfDayByRateByYear(int rate, int year);
+
 
     @Query("SELECT COUNT(*) FROM day WHERE is_removed IS 0")
     int getNumberOfDays();
+    @Query("SELECT COUNT(*) FROM day WHERE month IS :month AND year is :year AND is_removed IS 0")
+    int getNumberOfDaysByMonthAndYear(int month, int year);
+    @Query("SELECT COUNT(*) FROM day WHERE year is :year AND is_removed IS 0")
+    int getNumberOfDaysByYear(int year);
+
 
     @Query("SELECT AVG(rating) FROM day WHERE is_removed IS 0")
     float getAverageDay();
+    @Query("SELECT AVG(rating) FROM day WHERE month IS :month AND year is :year AND is_removed IS 0")
+    float getAverageDayByMonthAndYear(int month, int year);
+    @Query("SELECT AVG(rating) FROM day WHERE year is :year AND is_removed IS 0")
+    float getAverageDayByYear(int year);
+
 
     @Query("SELECT * FROM day WHERE day_of_the_month IS :dayOfTheMonth AND month IS :month AND year IS :year AND is_removed IS 0 ORDER BY year DESC, month DESC, day_of_the_month DESC")
     List<Day> getAllByDate(int dayOfTheMonth, int month, int year);
 
     @Query("SELECT AVG(rating) FROM day WHERE day_of_the_week IS :dayOfTheWeek AND year IS :year AND is_removed IS 0 ")
     float getAverageRatingPerDayOfTheWeekAndYear(int dayOfTheWeek, int year);
+
+    @Query("SELECT AVG(rating) FROM day WHERE day_of_the_week IS :dayOfTheWeek AND year IS :year AND month IS :month AND is_removed IS 0 ")
+    float getAverageRatingPerDayOfTheWeekByMonthAndYear(int dayOfTheWeek,int month, int year);
+
 
     @Query("SELECT AVG(rating) FROM day WHERE day_of_the_week IS :dayOfTheWeek AND is_removed IS 0 ")
     float getAverageRatingPerDayOfTheWeek(int dayOfTheWeek);

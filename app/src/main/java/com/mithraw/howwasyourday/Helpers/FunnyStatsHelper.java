@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.R;
@@ -24,8 +25,10 @@ public class FunnyStatsHelper {
     final CardView mCardView;
     boolean mPanelShowed = false;
     String mPreferenceName;
-
-    public FunnyStatsHelper(CardView cardView, Activity activity, String preferenceName) {
+    public FunnyStatsHelper(CardView cardView, Activity activity, String preferenceName){
+        this(cardView,activity,preferenceName,false);
+    }
+    public FunnyStatsHelper(CardView cardView, Activity activity, String preferenceName, boolean default_show) {
         this.mCardView = cardView;
         this.mActivity = activity;
         this.mPreferenceName = preferenceName;
@@ -84,7 +87,28 @@ public class FunnyStatsHelper {
             }
         });
         //End of the configuration of the close button
-
+        checkHidingStatus();
+        cardView.setVisibility(View.GONE);
     }
-
+    public void setQuote(String quote){
+        ((TextView)mCardView.findViewById(R.id.quote)).setText(quote);
+    }
+    private void checkHidingStatus(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        int curMonth = cal.get(Calendar.MONTH);
+        int curYear = cal.get(Calendar.YEAR);
+            boolean showCard = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean(mPreferenceName, true);
+            int showCardMonth = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getInt(mPreferenceName + "_month", 0);
+            int showCardYear = PreferenceManager.getDefaultSharedPreferences(App.getContext()).getInt(mPreferenceName + "_year", 0);
+            if ((showCard == false) && (((curMonth > showCardMonth) && (curYear >= showCardYear)) || (curYear > showCardYear))) {
+                PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putBoolean(mPreferenceName, true).apply();
+            }
+    }
+    public void show(){
+        mCardView.setVisibility(PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean(mPreferenceName, true)?View.VISIBLE:View.GONE);
+    }
+    public void forceHide(){
+        mCardView.setVisibility(View.GONE);
+    }
 }

@@ -103,7 +103,7 @@ public class StatisticsAdds {
     public String getExtremQuote() throws IllegalStateException{
         if(extremQuote.equals("")) {
             checkInit();
-            if ((numDayRated1 + numDayRated5 > numDayRated2 + numDayRated3 + numDayRated4)&&(numberOfRatedDays>50)) {
+            if ((numDayRated1 + numDayRated5 > numDayRated2 + numDayRated3 + numDayRated4)&&(numDayRated1 > numDayRated5)&&(numberOfRatedDays>15)) {
                 if(listExtremQuote.size()>1) {
                     Random r = new Random();
                     extremQuote = listExtremQuote.get(r.nextInt(listExtremQuote.size()) - 1);
@@ -120,7 +120,7 @@ public class StatisticsAdds {
             Map.Entry<Integer, Float> min = getWorstDay();
             Map.Entry<Integer, Float> max = getBestDay();
             if ((min != null) && (max != null)) {
-                if ((max.getValue() > (min.getValue() + 1.5)) && (numberOfRatedDays > 50)) {
+                if ((max.getValue() > (min.getValue() + 1.5)) && (numberOfRatedDays > 15)) {
                     if (listBigGapQuote.size() > 1) {
                         Random r = new Random();
                         bigGapQuote = listBigGapQuote.get(r.nextInt(listBigGapQuote.size()) - 1);
@@ -137,7 +137,7 @@ public class StatisticsAdds {
     public String getBadAvgQuote() throws IllegalStateException{
         if(badAvgQuote.equals("")) {
             checkInit();
-            if ((averageDay < 3)&&(numberOfRatedDays>50)) {
+            if ((averageDay < 3)&&(numberOfRatedDays>15)) {
                 if(listBadAvgQuote.size()>1) {
                     Random r = new Random();
                     badAvgQuote = listBadAvgQuote.get(r.nextInt(listBadAvgQuote.size()) - 1);
