@@ -1,14 +1,17 @@
 package com.mithraw.howwasyourday.Activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -16,17 +19,17 @@ import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.maps.android.clustering.ClusterManager;
 import com.mithraw.howwasyourday.App;
+import com.mithraw.howwasyourday.Helpers.SharingHelper;
 import com.mithraw.howwasyourday.R;
+import com.mithraw.howwasyourday.Tools.Map.DrawableMapView;
 import com.mithraw.howwasyourday.Tools.Map.OwnIconRenderer;
 import com.mithraw.howwasyourday.Tools.Map.RateClusterItem;
 import com.mithraw.howwasyourday.Tools.UnderlinedCheckTextView;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,14 +42,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private DatePickerDialog endDatePickerDialog = null;
     private Date startDate;
     private Date endDate;
-    private MapView mMapView;
+    private DrawableMapView mMapView;
     boolean firstTime = true;
     LinearLayout startDateLayout;
     LinearLayout endDateLayout;
     DaysDatabase db;
     GoogleMap map;
     List<ClusterManager<RateClusterItem>> mClusterManagerList;
-
+    SharingHelper mSharingHelper;
     private static Handler handler;
 
     public enum MSG_ID {
@@ -131,7 +134,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //Get the DB
         db = DaysDatabase.getInstance(getApplicationContext());
-
+        findViewById(R.id.share_button_map).setVisibility(View.GONE);
+        mSharingHelper = new SharingHelper((CardView) findViewById(R.id.mapCardView), (Activity) this);
+        mSharingHelper.attachToImageButton((ImageButton) findViewById(R.id.share_button_map));
         mMapView = findViewById(R.id.mapViewBig);
         // *** IMPORTANT ***
         // MapView requires that the Bundle you pass contain _ONLY_ MapView SDK
@@ -296,6 +301,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+        mSharingHelper.attachViewWithMapToImageButton((ImageButton) findViewById(R.id.share_button_map), mMapView, googleMap);
         mapReady(true);
         mClusterManagerList = new ArrayList<>();
         for(int i = 0;i<5;i++) {

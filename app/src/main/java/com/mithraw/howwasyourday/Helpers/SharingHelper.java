@@ -19,9 +19,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.commonsware.cwac.provider.StreamProvider;
+import com.google.android.gms.maps.GoogleMap;
 import com.mithraw.howwasyourday.Activities.MainActivity;
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.R;
+import com.mithraw.howwasyourday.Tools.Map.DrawableMapView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -52,7 +54,19 @@ public class SharingHelper {
     private Intent mShareIntent;
     private Activity mActivity;
     Collection<View> mListViewToHide;
-
+    DrawableMapView mMap;
+    GoogleMap mGMap;
+    GoogleMap.SnapshotReadyCallback callback = new GoogleMap.SnapshotReadyCallback() {
+        @Override
+        public void onSnapshotReady(Bitmap snapshot) {
+            // TODO Auto-generated method stub
+            if(mMap != null)
+                mMap.setDrawingCache(snapshot);
+            updateDatas();
+            Resources res = mActivity.getResources();
+            mActivity.startActivity(Intent.createChooser(mShareIntent, res.getString(R.string.share_via)));
+        }
+    };
 
     public SharingHelper(@NonNull CardView cardView, @NonNull Activity activity, View... listViewToHide) {
         this(cardView, activity);
@@ -78,6 +92,7 @@ public class SharingHelper {
         if ((mCardView != null) && (mCardView.getVisibility() != View.GONE)) {
             Bitmap tempBmp = mCardView.getDrawingCache();
             if (tempBmp != null) {
+                //Adding the icon
                 Resources res =  MainActivity.getContext().getResources();
                 image = Bitmap.createBitmap(tempBmp);
                 Bitmap icon = BitmapHelper.drawableToBitmap(res.getDrawable(R.mipmap.ic_launcher));
@@ -173,6 +188,21 @@ public class SharingHelper {
                 updateDatas();
                 Resources res = mActivity.getResources();
                 mActivity.startActivity(Intent.createChooser(mShareIntent, res.getString(R.string.share_via)));
+            }
+        });
+    }
+    /* Use into
+        Override
+        public void onMapReady(GoogleMap map) {
+            mSharingHelper.attachViewWithMapToImageButton((ImageButton)this.findViewById(R.id.share_view), mMapView, map);
+    */
+    public void attachViewWithMapToImageButton(ImageButton b, DrawableMapView mapView, GoogleMap gmap) {
+        mMap = mapView;
+        mGMap = gmap;
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mGMap.snapshot(callback);
             }
         });
     }

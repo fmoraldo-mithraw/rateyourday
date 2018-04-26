@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.mithraw.howwasyourday.Helpers.BitmapHelper;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Helpers.SharingHelper;
+import com.mithraw.howwasyourday.Tools.Map.DrawableMapView;
 import com.mithraw.howwasyourday.Tools.MyInt;
 
 import java.util.Calendar;
@@ -37,7 +38,7 @@ public class ExpandedDayActivity extends AppCompatActivity implements OnMapReady
     public final static String EXTRA_PARAM_DATETIME = "ExpandedDayActivity_DATETIME";
     public final static String EXTRA_PARAM_LONGITUDE = "ExpandedDayActivity_LONGITUDE";
     public final static String EXTRA_PARAM_LATITUDE = "ExpandedDayActivity_LATITUDE";
-    private MapView mMapView;
+    private DrawableMapView mMapView;
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     double latitude = 0;
     double longitude = 0;
@@ -61,7 +62,7 @@ public class ExpandedDayActivity extends AppCompatActivity implements OnMapReady
         cal.setTimeInMillis(intent.getLongExtra(EXTRA_PARAM_DATETIME,System.currentTimeMillis()));
         ((TextView)findViewById(R.id.dateTextView)).setText(intent.getStringExtra(EXTRA_PARAM_DATE));
         TextView titleTextView = findViewById(R.id.titleText);
-        mMapView = (MapView) findViewById(R.id.mapView);
+        mMapView =  findViewById(R.id.mapView);
         latitude = intent.getDoubleExtra(EXTRA_PARAM_LATITUDE,0);
         longitude = intent.getDoubleExtra(EXTRA_PARAM_LONGITUDE,0);
         if((latitude == 0) && (longitude == 0)){
@@ -147,6 +148,7 @@ public class ExpandedDayActivity extends AppCompatActivity implements OnMapReady
 
     @Override
     public void onMapReady(GoogleMap map) {
+        mSharingHelper.attachViewWithMapToImageButton((ImageButton)this.findViewById(R.id.share_view), mMapView, map);
         Resources res = getResources();
         LatLng latLng = new LatLng(latitude, longitude);
         map.addMarker(new MarkerOptions().position(latLng).title(res.getString(R.string.maps_marker)));
