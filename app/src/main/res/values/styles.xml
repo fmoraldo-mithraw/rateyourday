@@ -58,5 +58,26 @@
         <item name="android:textOn"></item>
         <item name="android:textOff"></item>
     </style>
+    <style name="RatingBar1" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/lightGrey</item>
+        <item name="colorControlActivated">@color/color1</item>
+    </style>
+    <style name="RatingBar2" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/lightGrey</item>
+        <item name="colorControlActivated">@color/color2</item>
+    </style>
+    <style name="RatingBar3" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/lightGrey</item>
+        <item name="colorControlActivated">@color/color3</item>
+        <item name="android:strokeWidth">1</item>
+    </style>
+    <style name="RatingBar4" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/lightGrey</item>
+        <item name="colorControlActivated">@color/color4</item>
+    </style>
+    <style name="RatingBar5" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/lightGrey</item>
+        <item name="colorControlActivated">@color/color5</item>
+    </style>
 
 </resources>
