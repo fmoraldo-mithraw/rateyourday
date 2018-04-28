@@ -22,17 +22,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="@string/action_donate"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
-
-        <TextView
             android:id="@+id/textView16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
             android:text="@string/donate_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 

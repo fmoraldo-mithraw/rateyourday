@@ -266,7 +266,8 @@ public class RateADay extends AppCompatActivity {
                 new KeyboardVisibilityEventListener() {
                     @Override
                     public void onVisibilityChanged(boolean isOpen) {
-                        if (mHeight <= 1280) {
+                        float scale = getResources().getDisplayMetrics().scaledDensity;
+                        if ((mHeight <= 1280)|| (scale >3.3)) {
                             if (isOpen) {
                                 mButtonsLinearLayout.setVisibility(View.GONE);
                             } else {

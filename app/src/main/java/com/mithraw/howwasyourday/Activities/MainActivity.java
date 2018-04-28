@@ -156,6 +156,7 @@ public class MainActivity extends _SwipeActivityClass
             newFragment.show(getSupportFragmentManager(), preferenceName);
         }
 
+
         //Connect to GoogleSignIn
         boolean firstTimeScreenShowed = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("first_use_screen_showed", false);
         String timeSync = PreferenceManager.getDefaultSharedPreferences(getContext()).getString("sync_frequency","180");
@@ -596,8 +597,15 @@ public class MainActivity extends _SwipeActivityClass
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        /*getMenuInflater().inflate(R.menu.share_button, menu);
-        MenuItem item = menu.findItem(R.id.menu_item_share);*/
+        getMenuInflater().inflate(R.menu.go_to_today, menu);
+        MenuItem item = menu.findItem(R.id.action_today);
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                onSwipeUp();
+                return true;
+            }
+        });
         return true;
     }
 

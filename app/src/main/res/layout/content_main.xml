@@ -1,214 +1,222 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.mithraw.howwasyourday.Activities.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    android:layout_height="match_parent">
 
-    <CalendarView
-        android:id="@+id/calendarView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginEnd="31dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="5dp"
-        android:clickable="true" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.mithraw.howwasyourday.Activities.MainActivity"
+        tools:showIn="@layout/app_bar_main">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cardViewLittle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        app:cardElevation="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendarView">
 
-        <LinearLayout
+        <CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginEnd="31dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="5dp"
+            android:clickable="true" />
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardViewLittle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:layout_marginBottom="3dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            app:cardElevation="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/calendarView">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/dateTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="01/01/0000"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
-
-                <ImageButton
-                    android:id="@+id/expand_button"
-                    style="@style/Widget.AppCompat.ImageButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|end"
-                    android:layout_margin="0dp"
-                    android:layout_weight="0"
-                    android:adjustViewBounds="true"
-                    android:background="@android:color/transparent"
-                    android:cropToPadding="true"
-                    android:padding="0dp"
-                    app:srcCompat="@drawable/ic_expand" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/nothing_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView17"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:enabled="true"
-                    android:gravity="center"
-                    android:text="@string/nothing_main"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/rate_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="0"
                     android:orientation="horizontal">
 
-                    <RatingBar
-                        android:id="@+id/ratingBar"
-                        style="@style/Widget.AppCompat.RatingBar.Small"
-                        android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/dateTextView"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="0"
-                        android:clickable="false"
-                        android:isIndicator="true"
-                        android:longClickable="false"
-                        android:maxLength="10"
-                        android:numStars="5"
-                        android:rating="0"
-                        android:stepSize="1"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
+                        android:layout_weight="1"
+                        android:text="01/01/0000"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
-                    <ImageView
-                        android:id="@+id/location_view"
+                    <ImageButton
+                        android:id="@+id/expand_button"
+                        style="@style/Widget.AppCompat.ImageButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="right|end"
+                        android:layout_margin="0dp"
                         android:layout_weight="0"
-                        app:srcCompat="@drawable/ic_place" />
+                        android:adjustViewBounds="true"
+                        android:background="@android:color/transparent"
+                        android:cropToPadding="true"
+                        android:padding="0dp"
+                        app:srcCompat="@drawable/ic_expand" />
+
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/titleText"
+                <LinearLayout
+                    android:id="@+id/nothing_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView17"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="true"
+                        android:gravity="center"
+                        android:text="@string/nothing_main"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/rate_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:enabled="true"
-                    android:inputType="textPersonName"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
-
-                <ScrollView
-                    android:id="@+id/scrollViewMain"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
                     android:layout_weight="0"
-                    android:scrollbarStyle="insideOverlay"
-                    android:fadeScrollbars="false">
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/logText"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                        <RatingBar
+                            android:id="@+id/ratingBar"
+                            style="@style/Widget.AppCompat.RatingBar.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
                             android:layout_marginStart="8dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_weight="1"
-                            android:ems="10"
-                            android:enabled="true"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:visibility="visible"
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="0"
+                            android:clickable="false"
+                            android:isIndicator="true"
+                            android:longClickable="false"
+                            android:maxLength="10"
+                            android:numStars="5"
+                            android:rating="0"
+                            android:stepSize="1"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.6"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/titleTextRate" />
+                            app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
+
+                        <ImageView
+                            android:id="@+id/location_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            app:srcCompat="@drawable/ic_place" />
                     </LinearLayout>
-                </ScrollView>
+
+                    <TextView
+                        android:id="@+id/titleText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:enabled="true"
+                        android:inputType="textPersonName"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+
+                    <ScrollView
+                        android:id="@+id/scrollViewMain"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_weight="0"
+                        android:fadeScrollbars="false"
+                        android:scrollbarStyle="insideOverlay">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/logText"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_weight="1"
+                                android:ems="10"
+                                android:enabled="true"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:visibility="visible"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.6"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/titleTextRate" />
+                        </LinearLayout>
+                    </ScrollView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/button_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:gravity="right"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <Button
+                        android:id="@+id/main_button_remove"
+                        style="@android:style/Widget.DeviceDefault.Button.Borderless.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/remove_button_text" />
+
+                    <Button
+                        android:id="@+id/main_button_edit"
+                        style="@android:style/Widget.DeviceDefault.Button.Borderless.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/edit_button_text" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/button_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:orientation="horizontal"
-                android:visibility="visible">
+        </android.support.v7.widget.CardView>
 
-                <Button
-                    android:id="@+id/main_button_remove"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:text="@string/remove_button_text" />
-
-                <Button
-                    android:id="@+id/main_button_edit"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:text="@string/edit_button_text" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
-
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

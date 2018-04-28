@@ -21,17 +21,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="@string/action_about_the_app"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
-
-        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
+            android:layout_marginTop="10dp"
             android:text="@string/about_the_app_main_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 

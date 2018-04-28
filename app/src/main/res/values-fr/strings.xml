@@ -43,7 +43,7 @@
     </string-array>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
+    <string name="pref_header_data_sync">Synchronisation</string>
 
     <string name="pref_title_sync_frequency">Fréquence de syncronisation</string>
     <string-array name="pref_sync_frequency_titles">
@@ -251,4 +251,6 @@
     <string name="advice_title_big_gap">Une journée de votre semaine est bien moins bien que les autres...</string>
     <string name="interesting_things">"Des informations intéressantes sont disponibles !"</string>
     <string name="interesting_things_button">Allons voir !</string>
+    <string name="go_to_today">Aller a la date d\'aujourd\'hui</string>
+
 </resources>
