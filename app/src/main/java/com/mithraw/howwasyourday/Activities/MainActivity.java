@@ -229,7 +229,7 @@ public class MainActivity extends _SwipeActivityClass
                     }
                 }
                 if(msg.what == MSG_ID.MSG_INTERRESTING.ordinal()){
-                    String preferenceName = "tips_snack_showed";
+                    String preferenceName = "tips_snack_show";
                     Calendar cal = Calendar.getInstance();
                     cal.setTimeInMillis(System.currentTimeMillis());
                     int curMonth = cal.get(Calendar.MONTH);

@@ -349,6 +349,8 @@ public class FunnyStatsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        CardView cvTrophy = findViewById(R.id.card_view_trophy);
+        cvTrophy.setVisibility(View.GONE);
         new Thread() {
             @Override
             public void run() {
