@@ -144,6 +144,14 @@ public class BitmapHelper {
             return new ArrayList<File>();
     }
 
+    public static String getImagesDirParent() {
+        if (PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("save_images_on_external_drive", false)) {
+            return getExternalImageDirParent();
+        } else {
+            return getInternalImageDirParent();
+        }
+
+    }
     public static String getImagesDir() {
         if (PreferenceManager.getDefaultSharedPreferences(App.getContext()).getBoolean("save_images_on_external_drive", false)) {
             return getExternalImageDir();
@@ -159,7 +167,19 @@ public class BitmapHelper {
         boolean bool = file.mkdirs();
         return dir;
     }
+    private static String getExternalImageDirParent() {
+        String dir = Environment.getExternalStorageDirectory().toString() + "/rateyourday/";
+        File file = new File(dir);
+        boolean bool = file.mkdirs();
+        return dir;
+    }
 
+    private static String getInternalImageDirParent() {
+        String dir = App.getContext().getFilesDir().toString();
+        File file = new File(dir);
+        file.mkdirs();
+        return dir;
+    }
     private static String getInternalImageDir() {
         String dir = App.getContext().getFilesDir().toString() + "/images-days/";
         File file = new File(dir);
@@ -324,7 +344,7 @@ public class BitmapHelper {
                             if ((event == CLOSE_WRITE) || (event == CLOSE_NOWRITE)) {
                                 this.stopWatching();
                                 try {
-                                    ZipTool.unzip(newFile, new File(getImagesDir()));
+                                    ZipTool.unzip(newFile, new File(getImagesDirParent()));
                                     handler.sendEmptyMessage(ImportExportActivity.MSG_ID.PHOTO_ARCHIVE_IMPORTED.ordinal());
                                 } catch (IOException e) {
                                     Message msg = Message.obtain();
