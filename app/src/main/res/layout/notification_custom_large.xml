@@ -31,7 +31,7 @@
         android:paddingBottom="10dp"
         android:paddingLeft="5dp"
         android:paddingTop="10dp">
-        <Button
+        <ImageButton
             android:id="@+id/Button1"
             android:layout_width="35dp"
             android:layout_height="35dp"
@@ -39,39 +39,39 @@
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:cropToPadding="false"
-            android:drawableTop="@drawable/ic_stars_24dp"
+            android:src="@drawable/ic_star_notification_button"
             android:enabled="true" />
-        <Button
+        <ImageButton
             android:id="@+id/Button2"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:drawableTop="@drawable/ic_stars_24dp"
+            android:src="@drawable/ic_star_notification_button"
             android:enabled="true"/>
-        <Button
+        <ImageButton
             android:id="@+id/Button3"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:drawableTop="@drawable/ic_stars_24dp"
+            android:src="@drawable/ic_star_notification_button"
             android:enabled="true"/>
-        <Button
+        <ImageButton
             android:id="@+id/Button4"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:drawableTop="@drawable/ic_stars_24dp"
+            android:src="@drawable/ic_star_notification_button"
             android:enabled="true"/>
-        <Button
+        <ImageButton
             android:id="@+id/Button5"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:drawableTop="@drawable/ic_stars_24dp"
+            android:src="@drawable/ic_star_notification_button"
             android:enabled="true"/>
     </LinearLayout>
 </RelativeLayout>

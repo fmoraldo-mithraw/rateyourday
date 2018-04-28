@@ -372,7 +372,6 @@ public class MainActivity extends _SwipeActivityClass
         if ((showSnack == false) && (((curMonth > showCardMonth) && (curYear >= showCardYear)) || (curYear > showCardYear))) {
             showSnack = true;
             PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit().putBoolean(preferenceName, showSnack).apply();
-
         }
         if(showSnack) {
 

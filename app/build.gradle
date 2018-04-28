@@ -6,8 +6,8 @@ android {
         applicationId "com.mithraw.howwasyourday"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 15
-        versionName "Beta-8"
+        versionCode 17
+        versionName "Beta-10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
