@@ -28,6 +28,7 @@ import com.mithraw.howwasyourday.Tools.MathTool;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -130,6 +131,8 @@ public class FunnyStatsActivity extends AppCompatActivity {
                     if ((datas != null) && (datas.getFavoriteDay() != null) && (datas.getWorstDay() != null)) {
                         mStatHelperNothing.forceHide();
                         mStatHelperCurrentMonth.show();
+                        TextView title = findViewById(R.id.current_month_text_view);
+                        title.setText(new SimpleDateFormat("MMMM").format(new java.util.Date(Calendar.getInstance().getTimeInMillis())));
                         TextView favDay = findViewById(R.id.text_view_current_month_favorite_day);
                         favDay.setText(DayHelper.getInstance().format(datas.getFavoriteDay(), 1));
                         TextView worstDay = findViewById(R.id.text_view_current_month_worst_day);
@@ -171,6 +174,11 @@ public class FunnyStatsActivity extends AppCompatActivity {
                     if ((datas != null) && (datas.getFavoriteDay() != null) && (datas.getWorstDay() != null)) {
                         mStatHelperNothing.forceHide();
                         mStatHelperLastMonth.show();
+                        Calendar cal = Calendar.getInstance();
+                        cal.add(Calendar.MONTH,-1);
+
+                        TextView title = findViewById(R.id.last_month_text_view);
+                        title.setText(new SimpleDateFormat("MMMM").format(new java.util.Date(cal.getTimeInMillis())));
                         TextView favDay = findViewById(R.id.text_view_last_month_favorite_day);
                         favDay.setText(DayHelper.getInstance().format(datas.getFavoriteDay(), 1));
                         TextView worstDay = findViewById(R.id.text_view_last_month_worst_day);
@@ -217,6 +225,8 @@ public class FunnyStatsActivity extends AppCompatActivity {
                             (datas.getWorstMonth() != null)) {
                         mStatHelperNothing.forceHide();
                         mStatHelperCurrentYear.show();
+                        TextView title = findViewById(R.id.current_year_text_view);
+                        title.setText(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
                         TextView favDay = findViewById(R.id.text_view_current_year_favorite_day);
                         favDay.setText(DayHelper.getInstance().format(datas.getFavoriteDay(), 2));
                         TextView worstDay = findViewById(R.id.text_view_current_year_worst_day);
@@ -254,6 +264,8 @@ public class FunnyStatsActivity extends AppCompatActivity {
                             (datas.getWorstMonth() != null)) {
                         mStatHelperNothing.forceHide();
                         mStatHelperLastYear.show();
+                        TextView title = findViewById(R.id.last_year_text_view);
+                        title.setText(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)-1));
                         TextView favDay = findViewById(R.id.text_view_last_year_favorite_day);
                         favDay.setText(DayHelper.getInstance().format(datas.getFavoriteDay(), 2));
                         TextView worstDay = findViewById(R.id.text_view_last_year_worst_day);

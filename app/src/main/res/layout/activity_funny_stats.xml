@@ -401,6 +401,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="@string/all_time_title"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
@@ -415,6 +416,13 @@
                         android:scaleType="fitEnd"
                         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
                 </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_inifnite" />
 
                 <View
                     android:layout_width="match_parent"
@@ -970,6 +978,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="@string/last_year_title"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
@@ -985,10 +994,20 @@
                         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/last_year_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="2017"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:typeface="monospace" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="?android:attr/listDivider" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1362,6 +1381,7 @@
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1495,6 +1515,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="@string/current_year_title"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
@@ -1509,6 +1530,15 @@
                         android:scaleType="fitEnd"
                         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/current_year_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="2018"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:typeface="monospace" />
 
                 <View
                     android:layout_width="match_parent"
@@ -2020,6 +2050,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="@string/last_month_title"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
@@ -2034,6 +2065,15 @@
                         android:scaleType="fitEnd"
                         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/last_month_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="March"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:typeface="monospace" />
 
                 <View
                     android:layout_width="match_parent"
@@ -2503,6 +2543,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="@string/current_month_title"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
@@ -2517,6 +2558,15 @@
                         android:scaleType="fitEnd"
                         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/current_month_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="April"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:typeface="monospace" />
 
                 <View
                     android:layout_width="match_parent"
@@ -2986,6 +3036,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="@string/last_week_title"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
@@ -3098,6 +3149,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="@string/nothing_interesting_title"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
