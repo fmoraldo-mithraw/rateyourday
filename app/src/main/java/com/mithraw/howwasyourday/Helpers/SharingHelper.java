@@ -90,7 +90,13 @@ public class SharingHelper {
             view.setVisibility(View.GONE);
         }
         if ((mCardView != null) && (mCardView.getVisibility() != View.GONE)) {
-            Bitmap tempBmp = mCardView.getDrawingCache();
+            mCardView.setDrawingCacheEnabled(true);
+            mCardView.buildDrawingCache(false);
+            Bitmap tempBmp = Bitmap.createBitmap(mCardView.getMeasuredWidth(),
+                    mCardView.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+            Canvas bitmapHolder = new Canvas(tempBmp);
+            mCardView.draw(bitmapHolder);
+            //Bitmap tempBmp = mCardView.getDrawingCache();
             if (tempBmp != null) {
                 //Adding the icon
                 Resources res =  MainActivity.getContext().getResources();
