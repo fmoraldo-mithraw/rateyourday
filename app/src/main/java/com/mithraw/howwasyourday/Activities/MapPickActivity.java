@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -51,7 +55,18 @@ public class MapPickActivity extends AppCompatActivity implements OnMapReadyCall
         } else if (((title != null) && !title.equals("")) && (mRate == 0)) {
             mTitle = title;
         }
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                pickLocation(place.getLatLng());
+            }
+            @Override
+            public void onError(Status status) {
+            }
+        });
 
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
@@ -129,18 +144,23 @@ public class MapPickActivity extends AppCompatActivity implements OnMapReadyCall
         return true;
     }
 
+    private void pickLocation(LatLng latLng) {
+        if (map != null) {
+            map.clear();
+            map.addMarker(new MarkerOptions().position(latLng).title(mTitle).icon(IconManager.getInstance().getIcon(mRate)));
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+            map.animateCamera(cameraUpdate);
+            mLatitude = latLng.latitude;
+            mLongitude = latLng.longitude;
+        }
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                map.clear();
-                map.addMarker(new MarkerOptions().position(latLng).title(mTitle).icon(IconManager.getInstance().getIcon(mRate)));
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
-                map.animateCamera(cameraUpdate);
-                mLatitude = latLng.latitude;
-                mLongitude = latLng.longitude;
+                pickLocation(latLng);
             }
         });
         if ((mLatitude == 0) && (mLongitude == 0) && (mLocManager != null)) {
