@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RatingBar;
@@ -85,7 +86,8 @@ public class ExpandedDayActivity extends AppCompatActivity implements OnMapReady
             logTextView.setText("");
         }else {
             logTextView.setVisibility(View.VISIBLE);
-            logTextView.setText(BitmapHelper.parseStringWithBitmaps(cal, log, arrayInt));
+            logTextView.setText(BitmapHelper.parseStringWithBitmaps(cal, log, arrayInt,true));
+            logTextView.setMovementMethod(LinkMovementMethod.getInstance());
         }
         ((RatingBar)findViewById(R.id.ratingBar)).setRating(intent.getFloatExtra(EXTRA_PARAM_RATE,0));
         ViewCompat.setTransitionName(cv, VIEW_NAME);

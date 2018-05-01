@@ -24,6 +24,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,6 +54,8 @@ import com.mithraw.howwasyourday.Tools.MyInt;
 import com.mithraw.howwasyourday.Tools._SwipeActivityClass;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -210,9 +213,10 @@ public class MainActivity extends _SwipeActivityClass
                     if ((rab != null) && (msg.obj != null))
                         rab.setRating((Integer) (msg.obj));
                 } else if (msg.what == MSG_ID.MSG_LOG.ordinal()) {
-                    if (msg.obj != null)
-                        setLogText(BitmapHelper.parseStringWithBitmaps(m_calendar, (String) (msg.obj), arrayInt));
-                    else
+                    if (msg.obj != null) {
+                        setLogText(BitmapHelper.parseStringWithBitmaps(m_calendar, (String) (msg.obj), arrayInt, true));
+                        ((TextView)findViewById(R.id.logText)).setMovementMethod(LinkMovementMethod.getInstance());
+                    }else
                         clearLogText();
                 } else if (msg.what == MSG_ID.MSG_TITLE.ordinal()) {
                     if (msg.obj != null)

@@ -1,5 +1,6 @@
 package com.mithraw.howwasyourday.Helpers;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,10 +12,16 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
+import android.view.View;
 
+import com.mithraw.howwasyourday.Activities.DisplayImageActivity;
 import com.mithraw.howwasyourday.Activities.ImportExportActivity;
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.Tools.MyInt;
@@ -69,10 +76,10 @@ public class BitmapHelper {
         return newText;
     }
 
-    public static SpannableStringBuilder parseStringWithBitmaps(Calendar cal, String text, MyInt[] maxId) {
+    public static SpannableStringBuilder parseStringWithBitmaps(Calendar cal, String text, MyInt[] maxId, boolean clickable) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
         builder.append(text);
-        File imagePath = new File(getDayImageDir(cal));
+        final File imagePath = new File(getDayImageDir(cal));
         int curIndex = 0;
         while (true) {
             curIndex = text.indexOf("[[[", curIndex);
@@ -96,13 +103,27 @@ public class BitmapHelper {
             //End of the looking for the image number
 
             String imageName = text.substring(curIndex + 3, curLast);
-            File newFile = new File(imagePath, imageName);
+            final File newFile = new File(imagePath, imageName);
             Bitmap bitmap = BitmapHelper.getBitmapFromFile(newFile);
             if (bitmap != null) {
                 BitmapDrawable d = new BitmapDrawable(bitmap);
                 d.setBounds(0, 0, d.getIntrinsicWidth()*3, d.getIntrinsicHeight()*3);
                 ImageSpan span = new ImageSpan(d,text.substring(curIndex,curIndex + imageName.length() + 6) ,ImageSpan.ALIGN_BASELINE);
                 builder.setSpan(span, curIndex, curIndex + imageName.length() + 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                if (clickable) {
+                    builder.setSpan(new ClickableSpan() {
+                        @Override
+                        public void onClick(View widget) {
+                            Intent intent = new Intent(App.getContext(), DisplayImageActivity.class);
+                            intent.putExtra(DisplayImageActivity.currentImage, newFile);
+                            intent.putExtra(DisplayImageActivity.imagePath, imagePath);
+                            Pair<View, String> p = new Pair<View, String>(widget, DisplayImageActivity.IMG);
+                            ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    App.getActivity(), p);
+                            ActivityCompat.startActivity(App.getActivity(),intent, activityOptions.toBundle());
+                        }
+                    }, curIndex, curIndex + imageName.length() + 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
             }
             curIndex += (imageName.length() + 6);
         }

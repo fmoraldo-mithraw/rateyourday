@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -267,7 +268,8 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.ViewHolder> {
             viewHolder.getLogCardText().setVisibility(View.GONE);
             viewHolder.getLogCardText().setText("");
         } else {
-            viewHolder.getLogCardText().setText(BitmapHelper.parseStringWithBitmaps(cal, logText, arrayInt));
+            viewHolder.getLogCardText().setText(BitmapHelper.parseStringWithBitmaps(cal, logText, arrayInt,true));
+            viewHolder.getLogCardText().setMovementMethod(LinkMovementMethod.getInstance());
             viewHolder.getLogCardDividerText().setVisibility(View.VISIBLE);
             viewHolder.getLogCardText().setVisibility(View.VISIBLE);
         }

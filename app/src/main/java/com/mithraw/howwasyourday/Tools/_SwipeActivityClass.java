@@ -10,7 +10,7 @@ public abstract class _SwipeActivityClass extends AppCompatActivity
     private static final int SWIPE_X_MIN_DISTANCE = 120;
     private static final int SWIPE_Y_MIN_DISTANCE = 250;
     private static final int SWIPE_MAX_OFF_PATH = 250;
-    private static final int SWIPE_THRESHOLD_VELOCITY = 400;
+    private static final int SWIPE_THRESHOLD_VELOCITY = 700;
     private GestureDetector gestureDetector;
 
     @Override

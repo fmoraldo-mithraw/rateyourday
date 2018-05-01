@@ -161,7 +161,7 @@ public class RateADay extends AppCompatActivity {
                     mRateView.setRating((Integer) (msg.obj));
                     allowFocusOnTexts(true);
                 } else if (msg.what == MSG_ID.MSG_LOG.ordinal()) {
-                    mLogText.setText(BitmapHelper.parseStringWithBitmaps(m_calendar, (String) (msg.obj), arrayInt));
+                    mLogText.setText(BitmapHelper.parseStringWithBitmaps(m_calendar, (String) (msg.obj), arrayInt,false));
                     allowFocusOnTexts(true);
 
                 } else if (msg.what == MSG_ID.MSG_TITLE.ordinal()) {
@@ -449,7 +449,7 @@ public class RateADay extends AppCompatActivity {
             e.printStackTrace();
         }
         String newString = BitmapHelper.addImageToString("image" + (arrayInt[0].getValue()) + ".png", mLogText.getText().toString(), mLogText.getSelectionStart());
-        mLogText.setText(BitmapHelper.parseStringWithBitmaps(m_calendar, newString, arrayInt));
+        mLogText.setText(BitmapHelper.parseStringWithBitmaps(m_calendar, newString, arrayInt,false));
     }
     @Override
     public void onResume(){
