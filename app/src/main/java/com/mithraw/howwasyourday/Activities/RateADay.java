@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.mithraw.howwasyourday.App;
 import com.mithraw.howwasyourday.Dialogs.TipsDialog;
 import com.mithraw.howwasyourday.Helpers.BitmapHelper;
+import com.mithraw.howwasyourday.Helpers.EmojiHelper;
 import com.mithraw.howwasyourday.Helpers.RateViewHelper;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Tools.Coordinate;
@@ -104,6 +105,7 @@ public class RateADay extends AppCompatActivity {
                 spanLength = -1;
                 mLogText.getEditableText().replace(start - length, start, "");
             }
+            EmojiHelper.parseCurrentChange(mLogText,s,start);
         }
 
         @Override
@@ -149,6 +151,7 @@ public class RateADay extends AppCompatActivity {
         mCameraAdder = findViewById(R.id.camera_adder);
         mPlaceAdder = findViewById(R.id.place_adder);
         mTitleText = findViewById(R.id.titleTextRate);
+        EmojiHelper.attachToEditText(mTitleText);
         mFlagsTitle = mTitleText.getInputType();
         mLogText = findViewById(R.id.logTextRate);
         mLogText.addTextChangedListener(watcher);
