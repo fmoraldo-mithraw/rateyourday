@@ -149,7 +149,7 @@ public class NotificationHelper {
                         .setSound(Uri.parse(PreferenceManager.getDefaultSharedPreferences(App.getApplication().getApplicationContext()).getString("notifications_new_message_ringtone", "content://settings/system/notification_sound")))
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                 if (PreferenceManager.getDefaultSharedPreferences(App.getApplication().getApplicationContext()).getBoolean("notifications_new_message_vibrate", true)) {
-                    long[] pattern = new long []{500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500};
+                    long[] pattern = new long []{2000,100,50};
                     mBuilder.setVibrate(pattern);
                 }
                 NotificationManager notificationManager = (NotificationManager) pContext.getSystemService(Context.NOTIFICATION_SERVICE);
