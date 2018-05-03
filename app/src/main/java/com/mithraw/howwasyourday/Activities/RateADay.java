@@ -2,10 +2,12 @@ package com.mithraw.howwasyourday.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,7 +25,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -233,6 +234,9 @@ public class RateADay extends AppCompatActivity {
                 Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT, null);
                 galleryIntent.setType("image/*");
                 galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                }
                 startActivityForResult(galleryIntent, ACTIVITY_RESULTS.GALLERY_ID.ordinal());
             }
         });
@@ -401,7 +405,22 @@ public class RateADay extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (((requestCode == ACTIVITY_RESULTS.GALLERY_ID.ordinal()) && (resultCode == RESULT_OK)) ||
                 ((requestCode == ACTIVITY_RESULTS.CAMERA_ID.ordinal()) && (resultCode == RESULT_OK))) {
-            if (data.getData() != null) {
+            if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)&&(data.getClipData() != null)) {
+                ClipData mClipData = data.getClipData();
+                for (int i = 0; i < mClipData.getItemCount(); i++) {
+                    try {
+                        ClipData.Item item = mClipData.getItemAt(i);
+                        InputStream stream = getContentResolver().openInputStream(item.getUri());
+                        mBitmap = BitmapFactory.decodeStream(stream);
+                        stream.close();
+                        saveAndDisplay(mBitmap);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else if (data.getData() != null) {
                 try {
                     if (mBitmap != null) {
                         mBitmap.recycle();
@@ -417,8 +436,10 @@ public class RateADay extends AppCompatActivity {
                     e.printStackTrace();
                 }
             } else {
-                mBitmap = (Bitmap) data.getExtras().get("data");
-                saveAndDisplay(mBitmap);
+
+                    mBitmap = (Bitmap) data.getExtras().get("data");
+                    saveAndDisplay(mBitmap);
+
             }
             super.onActivityResult(requestCode, resultCode, data);
         }else if ((requestCode == ACTIVITY_RESULTS.PLACE_ID.ordinal()) && (resultCode == RESULT_OK)){
@@ -435,7 +456,6 @@ public class RateADay extends AppCompatActivity {
 
     private void saveAndDisplay(Bitmap bitmap) {
         Bitmap resizeBitmap = Bitmap.createScaledBitmap(bitmap, 600, bitmap.getHeight() * 600 / bitmap.getWidth(), true);
-        bitmap.recycle();
         File imagePath = new File(BitmapHelper.getDayImageDir(m_calendar));
         arrayInt[0].setValue(arrayInt[0].getValue() + 1);
         File newFile = new File(imagePath, "image" + arrayInt[0].getValue() + ".png");
