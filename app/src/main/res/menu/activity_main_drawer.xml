@@ -20,6 +20,10 @@
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_map"
             android:title="@string/action_map" />
+        <item
+            android:id="@+id/nav_best_memories"
+            android:icon="@drawable/ic_sun"
+            android:title="@string/action_best_memories"/>
     </group>
     <group android:id="@+id/groupSettings" android:checkableBehavior="single">
         <item

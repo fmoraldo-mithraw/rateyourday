@@ -549,6 +549,11 @@ public class MainActivity extends _SwipeActivityClass
         startActivity(mapIntent);
     }
 
+    private void launchActivityBestMemories() {
+        Intent bestMemoriesIntent = new Intent(getApplicationContext(), BestMemoriesActivity.class);
+        startActivity(bestMemoriesIntent);
+    }
+
 
     public class ReconnectListener implements View.OnClickListener {
         @Override
@@ -643,6 +648,9 @@ public class MainActivity extends _SwipeActivityClass
         }
         if(id == R.id.nav_map) {
             launchActivityMap();
+        }
+        if(id == R.id.nav_best_memories) {
+            launchActivityBestMemories();
         }
 
 

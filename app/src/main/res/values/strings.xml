@@ -261,4 +261,6 @@
     <string name="go_to_today">Reach Today</string>
     <string name="title_activity_display_image">DisplayImageActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="action_best_memories">Best memories</string>
+    <string name="nothing_interesting_best_memories">"For now, no memory deserve to be here, i hope some will very soon !"</string>
 </resources>

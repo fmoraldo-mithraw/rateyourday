@@ -252,5 +252,7 @@
     <string name="interesting_things">"Des informations intéressantes sont disponibles !"</string>
     <string name="interesting_things_button">Allons voir !</string>
     <string name="go_to_today">Aller a la date d\'aujourd\'hui</string>
+    <string name="action_best_memories">Meilleurs souvenirs</string>
+    <string name="nothing_interesting_best_memories">"Vous n'avez pour le moment aucune journée qui mérite de figurer ici, très bientot j'espère !"</string>
 
 </resources>
