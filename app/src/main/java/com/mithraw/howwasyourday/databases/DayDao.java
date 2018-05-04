@@ -24,6 +24,8 @@ public interface DayDao {
     List<Day> getAll();
     @Query("SELECT * FROM day WHERE rating is 5 AND is_removed IS 0 ORDER BY year DESC, month DESC, day_of_the_month DESC")
     List<Day> getAllGoodMemories();
+    @Query("SELECT * FROM day WHERE rating is 4 AND is_removed IS 0 ORDER BY year DESC, month DESC, day_of_the_month DESC")
+    List<Day> getAllGoodMemories4();
     @Query("SELECT * FROM day WHERE is_removed IS 0 AND latitude IS NOT 0 AND longitude IS NOT 0 ORDER BY year DESC, month DESC, day_of_the_month DESC LIMIT 1")
     List<Day> getLastOneWithCoordinate();
 

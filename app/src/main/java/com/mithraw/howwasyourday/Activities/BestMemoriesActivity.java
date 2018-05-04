@@ -72,6 +72,9 @@ public class BestMemoriesActivity extends AppCompatActivity {
             @Override
             public void run() {
                 List<Day> days = db.dayDao().getAllGoodMemories();
+                if((days == null)|| (days.size() == 0)){
+                    days = db.dayDao().getAllGoodMemories4();
+                }
                 Message msg_rating = Message.obtain();
                 msg_rating.what = MSG_ID.QUERY_END.ordinal();
                 msg_rating.obj = days;
