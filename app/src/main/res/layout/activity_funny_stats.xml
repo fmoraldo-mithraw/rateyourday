@@ -422,6 +422,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginRight="9dp"
                     app:srcCompat="@drawable/ic_inifnite" />
 
                 <View
@@ -998,6 +999,7 @@
                     android:id="@+id/last_year_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="18dp"
                     android:gravity="center"
                     android:text="2017"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
@@ -1535,6 +1537,7 @@
                     android:id="@+id/current_year_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="18dp"
                     android:gravity="center"
                     android:text="2018"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
@@ -2070,6 +2073,7 @@
                     android:id="@+id/last_month_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="18dp"
                     android:gravity="center"
                     android:text="March"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
@@ -2563,6 +2567,7 @@
                     android:id="@+id/current_month_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="18dp"
                     android:gravity="center"
                     android:text="April"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
