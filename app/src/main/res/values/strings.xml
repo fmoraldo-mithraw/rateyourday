@@ -195,11 +195,11 @@
     <string name="checkbox_never_show_tips">Never display any tips again</string>
     <string name="title_tips">Tips</string>
     <string name="tips_main_how_to_use">1 - Select a date.\n2 - Expand it in order to watch all your log and share it to your friends.\n3 - Remove the day selected.\n4 - Edit the day selected.\n\nYou can also swipe up to reset the date to today\'s date, swipe left and right to display or hide the menu, or swipe down to refresh the content of the day selected.</string>
-    <string name="tips_main_menu1">You can click on the menu in order to expand it.</string>
+    <string name="tips_main_menu1">You can click on the menu in order to expand it.\nYou can click on the button in the top right corner in order to go back to today.</string>
     <string name="tips_main_menu2">Then select an item in order to open the corresponding screen.</string>
     <string name="tips_main_title">How to use the Main screen</string>
     <string name="tips_rate_title">How to use the Rating screen</string>
-    <string name="tips_rate">1 - The only mandatory action is to rate your day.\n2 - If you want to, you can fill the title an a text for your day.\n3 - To save your day and return to the main screen you can tap the back button on top or the back button on the bottom of your screen.</string>
+    <string name="tips_rate">The only mandatory action is to rate your day.\n\nIf you want to, you can fill the title an a text for your day.\n\nYou can add pictures and/or a location by clicking on the items on the bottom of the screen\n\nTo save your day and return to the main screen you can tap the save button on top or the back button of your phone.</string>
     <string name="tips_logs_title">How to use the Entry logs screen</string>
     <string name="tips_logs_top_screen">On the top of the screen, you can select the bound of dates you want to display on the screen.\nBy clicking on a day of the week, you remove/display all the entries from the list that are corresponding the day you clicked</string>
     <string name="tips_logs_cards">By tapping a day card, you display three buttons that allow you to take actions on the day, remove, edit or expand the day as you pleased.</string>
