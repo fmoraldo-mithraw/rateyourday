@@ -263,4 +263,8 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="action_best_memories">Best memories</string>
     <string name="nothing_interesting_best_memories">"For now, no memory deserve to be here, i hope some will very soon !"</string>
+    <string name="action_cancel">Cancel the edits</string>
+    <string name="cancel_string">Are you sure you want to leave without saving your modifications</string>
+    <string name="cancel_ok">Yes, cancel it !</string>
+    <string name="cancel_cancel">No, i will stay here</string>
 </resources>

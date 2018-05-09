@@ -3,6 +3,7 @@ package com.mithraw.howwasyourday.Activities;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,12 +14,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
+import android.view.ContextThemeWrapper;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -386,7 +390,6 @@ public class RateADay extends AppCompatActivity {
 
     @Override
     public void onPause(){
-        saveDay();
         mLocManager.clean();
         super.onPause();
     }
@@ -470,6 +473,41 @@ public class RateADay extends AppCompatActivity {
         }
         String newString = BitmapHelper.addImageToString("image" + (arrayInt[0].getValue()) + ".png", mLogText.getText().toString(), mLogText.getSelectionStart());
         mLogText.setText(BitmapHelper.parseStringWithBitmaps(m_calendar, newString, arrayInt,false));
+    }
+
+    private void Cancel() {
+        Intent myIntent = getIntent();
+        setResult(Activity.RESULT_CANCELED, myIntent);
+        BitmapHelper.cleanDatas(m_calendar, mLogText.getText().toString());
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.cancel_menu, menu);
+        MenuItem item = menu.findItem(R.id.action_cancel);
+        final Activity act = this;
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(RateADay.this);
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                alertDialogBuilder.setMessage(R.string.cancel_string)
+                        .setTitle(R.string.action_cancel);
+                alertDialogBuilder.setPositiveButton(R.string.cancel_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Cancel();
+                    }
+                });
+                alertDialogBuilder.setNegativeButton(R.string.cancel_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+                alertDialogBuilder.show();
+                return true;
+            }
+        });
+        return true;
     }
     @Override
     public void onResume(){

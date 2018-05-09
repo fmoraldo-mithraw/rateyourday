@@ -254,5 +254,8 @@
     <string name="go_to_today">Aller a la date d\'aujourd\'hui</string>
     <string name="action_best_memories">Meilleurs souvenirs</string>
     <string name="nothing_interesting_best_memories">"Vous n'avez pour le moment aucune journée qui mérite de figurer ici, très bientot j'espère !"</string>
-
+    <string name="action_cancel">Annuler les modifications</string>
+    <string name="cancel_string">"Êtes-vous sur de vouloire quitter cet écran sans sauvegarder les modifications ?"</string>
+    <string name="cancel_ok">Oui, annule tout !</string>
+    <string name="cancel_cancel">Non, je vais rester ici</string>
 </resources>
