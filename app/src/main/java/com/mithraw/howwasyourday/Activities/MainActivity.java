@@ -610,7 +610,7 @@ public class MainActivity extends _SwipeActivityClass
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                onSwipeUp();
+                goToday();
                 return true;
             }
         });
@@ -730,8 +730,7 @@ public class MainActivity extends _SwipeActivityClass
         drawer.closeDrawer(GravityCompat.START);
     }
 
-    @Override
-    protected void onSwipeUp() {
+    protected void goToday() {
         m_calendar.setTimeInMillis(System.currentTimeMillis());
         CalendarView calendarView = findViewById(R.id.calendarView);
         calendarView.setDate(m_calendar.getTimeInMillis());
@@ -741,8 +740,13 @@ public class MainActivity extends _SwipeActivityClass
     }
 
     @Override
+    protected void onSwipeUp() {
+        /*goToday()*/
+    }
+
+    @Override
     protected void onSwipeDown() {
-        updateLabel();
-        Toast.makeText(getBaseContext(), R.string.main_refresh, Toast.LENGTH_SHORT).show();
+        /*updateLabel();
+        Toast.makeText(getBaseContext(), R.string.main_refresh, Toast.LENGTH_SHORT).show();*/
     }
 }
