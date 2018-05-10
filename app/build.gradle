@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.mithraw.howwasyourday"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 22
         versionName "Release-2"
@@ -32,10 +32,11 @@ buildscript {
     }
 }
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'sun.bob:mcalendarview:1.0.0'
     implementation 'com.android.support:appcompat-v7:27.0.2'
     implementation 'com.android.support:recyclerview-v7:27.0.2'
-    implementation "com.android.support:support-compat:27.0.2"
+    implementation 'com.android.support:support-compat:27.0.2'
     implementation 'com.android.support:cardview-v7:27.0.2'
     implementation 'com.android.support:design:27.0.2'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -44,9 +45,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    implementation "android.arch.persistence.room:runtime:1.0.0"
+    implementation 'android.arch.persistence.room:runtime:1.0.0'
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
-    implementation "android.arch.persistence.room:rxjava2:1.0.0"
+    implementation 'android.arch.persistence.room:rxjava2:1.0.0'
     implementation 'com.commonsware.cwac:provider:0.5.3'
     implementation 'com.google.android.gms:play-services-drive:15.0.0'
     implementation 'com.google.android.gms:play-services-identity:15.0.0'
@@ -56,4 +57,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-places:15.0.0'
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
     implementation 'com.google.maps.android:android-maps-utils:0.4+'
+
 }

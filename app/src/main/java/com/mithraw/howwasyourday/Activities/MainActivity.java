@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -21,6 +20,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
@@ -29,7 +29,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -51,11 +50,8 @@ import com.mithraw.howwasyourday.Helpers.ThreadSyncDatas;
 import com.mithraw.howwasyourday.R;
 import com.mithraw.howwasyourday.Tools.Coordinate;
 import com.mithraw.howwasyourday.Tools.MyInt;
-import com.mithraw.howwasyourday.Tools._SwipeActivityClass;
 import com.mithraw.howwasyourday.databases.Day;
 import com.mithraw.howwasyourday.databases.DaysDatabase;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,16 +59,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import sun.bob.mcalendarview.MCalendarView;
+import sun.bob.mcalendarview.MarkStyle;
+import sun.bob.mcalendarview.listeners.OnDateClickListener;
+import sun.bob.mcalendarview.vo.DateData;
+
 /*
 Main Activity, show a calendar view and a card with the day selected (default today)
 Manage the menu
  */
 
 
-public class MainActivity extends _SwipeActivityClass
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT, MSG_UPDATE, MSG_LOCATION, MSG_INTERRESTING}
+    private enum MSG_ID {MSG_RATING, MSG_TITLE, MSG_LOG, MSG_EMPTY, MSG_SENT, MSG_UPDATE, MSG_LOCATION, MSG_LIST_RATED, MSG_INTERRESTING}
 
     public enum ACTIVITY_ID {ACTIVITY_RATE_A_DAY, ACTIVITY_SETTINGS, ACTIVITY_DIAGRAMS, ACTIVITY_LOGS, ACTIVITY_STATS}
 
@@ -85,7 +86,9 @@ public class MainActivity extends _SwipeActivityClass
     private Day mDay;
     private static CardView mCardView;
     Coordinate mLastCoordinate = new Coordinate();
+    DateData mLastDate;
     MyInt[] arrayInt = {new MyInt(0)};
+    List<DateData> listDaysRated;
     public static Context getContext() {
         return mContext;
     }
@@ -137,6 +140,7 @@ public class MainActivity extends _SwipeActivityClass
         setContentView(R.layout.activity_main);
         mContext = this;
         mCardView = this.findViewById(R.id.cardViewLittle);
+        listDaysRated = new ArrayList<>();
         //Display the first use Screen
         if (!(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("first_use_screen_showed", false))) {
             DialogFragment newFragment = new FirstUseDialog();
@@ -279,6 +283,16 @@ public class MainActivity extends _SwipeActivityClass
                         editButton.setText(R.string.edit_button_text);
                     }
                 }
+                if (msg.what == MSG_ID.MSG_LIST_RATED.ordinal()) {
+                    if (msg.obj != null) {
+                        List<Day> days = (List<Day>) msg.obj;
+                        listDaysRated.clear();
+                        for (Day d : days) {
+                            listDaysRated.add(new DateData(d.getYear(), d.getMonth() + 1, d.getDay()));
+                        }
+                        updateDayRated();
+                    }
+                }
             }
         };
         //Setup the expand button
@@ -319,6 +333,7 @@ public class MainActivity extends _SwipeActivityClass
                                 handler.sendEmptyMessage(MSG_ID.MSG_EMPTY.ordinal());
                             }
                         }.start();
+                        removeRateDay(m_calendar);
                     }
                 });
                 alertDialogBuilder.setNegativeButton(R.string.log_removed_cancel, new DialogInterface.OnClickListener() {
@@ -340,13 +355,13 @@ public class MainActivity extends _SwipeActivityClass
         rab.setMax(5);
 
         //  The the date controler
-        CalendarView calendarView = findViewById(R.id.calendarView);
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        MCalendarView calendarView = findViewById(R.id.calendarView);
+        calendarView.setOnDateClickListener(new OnDateClickListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                m_calendar.set(java.util.Calendar.YEAR, year);
-                m_calendar.set(java.util.Calendar.MONTH, month);
-                m_calendar.set(java.util.Calendar.DAY_OF_MONTH, dayOfMonth);
+            public void onDateClick(View view, DateData date) {
+                m_calendar.set(java.util.Calendar.YEAR, date.getYear());
+                m_calendar.set(java.util.Calendar.MONTH, date.getMonth() - 1);
+                m_calendar.set(java.util.Calendar.DAY_OF_MONTH, date.getDay());
                 //if the date selected is not the date of the day we consider the date has been changed
                 Date d = new Date(System.currentTimeMillis());
                 if ((d.getDate() == m_calendar.get(java.util.Calendar.DAY_OF_MONTH)) &&
@@ -356,12 +371,57 @@ public class MainActivity extends _SwipeActivityClass
                 } else {
                     dateChangedByUser = true;
                 }
+                selectDate(date);
                 updateLabel();
             }
         });
-        calendarView.setDate(m_calendar.getTimeInMillis());
+        calendarView.travelTo(new DateData(m_calendar.get(Calendar.YEAR), m_calendar.get(Calendar.MONTH) + 1, m_calendar.get(Calendar.DAY_OF_MONTH)));
+        calendarView.markDate(new DateData(m_calendar.get(Calendar.YEAR), m_calendar.get(Calendar.MONTH) + 1, m_calendar.get(Calendar.DAY_OF_MONTH))
+                .setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, getResources().getColor(R.color.colorPrimary))));
+        selectDate(new DateData(m_calendar.get(Calendar.YEAR), m_calendar.get(Calendar.MONTH) + 1, m_calendar.get(Calendar.DAY_OF_MONTH)));
+
         updateDateText();
         checkIfSomeThingInterresting();
+    }
+
+    private void updateDayRated() {
+        MCalendarView calendarView = findViewById(R.id.calendarView);
+        for (DateData d : listDaysRated) {
+            calendarView.unMarkDate(d);
+            calendarView.markDate(d.setMarkStyle(new MarkStyle(MarkStyle.DOT, getResources().getColor(R.color.colorAccent))));
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        DateData daySelected = new DateData(m_calendar.get(Calendar.YEAR), m_calendar.get(Calendar.MONTH) + 1, m_calendar.get(Calendar.DAY_OF_MONTH));
+        DateData today = new DateData(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
+        calendarView.unMarkDate(today);
+        calendarView.markDate(today.setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, getResources().getColor(R.color.colorAccent))));
+        calendarView.unMarkDate(daySelected);
+        calendarView.markDate(daySelected.setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, getResources().getColor(R.color.colorPrimary))));
+    }
+
+    private void removeRateDay(Calendar cal) {
+        DateData date = new DateData(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
+        MCalendarView calendarView = findViewById(R.id.calendarView);
+        calendarView.unMarkDate(date);
+        calendarView.markDate(date.setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, getResources().getColor(R.color.colorPrimary))));
+        listDaysRated.remove(date);
+        updateDayRated();
+    }
+
+    private void selectDate(DateData date) {
+        MCalendarView calendarView = findViewById(R.id.calendarView);
+        if (mLastDate != null) {
+            calendarView.unMarkDate(mLastDate);
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        DateData today = new DateData(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
+        if(!date.equals(today)){
+            calendarView.unMarkDate(today);
+            calendarView.markDate(today.setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, getResources().getColor(R.color.colorAccent))));
+        }
+        mLastDate = date;
     }
 
     private void checkIfSomeThingInterresting() {
@@ -488,8 +548,8 @@ public class MainActivity extends _SwipeActivityClass
     }
 
     private void updateLabel() {
-        CalendarView calendarView = findViewById(R.id.calendarView);
-        calendarView.setDate(m_calendar.getTimeInMillis());
+        MCalendarView calendarView = findViewById(R.id.calendarView);
+        calendarView.travelTo(new DateData(m_calendar.get(Calendar.YEAR), m_calendar.get(Calendar.MONTH) + 1, m_calendar.get(Calendar.DAY_OF_MONTH)));
         updateDateText();
         //Fill the controls with the correct infos
         fillTheInformations();
@@ -671,8 +731,11 @@ public class MainActivity extends _SwipeActivityClass
                 ((d.getYear() + 1900) != m_calendar.get(java.util.Calendar.YEAR)))) {
             m_calendar.setTimeInMillis(System.currentTimeMillis());
         }
-        CalendarView calendarView = findViewById(R.id.calendarView);
-        calendarView.setDate(m_calendar.getTimeInMillis());
+        MCalendarView calendarView = findViewById(R.id.calendarView);
+        if (calendarView.getMarkedDates() != null)
+            calendarView.getMarkedDates().removeAdd();
+        calendarView.travelTo(new DateData(m_calendar.get(Calendar.YEAR), m_calendar.get(Calendar.MONTH) + 1, m_calendar.get(Calendar.DAY_OF_MONTH)));
+        selectDate(new DateData(m_calendar.get(Calendar.YEAR), m_calendar.get(Calendar.MONTH) + 1, m_calendar.get(Calendar.DAY_OF_MONTH)));
 
         //Initialize the labels
         updateLabel();
@@ -715,38 +778,24 @@ public class MainActivity extends _SwipeActivityClass
                     handler.sendMessage(msg_log);
                     handler.sendEmptyMessage(MSG_ID.MSG_SENT.ordinal());
                 }
+                List<Day> daysRated = db.dayDao().getAll();
+                if (daysRated.size() > 0) {
+                    Message msg_log = Message.obtain();
+                    msg_log.what = MSG_ID.MSG_LIST_RATED.ordinal();
+                    msg_log.obj = daysRated;
+                    handler.sendMessage(msg_log);
+                }
             }
         }.start();
-    }
-    @Override
-    protected void onSwipeRight() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.openDrawer(GravityCompat.START);
-    }
-
-    @Override
-    protected void onSwipeLeft() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
     }
 
     protected void goToday() {
         m_calendar.setTimeInMillis(System.currentTimeMillis());
-        CalendarView calendarView = findViewById(R.id.calendarView);
-        calendarView.setDate(m_calendar.getTimeInMillis());
+        MCalendarView calendarView = findViewById(R.id.calendarView);
+        calendarView.travelTo(new DateData(m_calendar.get(Calendar.YEAR), m_calendar.get(Calendar.MONTH) + 1, m_calendar.get(Calendar.DAY_OF_MONTH)));
+        selectDate(new DateData(m_calendar.get(Calendar.YEAR), m_calendar.get(Calendar.MONTH) + 1, m_calendar.get(Calendar.DAY_OF_MONTH)));
         //Initialize the labels
         updateLabel();
         Toast.makeText(getBaseContext(), R.string.main_today, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onSwipeUp() {
-        /*goToday()*/
-    }
-
-    @Override
-    protected void onSwipeDown() {
-        /*updateLabel();
-        Toast.makeText(getBaseContext(), R.string.main_refresh, Toast.LENGTH_SHORT).show();*/
     }
 }
