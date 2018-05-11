@@ -471,8 +471,10 @@ public class RateADay extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        int selStart = mLogText.getSelectionStart();
         String newString = BitmapHelper.addImageToString("image" + (arrayInt[0].getValue()) + ".png", mLogText.getText().toString(), mLogText.getSelectionStart());
         mLogText.setText(BitmapHelper.parseStringWithBitmaps(m_calendar, newString, arrayInt,false));
+        mLogText.setSelection(selStart);
     }
 
     private void Cancel() {
