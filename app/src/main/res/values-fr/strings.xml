@@ -258,4 +258,5 @@
     <string name="cancel_string">"Êtes-vous sur de vouloire quitter cet écran sans sauvegarder les modifications ?"</string>
     <string name="cancel_ok">Oui, annule tout !</string>
     <string name="cancel_cancel">Non, je vais rester ici</string>
+    <string name="action_search">Rechercher</string>
 </resources>

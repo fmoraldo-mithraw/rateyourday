@@ -267,4 +267,5 @@
     <string name="cancel_string">Are you sure you want to leave without saving your modifications</string>
     <string name="cancel_ok">Yes, cancel it !</string>
     <string name="cancel_cancel">No, i will stay here</string>
+    <string name="action_search">Search</string>
 </resources>

@@ -613,6 +613,10 @@ public class MainActivity extends AppCompatActivity
         Intent bestMemoriesIntent = new Intent(getApplicationContext(), BestMemoriesActivity.class);
         startActivity(bestMemoriesIntent);
     }
+    private void launchActivitySearch() {
+        Intent searchIntent = new Intent(getApplicationContext(), SearchActivity.class);
+        startActivity(searchIntent);
+    }
 
 
     public class ReconnectListener implements View.OnClickListener {
@@ -711,6 +715,9 @@ public class MainActivity extends AppCompatActivity
         }
         if(id == R.id.nav_best_memories) {
             launchActivityBestMemories();
+        }
+        if(id == R.id.nav_search) {
+            launchActivitySearch();
         }
 
 

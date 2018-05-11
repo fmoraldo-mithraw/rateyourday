@@ -62,6 +62,8 @@ public interface DayDao {
     @Query("SELECT AVG(rating) FROM day WHERE day_of_the_week IS :dayOfTheWeek AND year IS :year AND month IS :month AND is_removed IS 0 ")
     float getAverageRatingPerDayOfTheWeekByMonthAndYear(int dayOfTheWeek,int month, int year);
 
+    @Query("SELECT * FROM day WHERE is_removed IS 0 AND (titleText LIKE '%' ||:queryText || '%' OR log LIKE '%' || :queryText || '%') ORDER BY year DESC, month DESC, day_of_the_month DESC")
+    List<Day> search(String queryText);
 
     @Query("SELECT AVG(rating) FROM day WHERE day_of_the_week IS :dayOfTheWeek AND is_removed IS 0 ")
     float getAverageRatingPerDayOfTheWeek(int dayOfTheWeek);
@@ -123,4 +125,6 @@ public interface DayDao {
 
     @Query("SELECT * FROM day WHERE date_time > :startDateInt AND date_time < :endDateInt AND day_of_the_week IN (:idsDays) AND rating IN (:idsRate) AND latitude IS NOT 0 AND longitude IS NOT 0 AND is_removed IS 0 ORDER BY year DESC, month DESC, day_of_the_month DESC")
     List<Day> getByBoundsAndDaysAndRatingNoBadLocations(long startDateInt, long endDateInt, int[] idsDays, int[] idsRate);
+
+
 }

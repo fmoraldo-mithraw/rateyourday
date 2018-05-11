@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
     <group android:id="@+id/groupInfos" android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_entry_logs"
-            android:icon="@drawable/ic_menu_list"
-            android:title="@string/action_entry_logs" />
         <item
             android:id="@+id/nav_funny_stats"
             android:icon="@drawable/ic_lightbulb_outline"
@@ -20,10 +15,21 @@
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_map"
             android:title="@string/action_map" />
+    </group>
+    <group android:id="@+id/groupList" android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_search"
+            android:icon="@drawable/ic_search"
+            android:title="@string/action_search"/>
+        <item
+            android:id="@+id/nav_entry_logs"
+            android:icon="@drawable/ic_menu_list"
+            android:title="@string/action_entry_logs" />
         <item
             android:id="@+id/nav_best_memories"
             android:icon="@drawable/ic_sun"
             android:title="@string/action_best_memories"/>
+
     </group>
     <group android:id="@+id/groupSettings" android:checkableBehavior="single">
         <item
