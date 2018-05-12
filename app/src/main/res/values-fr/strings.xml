@@ -232,7 +232,7 @@
     <string name="photo_archive">Archive photo</string>
     <string name="import_title">Importer</string>
     <string name="import_data">Vous pouvez importer des données sous deux formats:\n - CSV : \"date en millisecondes\";\"note\";\"titre\";\"texte\"\n - Base de donnée sqlite3 : Le même type de base de donnée que vous pouvez récupérer ici doit être utilisé.\nDans les textes, si vous voulez que des photos soient insérées, vous devez insérer[[[nomdelaphoto.png]]]</string>
-    <string name="import_data2">Vous pouvez rajouter vos photos dans une archive au format zip dans lequel vous mettrez vos photo dans des dossiers nommé suivant la date du jour auquel ils correspondent au format AAAAMMJJ, eux même dans un dossier parent nommé \"images-day\":</string>
+    <string name="import_data2">Vous pouvez rajouter vos photos dans une archive au format zip dans lequel vous mettrez vos photo dans des dossiers nommé suivant la date du jour auquel ils correspondent au format(les mois débuttant a 0, Janvier étant donc 00) AAAAMMJJ, eux même dans un dossier parent nommé \"images-day\":</string>
     <string name="congrats">Félicitations !</string>
     <string name="bronze_text">Vous avez remporté le trophée de bronze ! Continuez de noter vos journées, et vous remporterez bientôt le suivant !</string>
     <string name="silver_text">Vous avez remporté le trophée d\'argent ! Continuez de noter vos journées, et vous remporterez bientôt le suivant !</string>
