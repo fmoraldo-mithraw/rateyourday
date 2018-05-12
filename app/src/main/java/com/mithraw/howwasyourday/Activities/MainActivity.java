@@ -62,6 +62,7 @@ import java.util.Random;
 import sun.bob.mcalendarview.MCalendarView;
 import sun.bob.mcalendarview.MarkStyle;
 import sun.bob.mcalendarview.listeners.OnDateClickListener;
+import sun.bob.mcalendarview.listeners.OnMonthChangeListener;
 import sun.bob.mcalendarview.vo.DateData;
 
 /*
@@ -373,6 +374,22 @@ public class MainActivity extends AppCompatActivity
                 }
                 selectDate(date);
                 updateLabel();
+            }
+        });
+        calendarView.setOnMonthChangeListener(new OnMonthChangeListener() {
+            @Override
+            public void onMonthChange(int year, int month) {
+                final int f_year = year;
+                final int f_month = month;
+                new Thread() {
+                    @Override
+                    public void run() {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(Calendar.YEAR, f_year);
+                        calendar.set(Calendar.MONTH, f_month-1);
+                        updateCalendarFace(calendar.getTimeInMillis());
+                    }
+                }.start();
             }
         });
         calendarView.travelTo(new DateData(m_calendar.get(Calendar.YEAR), m_calendar.get(Calendar.MONTH) + 1, m_calendar.get(Calendar.DAY_OF_MONTH)));
@@ -785,15 +802,23 @@ public class MainActivity extends AppCompatActivity
                     handler.sendMessage(msg_log);
                     handler.sendEmptyMessage(MSG_ID.MSG_SENT.ordinal());
                 }
-                List<Day> daysRated = db.dayDao().getAll();
-                if (daysRated.size() > 0) {
-                    Message msg_log = Message.obtain();
-                    msg_log.what = MSG_ID.MSG_LIST_RATED.ordinal();
-                    msg_log.obj = daysRated;
-                    handler.sendMessage(msg_log);
-                }
+                updateCalendarFace(m_calendar.getTimeInMillis());
             }
         }.start();
+    }
+
+    private void updateCalendarFace(long time) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        calendar.add(Calendar.MONTH, -2);
+        long firstDate = calendar.getTimeInMillis();
+        calendar.add(Calendar.MONTH, 4);
+        long secondDate = calendar.getTimeInMillis();
+        List<Day> daysRated = db.dayDao().getByBounds(firstDate, secondDate);
+        Message msg_log = Message.obtain();
+        msg_log.what = MSG_ID.MSG_LIST_RATED.ordinal();
+        msg_log.obj = daysRated;
+        handler.sendMessage(msg_log);
     }
 
     protected void goToday() {
