@@ -268,4 +268,6 @@
     <string name="cancel_ok">Yes, cancel it !</string>
     <string name="cancel_cancel">No, i will stay here</string>
     <string name="action_search">Search</string>
+    <string name="snooze">Snooze</string>
+    <string name="snooze_toast">The notification will be back in an hour</string>
 </resources>

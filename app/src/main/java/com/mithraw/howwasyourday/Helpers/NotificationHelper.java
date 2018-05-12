@@ -42,6 +42,7 @@ public class NotificationHelper {
     public static final String THREE_STAR = "3";
     public static final String FOUR_STAR = "4";
     public static final String FIVE_STAR = "5";
+    public static final String SNOOZE = "6";
 
     public static void buildChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -67,6 +68,18 @@ public class NotificationHelper {
         );
     }
 
+    public static void snooze() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.add(Calendar.HOUR_OF_DAY, 1);
+        Resources res = App.getApplication().getResources();
+        String notificationIntentAction = res.getString(R.string.notificationIntentAction);
+        Intent intent = new Intent(App.getApplication().getApplicationContext(), TimeAlarm.class);
+        intent.setAction(notificationIntentAction);
+        alarmMgr = (AlarmManager) App.getApplication().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        alarmIntent = PendingIntent.getBroadcast(App.getApplication().getApplicationContext(), 1, intent, 0);
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+    }
     public static void updateNotificationStatus(boolean enable, String time, String ringtone, boolean vibration) {
         Logger.getLogger("NotificationHelper").log(new LogRecord(Level.INFO, "FMORALDO : Notification updated" + " " + enable + " " + time + " " + ringtone + " " + vibration));
         Calendar calendar = Calendar.getInstance();
@@ -131,18 +144,21 @@ public class NotificationHelper {
                 notificationLayoutExpanded.setOnClickPendingIntent(R.id.Button5, PendingIntent.getService(App.getApplication().getApplicationContext(), 0, fiveIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
 
+                Intent snoozeIntent = new Intent(App.getApplication().getApplicationContext(), NotificationIntentService.class);
+                snoozeIntent.setAction(SNOOZE);
                 Intent intent = new Intent(App.getApplication().getApplicationContext(), RateADay.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra(RateADay.EXTRA_DATE_DAY, calendar.get(java.util.Calendar.DAY_OF_MONTH));
                 intent.putExtra(RateADay.EXTRA_DATE_MONTH, calendar.get(java.util.Calendar.MONTH));
                 intent.putExtra(RateADay.EXTRA_DATE_YEAR, calendar.get(java.util.Calendar.YEAR));
                 PendingIntent pendingIntent = PendingIntent.getActivity(App.getApplication().getApplicationContext(), 0, intent, 0);
-
+                Resources res = App.getContext().getResources();
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(App.getApplication().getApplicationContext(), CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_notification_icon)
                         .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)
+                        .addAction(R.drawable.ic_snooze, res.getString(R.string.snooze), PendingIntent.getService(App.getApplication().getApplicationContext(), 0, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT))
                         .setCustomContentView(notificationLayout)
                         .setCustomBigContentView(notificationLayoutExpanded)
                         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

@@ -79,7 +79,7 @@ public class NotificationIntentService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(App.getApplication().NOTIFICATION_SERVICE);
         mNotificationManager.cancel(0);
-        Resources res = App.getApplication().getResources();
+        final Resources res = App.getApplication().getResources();
         Logger.getLogger("NotificationIntentService").log(new LogRecord(Level.INFO, "FMORALDO : NotificationIntentService triggered " + intent.getAction()));
         String toastString = res.getString(R.string.notification_default_star);
         int rate = 1;
@@ -104,6 +104,18 @@ public class NotificationIntentService extends IntentService {
                 toastString = res.getString(R.string.notification_five_star);
                 rate = 5;
                 break;
+            case NotificationHelper.SNOOZE:
+                NotificationHelper.snooze();
+                new Thread (){
+                    @Override
+                    public void run(){
+                        Looper.prepare();
+                        Toast.makeText(getBaseContext(), res.getString(R.string.snooze_toast), Toast.LENGTH_LONG).show();
+                        Looper.loop();
+                    }
+                }.start();
+
+                return;
 
         }
         Thread t = new Thread(new notificationRunnable(toastString,rate));

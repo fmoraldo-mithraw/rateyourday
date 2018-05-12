@@ -259,4 +259,7 @@
     <string name="cancel_ok">Oui, annule tout !</string>
     <string name="cancel_cancel">Non, je vais rester ici</string>
     <string name="action_search">Rechercher</string>
+    <string name="snooze">Plus tard</string>
+    <string name="snooze_toast">La notification reviendra dans une heure.</string>
+
 </resources>
