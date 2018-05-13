@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import sun.bob.mcalendarview.adapters.CalendarAdapter;
 import sun.bob.mcalendarview.views.MonthView;
 import sun.bob.mcalendarview.vo.MonthData;
@@ -44,9 +41,7 @@ public class MonthFragment extends Fragment {
         if ((monthData != null) && (monthData.getDate() != null)) {
             if (hasTitle) {
                 TextView textView = new TextView(getContext());
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM YYYY");
-                Date d = new Date(monthData.getDate().getYear()-1900,monthData.getDate().getMonth()-1,1 );
-                textView.setText(simpleDateFormat.format(d));
+                textView.setText(String.format("%d-%d", monthData.getDate().getYear(), monthData.getDate().getMonth()));
                 ret.addView(textView);
             }
             MonthView monthView = new MonthView(getContext());
