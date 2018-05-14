@@ -33,7 +33,8 @@ public class MonthData {
         tmpCal.clear();
         tmpCal.set(date.getYear(), date.getMonth() - 1, 1);
         totalDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        startDay = tmpCal.get(Calendar.DAY_OF_WEEK) - 1;
+        int firstDayOfTheWeek = calendar.getFirstDayOfWeek();
+        startDay = MathTools.floorMod(tmpCal.get(Calendar.DAY_OF_WEEK) - firstDayOfTheWeek,7);
         totalDay = totalDay + startDay;
         if(date.getMonth() - 1 > 0) {
             lastMonth = date.getMonth() - 2;
@@ -59,7 +60,7 @@ public class MonthData {
             if(i < startDay) {
                 addDate = new DayData(new DateData(date.getYear(),
                                                     lastMonth,
-                                                    lastMonthTotalDay - (startDay- i)+firstDayOfTheWeek));
+                                                    lastMonthTotalDay - (startDay- i)+1));
                 addDate.setTextColor(Color.GRAY);
                 addDate.setTextSize(0);
                 content.add(addDate);
@@ -75,7 +76,7 @@ public class MonthData {
 
                 addDate = new DayData(new DateData(nextYear,
                                                     nextMonth,
-                                                    i - totalDay + firstDayOfTheWeek));
+                                                    i - totalDay + 1));
                 addDate.setTextColor(Color.GRAY);
                 addDate.setTextSize(0);
                 content.add(addDate);
@@ -85,7 +86,7 @@ public class MonthData {
             }
             addDate = new DayData(new DateData(date.getYear(),
                                     date.getMonth(),
-                                    i + firstDayOfTheWeek - startDay));
+                                    i + 1 - startDay));
             addDate.setTextColor(Color.BLACK);
             addDate.setTextSize(1);
             content.add(addDate);
